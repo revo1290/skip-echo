@@ -6,14 +6,19 @@
 | --- | --- |
 | Linux / Node.js 24.19.0: build and unit tests | Executed; see results |
 | Node.js 22, macOS, Windows | CI matrix prepared; not executed here |
-| Claude Code plugin validation | Not run: executable unavailable |
-| SessionStart context inside Claude Code | Not observed |
+| Claude Code plugin validation | Executed 2026-10-05 with Claude Code 2.1.289 on Linux: plugin and marketplace manifests pass without warnings |
+| `npx skills add` discovery | `skills add <local repo> --list` finds exactly one `skip-echo` skill; installation into each agent untested |
+| A/B/C/D condition suite (`evals/conditions`) | Pilot executed 2026-10-05: all four conditions load and run; the empty baseline plugin must sit inside each case directory |
+| Native `claude plugin eval` suite | Executed 2026-10-05, Claude Code 2.1.289, Linux: synthetic `history.jsonl` accepted and replayed; `SessionStart:resume` fired with the plugin and injected the policy, absent without it |
+| Cursor rule / AGENTS.md snippet | Generated only; untested in any client |
+| SessionStart context inside Claude Code | Observed only inside `claude plugin eval` child sessions (resume source); interactive sessions not observed |
 | startup / resume / clear / compact / fork | Hook unit inputs covered; real host lifecycle untested |
 | Standalone skill format | Local skill validator checked; discovery is client-specific |
 | Agent forward tests | Explicit policy, development-only; not Claude Code auto-application |
 | Subagent inheritance / output-style coexistence | Untested |
 | Native Claude Code installer without Node | Untested; standalone route available |
-| genshijin / yomiyasu / other clients | Untested |
+| Combined with caveman / genshijin / yomiyasu | Untested; the policy forbids dropping required facts to meet a terse style |
+| `/skip-echo off\|full\|on` arguments | Documented skill-argument behavior; model compliance untested |
 
 ## Per-client release evidence
 

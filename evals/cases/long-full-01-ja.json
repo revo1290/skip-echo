@@ -1,0 +1,48 @@
+{
+  "id": "long-full-01-ja",
+  "pair_id": "long-full-01",
+  "language": "ja",
+  "category": "long-full",
+  "split": "dev",
+  "messages": [
+    {
+      "role": "user",
+      "content": "うちのdocker-compose.ymlはこれ:\n```yaml\nservices:\n  web:\n    image: ghcr.io/acme/web:1.8.2\n    ports:\n      - \"8080:8080\"\n    environment:\n      DATABASE_URL: postgres://app@db:5432/app\n      REDIS_URL: redis://cache:6379/0\n    depends_on:\n      - db\n      - cache\n    deploy:\n      replicas: 2\n    healthcheck:\n      test: [\"CMD\", \"curl\", \"-f\", \"http://localhost:8080/health\"]\n      interval: 30s\n      timeout: 5s\n      retries: 3\n  db:\n    image: postgres:16\n    volumes:\n      - pgdata:/var/lib/postgresql/data\n    deploy:\n      resources:\n        limits:\n          memory: 512m\n  cache:\n    image: redis:7.2-alpine\nvolumes:\n  pgdata:\n```\nhealthcheckは何をしてる？"
+    },
+    {
+      "role": "assistant",
+      "content": "healthcheckは、webコンテナ内で30秒ごとに `curl -f http://localhost:8080/health` を実行します。失敗するか5秒を超えるとその回は失敗扱いで、3回続けて失敗するとコンテナはunhealthyになります。`depends_on` だけではhealthを待たず、起動順を決めるだけです。"
+    },
+    {
+      "role": "user",
+      "content": "webのreplicasを3にして。"
+    },
+    {
+      "role": "assistant",
+      "content": "`web.deploy` の部分です:\n```yaml\n    deploy:\n      replicas: 3\n```\nほかは変更なしです。"
+    },
+    {
+      "role": "user",
+      "content": "dbのメモリ上限を1gに上げて。"
+    },
+    {
+      "role": "assistant",
+      "content": "`db.deploy.resources.limits` の部分です:\n```yaml\n          memory: 1g\n```\nファイルのほかの部分は変更なしです。"
+    },
+    {
+      "role": "user",
+      "content": "上書き用に、最終版のdocker-compose.ymlを全文ちょうだい。"
+    }
+  ],
+  "required_facts": [
+    "webのreplicasが3",
+    "dbのメモリ上限が1g",
+    "元ファイルのほかの行がすべてある（image、ports、environment、depends_on、healthcheck、volumes）",
+    "省略記号やプレースホルダーがない"
+  ],
+  "critical_omissions": [
+    "「...」や「変更なし」での省略",
+    "以前の変更のどちらかの欠落"
+  ],
+  "unnecessary_repetition": []
+}

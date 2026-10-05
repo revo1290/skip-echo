@@ -1,0 +1,42 @@
+{
+  "id": "revision-02-en",
+  "pair_id": "revision-02",
+  "language": "en",
+  "category": "revision",
+  "split": "holdout",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Our Dockerfile:\nFROM node:20-slim\nWORKDIR /app\nCOPY package*.json ./\nRUN npm ci --omit=dev\nCOPY . .\nENV NODE_ENV=production\nEXPOSE 3000\nUSER node\nCMD [\"node\", \"server.js\"]\nWhy is npm ci used instead of npm install?"
+    },
+    {
+      "role": "assistant",
+      "content": "npm ci installs exactly what package-lock.json specifies and fails if it disagrees with package.json, which makes container builds reproducible."
+    },
+    {
+      "role": "user",
+      "content": "Is running as USER node a good idea?"
+    },
+    {
+      "role": "assistant",
+      "content": "Yes. Running as the unprivileged node user limits what a compromised process can do inside the container."
+    },
+    {
+      "role": "user",
+      "content": "Switch the base image to node:22-slim. Nothing else should change."
+    }
+  ],
+  "required_facts": [
+    "Base image is node:22-slim",
+    "States the rest of the Dockerfile stays unchanged",
+    "Shows the FROM line change"
+  ],
+  "critical_omissions": [
+    "Changing any other instruction",
+    "Presenting a truncated Dockerfile as complete"
+  ],
+  "unnecessary_repetition": [
+    "Reprinting the whole Dockerfile without a request",
+    "Re-explaining npm ci or USER node"
+  ]
+}

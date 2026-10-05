@@ -1,0 +1,42 @@
+{
+  "id": "progress-02-en",
+  "pair_id": "progress-02",
+  "language": "en",
+  "category": "progress",
+  "split": "holdout",
+  "messages": [
+    {
+      "role": "user",
+      "content": "We need to add a nullable \"region\" column to the orders table and backfill it."
+    },
+    {
+      "role": "assistant",
+      "content": "Plan: 1) add the nullable column in migration 0042, 2) backfill from customers.region in batches of 10,000, 3) add an index after the backfill, 4) prepare a rollback script. Migration 0042 is written and applied on staging."
+    },
+    {
+      "role": "user",
+      "content": "Add the index now too."
+    },
+    {
+      "role": "assistant",
+      "content": "Migration 0043 adds an index on orders.region; it was applied on staging without errors."
+    },
+    {
+      "role": "user",
+      "content": "The staging backfill finished: 1,200,000 rows updated, 3 rows failed because customers.region was NULL. The rollback script has not been tested. What is the status?"
+    }
+  ],
+  "required_facts": [
+    "Backfill updated 1,200,000 rows",
+    "3 rows failed because of NULL customers.region",
+    "Rollback script untested"
+  ],
+  "critical_omissions": [
+    "Omitting the 3 failed rows",
+    "Claiming the rollback is verified"
+  ],
+  "unnecessary_repetition": [
+    "The four-step migration plan",
+    "Explanation of migrations 0042 and 0043"
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "id": "progress-01-en",
+  "pair_id": "progress-01",
+  "language": "en",
+  "category": "progress",
+  "split": "dev",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Add input validation to the signup form and run the tests."
+    },
+    {
+      "role": "assistant",
+      "content": "Plan: 1) add email and password validators in src/signup.js, 2) add unit tests, 3) run npm test. Result: validateEmail and validatePassword (minimum 12 characters) are in src/signup.js, 6 unit tests were added, and npm test reported 48 passed, 0 failed."
+    },
+    {
+      "role": "user",
+      "content": "Also reject passwords that contain the email address."
+    },
+    {
+      "role": "assistant",
+      "content": "validatePassword now rejects passwords containing the email address, with 1 new test. npm test reported 49 passed, 0 failed."
+    },
+    {
+      "role": "user",
+      "content": "I moved the 4 error messages to t(\"signup.*\") keys and added them to locales/en.json. npm test still reports 49 passed. locales/ja.json has no signup keys yet. Give me a status update based only on these observations."
+    }
+  ],
+  "required_facts": [
+    "4 messages now use t() keys in locales/en.json",
+    "49 tests passed in the user-reported run",
+    "locales/ja.json signup keys still missing"
+  ],
+  "critical_omissions": [
+    "Omitting the missing ja.json keys",
+    "Claiming to have run the tests personally"
+  ],
+  "unnecessary_repetition": [
+    "The original three-step plan",
+    "Email and password validator details from earlier turns"
+  ]
+}

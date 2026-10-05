@@ -2,11 +2,20 @@
 
 ## Corpus and split
 
-60 synthetic conversations: 30 Japanese, 30 English; 30 bilingual pairs. Each case contains three user turns (five messages, final response withheld). There are 12 categories. Six categories have three parameter variants per language; six have two. These are templated fixtures, not 60 independent observations. Expand scenario diversity before broad effectiveness claims.
+84 synthetic conversations: 42 Japanese, 42 English; 42 bilingual pairs. Most cases contain three user turns (five messages, final response withheld); the v3 stress cases contain four (seven messages). There are 18 categories. Manifest v2 added `progress` (multi-step status reports) and `revision` (unrequested reprint of an existing artifact). Manifest v3 added four long-history stress categories: `long-revision`, `long-full` (protective: full text after several edits), `long-progress`, and `long-constraint`. No earlier case changed. These are templated fixtures, not 84 independent observations. Expand scenario diversity before broad effectiveness claims.
 
-36 development / 24 holdout, fixed by `manifest.json` SHA-256 values before model tests. Translation pairs share their split. Because category templates occur in both splits, holdout evaluates transfer across variants rather than novel domains. Never tune on holdout outputs; replace exposed holdout cases for a future confirmatory run.
+48 development / 36 holdout, fixed by `manifest.json` SHA-256 values before model tests. Translation pairs share their split. Because category templates occur in both splits, holdout evaluates transfer across variants rather than novel domains. Never tune on holdout outputs; replace exposed holdout cases for a future confirmatory run.
 
-`smoke.json` selects 12 development cases, six per language and one per category. The smoke suite is not the release gate.
+`smoke.json` selects 14 development cases, seven per language and one per category. The smoke suite is not the release gate.
+
+`stress.json` selects the 8 development stress cases. Smoke fixtures turned out to be too easy: in the first native run, 12 of 14 scored 1.00 with and without the plugin.
+
+`node scripts/build.mjs` generates two `claude plugin eval` suites from development cases only; neither ever contains holdout cases:
+
+- `evals/native/` (smoke + stress): each fixed history replayed with and without the installed plugin (A versus D).
+- `evals/conditions/` (stress): each case as four cases, `<id>.A` to `<id>.D`, run with `--ablation none`. A, B, and C load an empty baseline plugin shipped inside the case; B appends `control.txt` and C appends the policy to the system prompt; D loads this plugin, so the policy arrives through the SessionStart hook. Every condition shares the same chat-only system line.
+
+`node scripts/summarize-native.mjs <aggregate-result.json>` groups results by condition. Use both suites for screening and regressions only: judge-based scores are not human review. C delivers the policy as a system prompt while D delivers it as hook context, so C versus D also measures delivery.
 
 ## Conditions
 
@@ -19,7 +28,7 @@
 
 For non-English prompts the same English control instruction is used to hold instruction language constant with C; prompts remain Japanese or English. Keep model, generation settings, client, tools, other system instructions, and context budget identical. If that is impossible, report the confound.
 
-`node scripts/prepare-eval.mjs smoke 1` generates 48 jobs and a blinded output template; it does not run models. `holdout 3` generates 288 fixed-history jobs/model. Cost must be budgeted before generation using actual model prices and estimated input/output lengths. Record the chosen repetition count before seeing results. Do not silently spend on additional runs.
+`node scripts/prepare-eval.mjs smoke 1` generates 56 jobs and a blinded output template; it does not run models. `holdout 3` generates 336 fixed-history jobs/model. Cost must be budgeted before generation using actual model prices and estimated input/output lengths. Record the chosen repetition count before seeing results. Do not silently spend on additional runs.
 
 For fixed-history evaluation, replay the same messages via a client/API that supports proper user/assistant roles. Pasting them into one user prompt is only a proxy, not equivalent role-based evaluation. D requires the real Claude Code plugin path and evidence of injection; do not relabel C as D. If a comparable history mechanism is unavailable, report D separately.
 

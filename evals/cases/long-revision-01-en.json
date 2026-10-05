@@ -1,0 +1,52 @@
+{
+  "id": "long-revision-01-en",
+  "pair_id": "long-revision-01",
+  "language": "en",
+  "category": "long-revision",
+  "split": "dev",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Here is our docker-compose.yml:\n```yaml\nservices:\n  web:\n    image: ghcr.io/acme/web:1.8.2\n    ports:\n      - \"8080:8080\"\n    environment:\n      DATABASE_URL: postgres://app@db:5432/app\n      REDIS_URL: redis://cache:6379/0\n    depends_on:\n      - db\n      - cache\n    deploy:\n      replicas: 2\n    healthcheck:\n      test: [\"CMD\", \"curl\", \"-f\", \"http://localhost:8080/health\"]\n      interval: 30s\n      timeout: 5s\n      retries: 3\n  db:\n    image: postgres:16\n    volumes:\n      - pgdata:/var/lib/postgresql/data\n    deploy:\n      resources:\n        limits:\n          memory: 512m\n  cache:\n    image: redis:7.2-alpine\nvolumes:\n  pgdata:\n```\nWhat does the healthcheck do?"
+    },
+    {
+      "role": "assistant",
+      "content": "The healthcheck runs `curl -f http://localhost:8080/health` inside the web container every 30 seconds. If a request fails or takes longer than 5 seconds, that attempt counts as a failure; after 3 consecutive failures the container is marked unhealthy. Plain `depends_on` does not wait for health; it only orders startup."
+    },
+    {
+      "role": "user",
+      "content": "Change web replicas to 3."
+    },
+    {
+      "role": "assistant",
+      "content": "Under `web.deploy`:\n```yaml\n    deploy:\n      replicas: 3\n```\nEverything else is unchanged."
+    },
+    {
+      "role": "user",
+      "content": "Raise the db memory limit to 1g."
+    },
+    {
+      "role": "assistant",
+      "content": "Under `db.deploy.resources.limits`:\n```yaml\n          memory: 1g\n```\nThe rest of the file is unchanged."
+    },
+    {
+      "role": "user",
+      "content": "Now change the redis image to redis:7.4-alpine."
+    }
+  ],
+  "required_facts": [
+    "cache service image is redis:7.4-alpine",
+    "States that the rest of the file is unchanged",
+    "The change is locatable under the cache service"
+  ],
+  "critical_omissions": [
+    "Changing any other value",
+    "Presenting a truncated file as complete",
+    "Reverting the earlier replicas or memory changes"
+  ],
+  "unnecessary_repetition": [
+    "Reprinting the entire compose file without a request",
+    "Re-explaining the healthcheck",
+    "Restating the earlier replicas and memory changes in detail"
+  ]
+}

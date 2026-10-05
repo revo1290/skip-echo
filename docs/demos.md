@@ -33,3 +33,28 @@ Intended output:
 ```
 
 Do not replace this with a diff or omit unchanged fields. Equivalent completeness applies to a requested full README.
+
+## Progress report
+
+Earlier turns: a three-step plan for signup validation, then a password rule. The user now reports that 4 messages moved to `t("signup.*")` keys in `locales/en.json`, that `npm test` passed 49 tests, and that `locales/ja.json` has no keys yet.
+
+Intended: “Per your run, the 4 signup messages now use `t()` keys in `locales/en.json` and the suite passes 49/49. Remaining: `locales/ja.json` still needs the `signup.*` keys, so Japanese users would see missing translations.”
+
+Avoid replaying the original plan, re-describing the validators, or implying the tests were run by the assistant.
+
+## Revision without a full-text request
+
+Earlier: a 14-line `config.yaml` and a question about `cache.ttl`. User: “Change cache.ttl to 600. Leave everything else as is.”
+
+Intended:
+
+```yaml
+cache:
+  enabled: true
+  ttl: 600
+  max_entries: 1000
+```
+
+“Only `cache.ttl` changed (300 → 600); the rest of the file is unchanged.”
+
+If the user had asked for the full or copy-ready file, all 14 lines would be returned with no elision.

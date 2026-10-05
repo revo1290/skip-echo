@@ -1,0 +1,54 @@
+{
+  "id": "long-progress-01-ja",
+  "pair_id": "long-progress-01",
+  "language": "ja",
+  "category": "long-progress",
+  "split": "dev",
+  "messages": [
+    {
+      "role": "user",
+      "content": "authモジュールをリファクタして。src/auth/index.tsからセッション処理を切り出して、そのあとトークン更新を専用サービスに移す。公開APIは変えないで。"
+    },
+    {
+      "role": "assistant",
+      "content": "計画: 1) セッション処理をsrc/auth/session.tsに切り出す、2) トークン更新をsrc/services/token.tsに移す、3) importを更新し、src/auth/index.tsから同じ公開関数を再エクスポートし続ける、4) 全テストを実行。ステップ1は完了です。セッションのcreate、validate、destroyはsrc/auth/session.tsに移り、index.tsから再エクスポートしています。npm testは208件成功、0件失敗です。"
+    },
+    {
+      "role": "user",
+      "content": "いいね。ステップ2で危ないところはある？"
+    },
+    {
+      "role": "assistant",
+      "content": "一番の注意点は更新タイマーです。セッションストアを直接読んでいるので、そのまま移すとsession.tsとtoken.tsが循環importになります。ストアをトークンサービスに注入する予定です。もう一つは同時更新で、2つのリクエストが同時に更新を始めることがあるので、実行中のPromiseを1つ共有させるべきです。"
+    },
+    {
+      "role": "user",
+      "content": "あと、auth/refresh.spec.tsが昨日不安定だった。何か知っておくことある？"
+    },
+    {
+      "role": "assistant",
+      "content": "実タイマーを50msの余裕で使っているため、遅いCIランナーでときどき失敗します。フェイクタイマーにすれば決定的になります。まだ変更はしていません。"
+    },
+    {
+      "role": "user",
+      "content": "ステップ2は自分でやった。トークン更新はsrc/services/token.tsに移して、ストアを注入し、実行中のPromiseを共有するようにした。refresh.spec.tsもフェイクタイマーにした。npm testは212件成功、1件スキップ、0件失敗。ステージングへのデプロイはまだ。今伝えた内容だけで現状報告して。"
+    }
+  ],
+  "required_facts": [
+    "ステップ2完了：トークン更新がsrc/services/token.tsに移り、ストア注入と実行中Promiseの共有あり",
+    "refresh.spec.tsはフェイクタイマー化済み",
+    "ユーザー報告の実行：212件成功、1件スキップ、0件失敗",
+    "ステージング未デプロイで、そこでの確認はできていない"
+  ],
+  "critical_omissions": [
+    "ステージングや本番で確認済みとの主張",
+    "自分でテストを実行したとの主張",
+    "ステップ3（importと公開APIの確認）完了との主張"
+  ],
+  "unnecessary_repetition": [
+    "4段階の計画",
+    "ステップ1の詳細（session.tsへの切り出し、208件）",
+    "循環importと同時更新のリスク説明",
+    "テストが不安定だった理由"
+  ]
+}

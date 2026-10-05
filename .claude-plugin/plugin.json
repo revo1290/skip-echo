@@ -1,9 +1,16 @@
 {
   "name": "skip-echo",
-  "version": "0.1.0",
-  "description": "Less repetition. Complete answers. Experimental conversation-aware response policy.",
+  "displayName": "SkipEcho",
+  "version": "0.2.0",
+  "description": "Less repetition. Complete answers. Stops re-explaining unchanged context across turns while keeping full deliverables, corrections, and re-explanations. Experimental.",
   "license": "MIT",
   "author": {
     "name": "SkipEcho contributors"
+  },
+  "homepage": "https://github.com/revo1290/skip-echo#readme",
+  "repository": "https://github.com/revo1290/skip-echo",
+  "keywords": ["repetition", "conversation", "status-report", "concise", "context"],
+  "experimental": {
+    "evals": "evals/native"
   }
 }

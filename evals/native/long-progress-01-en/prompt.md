@@ -1,0 +1,1 @@
+I did step 2 myself: token refresh is now in src/services/token.ts with the store injected and a shared in-flight promise. I also switched refresh.spec.ts to fake timers. npm test: 212 passed, 1 skipped, 0 failed. No staging deploy yet. Give me a status update based only on what I just told you.

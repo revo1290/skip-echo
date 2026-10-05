@@ -1,0 +1,11 @@
+schema_version: "1.1"
+name: long-full-01-ja.D
+description: "Generated from evals/cases/long-full-01-ja.json (sha256 c70c0459a136). Do not edit."
+tags: [cond-D, long-full, ja]
+plugins: ["../../../.."]
+context:
+  history_file: history.jsonl
+execution:
+  max_turns: 3
+  allowed_tools: [Skill]
+  append_system_prompt: "This conversation has no codebase or workspace files. Do not search for, read, or create files; answer in your reply."

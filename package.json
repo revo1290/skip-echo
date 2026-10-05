@@ -1,6 +1,6 @@
 {
   "name": "skip-echo",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "license": "MIT",
@@ -12,7 +12,10 @@
     "check": "node scripts/build.mjs --check",
     "test": "node --test tests/*.test.mjs",
     "eval:prepare": "node scripts/prepare-eval.mjs",
-    "eval:score": "node scripts/score-eval.mjs"
+    "eval:score": "node scripts/score-eval.mjs",
+    "eval:native": "claude plugin eval . --ablation with-without --runs 3 --max-cost-usd 5",
+    "eval:conditions": "claude plugin eval . --eval-dir evals/conditions --ablation none --runs 3 --max-cost-usd 8",
+    "eval:summary": "node scripts/summarize-native.mjs"
   },
   "repository": {
     "type": "git",

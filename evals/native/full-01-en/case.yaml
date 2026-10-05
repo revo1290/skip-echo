@@ -1,0 +1,10 @@
+schema_version: "1.1"
+name: full-01-en
+description: "Generated from evals/cases/full-01-en.json (sha256 009a633c6825). Do not edit."
+tags: [full, en, smoke]
+context:
+  history_file: history.jsonl
+execution:
+  max_turns: 3
+  allowed_tools: [Skill]
+  append_system_prompt: "This conversation has no codebase or workspace files. Do not search for, read, or create files; answer in your reply."

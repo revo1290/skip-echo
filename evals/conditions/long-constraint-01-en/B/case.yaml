@@ -1,0 +1,11 @@
+schema_version: "1.1"
+name: long-constraint-01-en.B
+description: "Generated from evals/cases/long-constraint-01-en.json (sha256 b55fd005d7c0). Do not edit."
+tags: [cond-B, long-constraint, en]
+plugins: ["baseline-plugin"]
+context:
+  history_file: history.jsonl
+execution:
+  max_turns: 3
+  allowed_tools: [Skill]
+  append_system_prompt: "This conversation has no codebase or workspace files. Do not search for, read, or create files; answer in your reply.\n\nAnswer the current question without unnecessarily repeating previous explanations. Preserve necessary context, explicit corrections, and requests for complete output."

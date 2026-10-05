@@ -1,0 +1,106 @@
+{
+ "date": "2026-10-05",
+ "kind": "conditions-suite-pilot",
+ "client": "Claude Code 2.1.289",
+ "os": "Linux",
+ "model_exact": null,
+ "model_note": "Default eval child-session model and default judge; exact IDs not recorded.",
+ "mode": "fixed-history replay, --ablation none, 1 run per condition",
+ "human_reviewed": false,
+ "cost_usd": 0.4398,
+ "results": [
+  {
+   "case": "long-revision-01-en.A",
+   "score": 1,
+   "graders": {
+    "essentials": true,
+    "no-echo-1": true,
+    "no-echo-2": true,
+    "no-echo-3": true
+   },
+   "output": "Under `cache`:\n```yaml\n  cache:\n    image: redis:7.4-alpine\n```\nThe rest of the file is unchanged."
+  },
+  {
+   "case": "long-revision-01-en.B",
+   "score": 1,
+   "graders": {
+    "essentials": true,
+    "no-echo-1": true,
+    "no-echo-2": true,
+    "no-echo-3": true
+   },
+   "output": "Under `cache`:\n```yaml\n  cache:\n    image: redis:7.4-alpine\n```\nThe rest of the file is unchanged."
+  },
+  {
+   "case": "long-revision-01-en.C",
+   "score": 1,
+   "graders": {
+    "essentials": true,
+    "no-echo-1": true,
+    "no-echo-2": true,
+    "no-echo-3": true
+   },
+   "output": "Under `cache`:\n```yaml\n  cache:\n    image: redis:7.4-alpine\n```\nThe rest of the file is unchanged. This is a minor-version bump of Redis, so check the 7.4 release notes before deploying. I haven't tested it against your app."
+  },
+  {
+   "case": "long-revision-01-en.D",
+   "score": 1,
+   "graders": {
+    "essentials": true,
+    "no-echo-1": true,
+    "no-echo-2": true,
+    "no-echo-3": true
+   },
+   "output": "Under `cache`:\n```yaml\n  cache:\n    image: redis:7.4-alpine\n```\nThe rest of the file is unchanged. This is a minor-version bump, so the `redis:7.2-alpine` data format and config should carry over, but I haven't tested it against your setup."
+  },
+  {
+   "case": "long-progress-01-ja.A",
+   "score": 0.333,
+   "graders": {
+    "essentials": false,
+    "no-echo-1": true,
+    "no-echo-2": false,
+    "no-echo-3": false,
+    "no-echo-4": true
+   },
+   "output": "**現状報告**(あなたの報告に基づく内容で、私は今回何も再確認していません)\n\n**完了**\n- ステップ1: セッション処理を`src/auth/session.ts`に切り出し済み。`index.ts`から再エクスポートしています。\n- ステップ2: トークン更新を`src/services/token.ts`に移し済み。ストアを注入し、実行中のPromiseを共有する形になっています。\n- `auth/refresh.spec.ts`: フェイクタイマーに変更済み。\n- `npm test`: 212件成功、1件スキップ、0件失敗。\n\n**未完了**\n- ステージングへのデプロイ。\n\n**確認が必要な点**\n- スキップの1件: 前回の208件の時点でスキップがあったかは不明です。今回新しく増えたのか、元からあるのかは確認したほうがよいです。\n- 公開APIが不変かどうか: ステップ2後に`src/auth/index.ts`の再エクスポートが同じ関数を出し続けているか、今回の報告では触れられていません。\n- 循環importがないか: `session.ts`と`token.ts`の間に循環がないことは、まだ確認されていません。ストア注入で解消できているはずですが、確認はしていません。\n\n次は、上の3点を確認してからデプロイに進むのがよいと思います。"
+  },
+  {
+   "case": "long-progress-01-ja.B",
+   "score": 0.5,
+   "graders": {
+    "essentials": false,
+    "no-echo-1": true,
+    "no-echo-2": false,
+    "no-echo-3": true,
+    "no-echo-4": true
+   },
+   "output": "**現状報告**(今伝えてもらった内容のみに基づく)\n\n**完了**\n- **ステップ1:** セッション処理(create/validate/destroy)を`src/auth/session.ts`に切り出し済み。`index.ts`から再エクスポートしている。\n- **ステップ2:** トークン更新を`src/services/token.ts`に移した。\n  - ストアは注入式にした。\n  - 実行中のPromiseを共有する。\n- **`auth/refresh.spec.ts`:** フェイクタイマーに変更した。\n- **テスト:** `npm test`は212件成功、1件スキップ、0件失敗。\n\n**未完了・未確認**\n- **ステージングへのデプロイ:** まだ。\n- **ステップ3(import更新と公開APIの再エクスポート維持):** 今回は言及がなかったので、完了かどうかは未確認。トークン更新側の公開関数が`src/auth/index.ts`から引き続き同じ名前で公開されているか、確認が必要。\n- **スキップ1件:** 前回の208件には出ていなかった。このリファクタで入ったのか、元からあったのかは不明。意図したものか確認したほうがいい。\n\nなお、これらの結果は私が実行して確認したものではなく、あなたの報告に基づく。"
+  },
+  {
+   "case": "long-progress-01-ja.C",
+   "score": 0.333,
+   "graders": {
+    "essentials": true,
+    "no-echo-1": false,
+    "no-echo-2": false,
+    "no-echo-3": false,
+    "no-echo-4": false
+   },
+   "output": "ステップ2は完了で、トークン更新は`src/services/token.ts`に移っています。以下はすべてあなたの報告に基づく内容で、私はコードもテストも確認していません。\n\n**変更点**\n- トークン更新を`src/services/token.ts`に移した。\n- セッションストアをトークンサービスに注入するようにした。\n- 同時更新では、実行中のPromiseを共有するようにした。\n- `auth/refresh.spec.ts`をフェイクタイマーに変更した。\n\n**テスト結果**\n- `npm test`は212件成功、1件スキップ、0件失敗です。\n- ステップ1の後は208件成功、スキップなしでした。成功が4件増え、スキップが1件出ています。\n- スキップされた1件がどのテストか、なぜスキップされたかはまだ分かっていません。\n\n**未確認・未実施**\n- ステージングへのデプロイは未実施です。\n- 公開APIが変わっていないことは、この報告の範囲では確認されていません。`src/auth/index.ts`の再エクスポートがトークン更新の移動後も同じ関数を出しているか、確認が必要です。\n- 循環importが起きていないことも、報告には含まれていません。\n- `refresh.spec.ts`がフェイクタイマーで安定したかは、1回の実行しか見ていません。CI上での繰り返し実行は未確認です。\n\n**次にやること**\n- スキップされた1件の特定と、それが今回の変更に関係するかの確認。\n- 公開APIの再エクスポート確認。\n- 問題がなければステージングへのデプロイ。"
+  },
+  {
+   "case": "long-progress-01-ja.D",
+   "score": 1,
+   "graders": {
+    "essentials": true,
+    "no-echo-1": true,
+    "no-echo-2": true,
+    "no-echo-3": true,
+    "no-echo-4": true
+   },
+   "output": "ステップ2が完了しました。ここまでの内容はすべてあなたの報告に基づいていて、私は何も実行・確認していません。\n\n**変更点**\n- トークン更新を `src/services/token.tsに` 移しました。\n- セッションストアをトークンサービスに注入する形にしました。\n- 同時更新では、実行中のPromiseを共有するようにしました。\n- `refresh.spec.ts` をフェイクタイマーに変えました。\n\n**テスト結果（あなたの報告）**\n- `npm test` は212件成功、1件スキップ、0件失敗です。\n\n**未確認・未完了**\n- ステージングへのデプロイはまだです。\n- スキップされた1件が何か、今回の変更と関係があるかは、いただいた情報からはわかりません。\n- ステップ2後に、`src/auth/index.ts` の公開APIが変わっていないかは、今のところ確認されていません。\n- 循環importが解消されたかも、確認された情報はありません。\n- フェイクタイマー化で `refresh.spec.ts` の不安定さが直ったかは、まだわかりません。1回通っただけでは判断できず、CIで繰り返し実行して確かめる必要があります。"
+  }
+ ],
+ "interpretation": "Pilot to prove the A/B/C/D harness works. n=1 per condition; judge-scored; not evidence of effectiveness."
+}

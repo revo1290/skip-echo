@@ -4,14 +4,15 @@ import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const selection = process.argv[2] ?? 'smoke';
-if (!['smoke','dev','holdout'].includes(selection)) throw new Error('Use smoke, dev, or holdout');
+if (!['smoke','stress','dev','holdout'].includes(selection)) throw new Error('Use smoke, stress, dev, or holdout');
 const repetitions = Number(process.argv[3] ?? 1);
 if (!Number.isInteger(repetitions) || repetitions < 1 || repetitions > 10) throw new Error('Repetitions: 1–10');
 const manifest = JSON.parse(readFileSync(resolve(root, 'evals/manifest.json')));
 const smoke = JSON.parse(readFileSync(resolve(root, 'evals/smoke.json')));
+const stress = JSON.parse(readFileSync(resolve(root, 'evals/stress.json')));
 const policy = readFileSync(resolve(root, 'src/response-policy.md'), 'utf8').trim();
 const control = readFileSync(resolve(root, 'evals/control.txt'), 'utf8').trim();
-const selected = manifest.cases.filter(c => selection === 'smoke' ? smoke.includes(c.id) : c.split === selection);
+const selected = manifest.cases.filter(c => selection === 'smoke' ? smoke.includes(c.id) : selection === 'stress' ? stress.includes(c.id) : c.split === selection);
 const jobs=[];
 for (const item of selected) {
  const bytes = readFileSync(resolve(root, 'evals/cases', item.id+'.json'));

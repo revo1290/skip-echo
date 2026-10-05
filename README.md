@@ -2,84 +2,124 @@
 
 **Less repetition. Complete answers.**
 
-[日本語](README.ja.md) · MIT · **0.1.0 / experimental**
+[日本語](README.ja.md) · MIT · **0.2.0 / experimental**
 
-A conversation-aware Agent Skill that aims to stop re-explaining unchanged background on every follow-up. It keeps the new answer, necessary context, explicit corrections, and complete deliverables. Shorter is not automatically better.
+Long Claude sessions re-explain things: every follow-up restates the background, every status report replays the plan, and a one-line config change comes back as the whole file. SkipEcho is a conversation-aware policy for Claude Code and other Agent Skills clients that drops **repeated claims** across turns, and keeps what the user needs **this turn**: the new answer, corrections, conditions, unverified scope, and complete deliverables when they are asked for.
+
+## Where it fits
+
+Terse-output skills such as caveman and genshijin compress **wording inside one reply**. SkipEcho decides **which claims belong in this reply**, based on what the conversation already established. They address different waste, so they can be combined.
+
+| | Terse styles (caveman, genshijin, “be brief”) | SkipEcho |
+| --- | --- | --- |
+| What gets removed | Articles, filler, honorifics, politeness | Claims already stated and still unchanged |
+| Unit of decision | Each sentence | The conversation so far |
+| Turn 1 of a new topic | Shorter | Unchanged: a normal complete answer |
+| “Give me the full README” | Still terse | Complete and self-contained |
+| “Explain that again” | Still terse | Explained afresh |
+| Status report after multi-step work | Compressed full replay | Outcome, what changed, what was verified now, what remains |
+| One-value edit of a long file | Whole file, compressed | Changed part plus “rest unchanged”, unless full text is requested |
+| Combined use | | Supported by design: never drops required facts to meet another style's word budget |
+
+Independent write-ups have found that terse styles cut a modest share of output tokens and that a one-line “be brief” instruction does about as well ([implicator.ai](https://www.implicator.ai/caveman-claude-code-skill-cuts-output-20-your-bill-barely-notices-2/), [Hacker News](https://news.ycombinator.com/item?id=47954745)). SkipEcho is designed to be tested against exactly that: the evaluation includes a strong one-sentence control (condition B), and the project commits to simplifying itself if it cannot beat that control. No savings or superiority claim is made until that evaluation is done. See [evaluation status](evals/results/README.md).
 
 ## What it does
 
 | Request | Intended behavior |
 | --- | --- |
-| Add one constraint | Address its effect without restarting the entire explanation |
-| Correct an earlier answer | Acknowledge the error and explain the corrected conclusion |
-| Full text / final version / handoff | Include all necessary context and complete artifacts |
-| Explain again / in more detail | Explain afresh; never assume the user understood |
-| New topic / lost history | Give a complete answer using only available context |
+| Add one constraint | Address its effect without restarting the explanation |
+| Correct an earlier answer | Acknowledge the error and state the corrected conclusion |
+| Progress or completion report | Lead with the outcome; report only what changed, what was verified now, and what remains |
+| Change one value in an existing file or block | Show the changed part and say the rest is unchanged; give the full version if requested, if it is only a few lines, or if an excerpt would be harder to apply |
+| Full text, final version, copy-ready, handoff | Restore all necessary context; never elide |
+| Explain again, more detail, confusion | Explain afresh; never assume the user understood |
+| New topic, or history lost after compaction | Complete answer using only the context actually available |
 
-These are design goals, not a measured superiority claim. See [evaluation status](evals/results/README.md), [illustrative demos](docs/demos.md), and [limitations](docs/compatibility.md).
+It never shortens requested code, commands, configuration, tests, documents, delegation prompts, or subagent work, and never skips research, tools, or verification. Illustrative examples: [demos](docs/demos.md).
 
-## Try the Claude Code plugin locally
+## Install
 
-Requires Node.js **22+** on PATH in the environment that runs hooks, plus a Claude Code version supporting the documented plugin and SessionStart interfaces. The minimum compatible Claude Code version has not been established. A native Claude Code installation does not imply Node.js is installed.
+### Claude Code plugin (recommended)
 
-From this project's root:
-
-```sh
-node scripts/build.mjs --check
-node --test tests/*.test.mjs
-claude plugin validate .
-claude --plugin-dir .
-```
-
-`claude plugin validate` and `--plugin-dir` are documented commands; they have not been executed in the development environment. Ask ordinary follow-up questions; invoking the skill manually is not needed for the plugin's SessionStart injection. Hook execution does not guarantee model compliance.
-
-## Install for your user account
-
-From the project root, register the local marketplace and install:
+Applies automatically to every session through a SessionStart hook. Requires Node.js **22+** on the PATH that runs hooks.
 
 ```sh
-claude plugin marketplace add .
+claude plugin marketplace add revo1290/skip-echo
 claude plugin install skip-echo@skip-echo-marketplace --scope user
 ```
 
-Start a new session to exercise SessionStart. Do not simultaneously install a standalone copy or add the same hook to settings. No CLAUDE.md or output style is edited by this project. Install from GitHub with `claude plugin marketplace add revo1290/skip-echo`, then `claude plugin install skip-echo@skip-echo-marketplace --scope user`.
+Start a new session. Do not also install the standalone skill or add the same hook to your settings.
 
-To disable or remove:
+### Standalone skill (any Agent Skills client, no Node.js hook)
+
+```sh
+npx skills add revo1290/skip-echo
+```
+
+Or copy only `skills/skip-echo/` to `~/.claude/skills/skip-echo/`. A standalone skill is loaded by relevance, so it is **not** guaranteed to apply to every reply.
+
+### Cursor, Codex, and other agents
+
+Generated rule files carry the same policy:
+
+- Cursor: copy [`integrations/cursor/skip-echo.mdc`](integrations/cursor/skip-echo.mdc) to `.cursor/rules/`.
+- Codex and other `AGENTS.md` readers: paste [`integrations/AGENTS.md`](integrations/AGENTS.md) into your `AGENTS.md`.
+
+These clients are untested; the files are provided for convenience.
+
+## Control it in a conversation
+
+| Command | Effect |
+| --- | --- |
+| `/skip-echo off` | Suspend for the rest of the conversation |
+| `/skip-echo full` | Give the next answer as a complete, self-contained version |
+| `/skip-echo on` | Resume |
+
+If the bare name is taken by another command, use `/skip-echo:skip-echo`. Plain language works too: “Give the full answer this time” or “Stop reducing repetition for the rest of this conversation.”
+
+To disable or remove the plugin:
 
 ```sh
 claude plugin disable skip-echo@skip-echo-marketplace --scope user
 claude plugin uninstall skip-echo@skip-echo-marketplace --scope user
 ```
 
-Previously injected context may remain in the current conversation. Start a fresh session after disabling to test absence of injection. You can also say “Give the full answer this time” or “Stop applying repetition reduction for the rest of this conversation.”
+Previously injected context can remain in the current conversation; start a new session to confirm it is gone.
 
-## Standalone skill
+## Measure it yourself
 
-For Claude Code without Node.js, copy **only** `skills/skip-echo/` into `~/.claude/skills/skip-echo/` (do not overwrite an existing installation unintentionally). Remove that folder to uninstall. The file follows the [Agent Skills format](https://agentskills.io/specification). Other clients need their own skill installation procedure.
+The repository ships two [`claude plugin eval`](https://code.claude.com/docs/en/plugin-evals) suites generated from frozen development conversations. Each case replays a fixed multi-turn history.
 
-Standalone discovery is relevance-based and is **not** guaranteed on every response. The bundled root `SKILL.md` is an equivalent copy for personal-skill hosts; Claude Code's plugin layout uses the nested `skills/` directory. Runtime consumers do not need to read this README or evaluation files.
+```sh
+# With vs. without the plugin, 14 smoke + 8 long stress conversations
+claude plugin eval . --ablation with-without --runs 3 --max-cost-usd 5
+
+# A/B/C/D on the 8 stress conversations: no plugin, one-line "be brief"-style control,
+# policy as system prompt, installed plugin
+claude plugin eval . --eval-dir evals/conditions --ablation none --runs 3 --max-cost-usd 8
+node scripts/summarize-native.mjs evals/conditions/results/<timestamp>/aggregate-result.json
+```
+
+`--ablation with-without` is required in the first suite because history-replay cases otherwise run with the plugin only. The second suite answers the question terse-style skills leave open: does SkipEcho beat a one-line instruction (condition B)? Every run and judge call is billed to your account; set a cost ceiling. Graders are model-judged (`essentials` checks required facts and critical omissions, weighted 2; one `no-echo-N` grader per predeclared unnecessary repetition), so treat results as **screening, not release evidence**. Holdout cases are excluded from this suite on purpose. The human-graded A/B/C/D protocol, including the short-instruction control, is in [evals/rubric.md](evals/rubric.md).
 
 ## How it works
 
-`src/response-policy.md` is the only policy source. `node scripts/build.mjs` generates both SKILL.md copies and `scripts/policy.generated.mjs`. A single SessionStart hook injects this fixed policy for startup, resume, clear, compact, and fork. It ignores stdin, stores no user data, and does not access transcripts, network, or another model. It fails open if the bundled policy cannot load. The host can show diagnostics if Node is missing.
+`src/response-policy.md` is the only policy source. `node scripts/build.mjs` generates both SKILL.md copies, the hook's policy module, the Cursor and AGENTS.md rule files, and the native eval suite; `--check` fails on any drift. The SessionStart hook injects the fixed policy for startup, resume, clear, compact, and fork. It ignores stdin, stores no user data, reads no transcripts, makes no network or model calls, and fails open if the policy cannot load.
 
-Skill discovery can load the same policy again; duplicate model context has not been measured. There is no per-prompt injection, post-processing, external memory, or cache-extension feature. Instructions add input tokens; total costs can increase in short or new conversations.
+Instructions add input tokens. In short or new conversations total cost can increase; the policy is about 3,400 characters (517 words), and its token count has not been measured. Skill discovery can load the same policy a second time; that duplicate has not been measured. There is no per-prompt injection, post-processing, or external memory.
 
-## Development and evaluation
+## Development
 
-No npm dependencies or install step. Node.js is a runtime dependency.
+No npm dependencies or install step.
 
 ```sh
 node scripts/build.mjs
 node scripts/build.mjs --check
 node --test tests/*.test.mjs
+claude plugin validate .
 node scripts/prepare-eval.mjs smoke 1
 ```
 
-Preparation creates 48 fixed-history jobs (12 cases × A/B/C/D); **it does not call a model**. See [rubric and procedure](evals/rubric.md). The corpus contains 60 synthetic cases in 30 bilingual pairs, split into 36 development and 24 holdout cases. Variants share templates and are not 60 independent real-world observations.
-
-Do not advertise token savings or superiority to a short instruction until a controlled evaluation supports it. Full Claude Code lifecycle tests, independent human scoring, A/B/C/D comparisons, and cumulative-conversation evaluation remain outstanding.
-
-## Contributing
+The corpus has 84 synthetic cases in 42 bilingual pairs (48 development, 36 holdout) across 18 categories, including long multi-turn stress conversations. `prepare-eval` creates fixed-history A/B/C/D jobs and does not call a model. Variants share templates, so they are not 84 independent observations.
 
 See [CONTRIBUTING](CONTRIBUTING.md), [SECURITY](SECURITY.md), [compatibility](docs/compatibility.md), [design](docs/design.md), and [sources](docs/sources.md). Issue forms cover over-omission, repetition, and activation failures. Submit only synthetic or redacted examples.

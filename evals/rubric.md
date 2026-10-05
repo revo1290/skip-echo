@@ -2,13 +2,20 @@
 
 ## Corpus and split
 
-68 synthetic conversations: 34 Japanese, 34 English; 34 bilingual pairs. Each case contains three user turns (five messages, final response withheld). There are 14 categories. Six categories have three parameter variants per language; eight have two. Manifest v2 added the `progress` (multi-step status reports) and `revision` (unrequested reprint of an existing artifact) categories without changing any v1 case. These are templated fixtures, not 68 independent observations. Expand scenario diversity before broad effectiveness claims.
+84 synthetic conversations: 42 Japanese, 42 English; 42 bilingual pairs. Most cases contain three user turns (five messages, final response withheld); the v3 stress cases contain four (seven messages). There are 18 categories. Manifest v2 added `progress` (multi-step status reports) and `revision` (unrequested reprint of an existing artifact). Manifest v3 added four long-history stress categories: `long-revision`, `long-full` (protective: full text after several edits), `long-progress`, and `long-constraint`. No earlier case changed. These are templated fixtures, not 84 independent observations. Expand scenario diversity before broad effectiveness claims.
 
-40 development / 28 holdout, fixed by `manifest.json` SHA-256 values before model tests. Translation pairs share their split. Because category templates occur in both splits, holdout evaluates transfer across variants rather than novel domains. Never tune on holdout outputs; replace exposed holdout cases for a future confirmatory run.
+48 development / 36 holdout, fixed by `manifest.json` SHA-256 values before model tests. Translation pairs share their split. Because category templates occur in both splits, holdout evaluates transfer across variants rather than novel domains. Never tune on holdout outputs; replace exposed holdout cases for a future confirmatory run.
 
 `smoke.json` selects 14 development cases, seven per language and one per category. The smoke suite is not the release gate.
 
-`evals/native/` is generated from the smoke cases by `node scripts/build.mjs` for `claude plugin eval`. It replays each fixed history through Claude Code with and without the installed plugin (A versus D) and grades with model judges. Use it for screening and regressions only: judge-based scores are not human review, the suite cannot express condition B or C, and it never contains holdout cases.
+`stress.json` selects the 8 development stress cases. Smoke fixtures turned out to be too easy: in the first native run, 12 of 14 scored 1.00 with and without the plugin.
+
+`node scripts/build.mjs` generates two `claude plugin eval` suites from development cases only; neither ever contains holdout cases:
+
+- `evals/native/` (smoke + stress): each fixed history replayed with and without the installed plugin (A versus D).
+- `evals/conditions/` (stress): each case as four cases, `<id>.A` to `<id>.D`, run with `--ablation none`. A, B, and C load an empty baseline plugin shipped inside the case; B appends `control.txt` and C appends the policy to the system prompt; D loads this plugin, so the policy arrives through the SessionStart hook. Every condition shares the same chat-only system line.
+
+`node scripts/summarize-native.mjs <aggregate-result.json>` groups results by condition. Use both suites for screening and regressions only: judge-based scores are not human review. C delivers the policy as a system prompt while D delivers it as hook context, so C versus D also measures delivery.
 
 ## Conditions
 

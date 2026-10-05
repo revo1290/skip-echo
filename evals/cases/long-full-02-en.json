@@ -1,0 +1,48 @@
+{
+  "id": "long-full-02-en",
+  "pair_id": "long-full-02",
+  "language": "en",
+  "category": "long-full",
+  "split": "holdout",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Our nginx.conf:\n```nginx\nworker_processes auto;\nevents {\n    worker_connections 1024;\n}\nhttp {\n    sendfile on;\n    keepalive_timeout 65;\n    gzip on;\n    gzip_types text/css application/javascript application/json;\n    upstream app {\n        server 127.0.0.1:3000;\n        server 127.0.0.1:3001;\n    }\n    server {\n        listen 80;\n        server_name example.com;\n        client_max_body_size 10m;\n        location / {\n            proxy_pass http://app;\n            proxy_set_header Host $host;\n            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\n        }\n        location /static/ {\n            root /var/www;\n            expires 7d;\n        }\n    }\n}\n```\nWhat does the upstream block do?"
+    },
+    {
+      "role": "assistant",
+      "content": "It defines a server group named `app` with two backends. `proxy_pass http://app` sends requests to that group, and nginx distributes them round-robin by default. If a backend fails, nginx stops sending it requests for a while based on `max_fails` and `fail_timeout`, which default to 1 and 10s."
+    },
+    {
+      "role": "user",
+      "content": "Raise client_max_body_size to 50m."
+    },
+    {
+      "role": "assistant",
+      "content": "In the `server` block:\n```nginx\n        client_max_body_size 50m;\n```\nNothing else changes."
+    },
+    {
+      "role": "user",
+      "content": "Make static files expire after 30d."
+    },
+    {
+      "role": "assistant",
+      "content": "In `location /static/`:\n```nginx\n            expires 30d;\n```\nThe rest of the file is unchanged."
+    },
+    {
+      "role": "user",
+      "content": "Send me the full final nginx.conf to replace the file."
+    }
+  ],
+  "required_facts": [
+    "client_max_body_size is 50m",
+    "static expires is 30d",
+    "Both original upstream servers and every other directive are present",
+    "No elision markers or placeholders"
+  ],
+  "critical_omissions": [
+    "Using \"...\" or \"unchanged\" placeholders",
+    "Missing either earlier change"
+  ],
+  "unnecessary_repetition": []
+}

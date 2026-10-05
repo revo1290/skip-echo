@@ -48,26 +48,27 @@ test('single default hook registration with five match sources',()=>{
  assert.equal(json('.claude-plugin/marketplace.json').plugins[0].source,'./');
  assert.equal(manifest.version,json('package.json').version);
 });
-test('68 frozen cases with paired-language split isolation and 14 smoke cases',()=>{
- const manifest=json('evals/manifest.json');assert.equal(manifest.cases.length,68);
+test('84 frozen cases with paired-language split isolation, 14 smoke and 8 stress cases',()=>{
+ const manifest=json('evals/manifest.json');assert.equal(manifest.cases.length,84);
  const cases=manifest.cases.map(c=>{const raw=read('evals/cases/'+c.id+'.json');assert.equal(createHash('sha256').update(raw).digest('hex'),c.sha256);const obj=JSON.parse(raw);assert.equal(c.split,obj.split);assert.equal(c.id,obj.id);return obj;});
- assert.equal(new Set(cases.map(c=>c.id)).size,68);
- assert.equal(readdirSync(resolve(root,'evals/cases')).length,68);
- assert.equal(cases.filter(c=>c.split==='dev').length,40);assert.equal(cases.filter(c=>c.split==='holdout').length,28);
- for(const lang of ['ja','en'])assert.equal(cases.filter(c=>c.language===lang).length,34);
- for(const c of cases){assert.equal(c.messages.length,5);assert.deepEqual(c.messages.map(m=>m.role),['user','assistant','user','assistant','user']);assert.ok(c.required_facts.length>0);assert.ok(c.critical_omissions.length>0);assert.equal(new Set(cases.filter(p=>p.pair_id===c.pair_id).map(p=>p.split)).size,1);}
+ assert.equal(new Set(cases.map(c=>c.id)).size,84);
+ assert.equal(readdirSync(resolve(root,'evals/cases')).length,84);
+ assert.equal(cases.filter(c=>c.split==='dev').length,48);assert.equal(cases.filter(c=>c.split==='holdout').length,36);
+ for(const lang of ['ja','en'])assert.equal(cases.filter(c=>c.language===lang).length,42);
+ for(const c of cases){assert.ok(c.messages.length>=5&&c.messages.length%2===1);assert.deepEqual(c.messages.map(m=>m.role),c.messages.map((_,i)=>i%2?'assistant':'user'));assert.ok(c.required_facts.length>0);assert.ok(c.critical_omissions.length>0);assert.equal(new Set(cases.filter(p=>p.pair_id===c.pair_id).map(p=>p.split)).size,1);}
  const smoke=json('evals/smoke.json').map(id=>cases.find(c=>c.id===id));assert.equal(smoke.length,14);assert.ok(smoke.every(c=>c.split==='dev'));assert.equal(new Set(smoke.map(c=>c.category)).size,14);
+ const stress=json('evals/stress.json').map(id=>cases.find(c=>c.id===id));assert.equal(stress.length,8);assert.ok(stress.every(c=>c.split==='dev'&&c.messages.length>=7));
 });
-test('native plugin eval suite mirrors smoke cases only, with replayable history',()=>{
+test('native plugin eval suite mirrors smoke and stress dev cases, with replayable history',()=>{
  assert.equal(json('.claude-plugin/plugin.json').experimental.evals,'evals/native');
  const smoke=json('evals/smoke.json');const dirs=readdirSync(resolve(root,'evals/native'),{withFileTypes:true}).filter(e=>e.isDirectory()&&e.name!=='results').map(e=>e.name).sort();
- assert.deepEqual(dirs,[...smoke].sort());
- for(const id of smoke){
+ const selected=[...smoke,...json('evals/stress.json')].sort();assert.deepEqual(dirs,selected);
+ for(const id of selected){
   const c=json('evals/cases/'+id+'.json');assert.equal(c.split,'dev');
   assert.match(read(`evals/native/${id}/case.yaml`),/history_file: history\.jsonl/);
   assert.equal(read(`evals/native/${id}/prompt.md`),c.messages.at(-1).content+'\n');
   const lines=read(`evals/native/${id}/history.jsonl`).trim().split('\n').map(l=>JSON.parse(l));
-  assert.deepEqual(lines.map(l=>l.message.role),['user','assistant','user','assistant']);
+  assert.deepEqual(lines.map(l=>l.message.role),c.messages.slice(0,-1).map(m=>m.role));
   for(let i=1;i<lines.length;i++)assert.equal(lines[i].parentUuid,lines[i-1].uuid);
   const g=read(`evals/native/${id}/graders/essentials.md`);for(const f of c.required_facts)assert.ok(g.includes(f));
  }
@@ -77,4 +78,14 @@ test('manual mode arguments are documented in the shipped policy',()=>{
  for(const mode of ['`off`','`full`','`on`'])assert.ok(skill.includes(mode));
  assert.ok(read('integrations/cursor/skip-echo.mdc').startsWith('---\ndescription:'));
  assert.ok(read('integrations/AGENTS.md').includes(read('src/response-policy.md').trim()));
+});
+test('condition suite runs stress cases under A/B/C/D with matching instructions',()=>{
+ const stress=json('evals/stress.json');const policy=read('src/response-policy.md').trim();const control=read('evals/control.txt').trim();
+ for(const id of stress)for(const cond of ['A','B','C','D']){
+  const y=read(`evals/conditions/${id}/${cond}/case.yaml`);assert.match(y,new RegExp(`name: ${id.replace(/[-]/g,'\\-')}\\.${cond}`));
+  const system=JSON.parse(y.match(/append_system_prompt: (.*)/)[1]);
+  assert.equal(system.includes(control),cond==='B');assert.equal(system.includes(policy),cond==='C');
+  assert.match(y,cond==='D'?/plugins: \["\.\.\/\.\.\/\.\.\/\.\."\]/:/plugins: \["baseline-plugin"\]/);
+  if(cond!=='D')assert.equal(json(`evals/conditions/${id}/${cond}/baseline-plugin/.claude-plugin/plugin.json`).name,'skip-echo-eval-baseline');
+ }
 });

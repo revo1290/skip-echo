@@ -1,0 +1,5 @@
+{
+  "name": "skip-echo-eval-baseline",
+  "version": "0.0.0",
+  "description": "Empty plugin used as the no-SkipEcho arm of evals/conditions."
+}

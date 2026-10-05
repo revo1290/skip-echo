@@ -88,13 +88,19 @@ Previously injected context can remain in the current conversation; start a new 
 
 ## Measure it yourself
 
-The repository ships a native [`claude plugin eval`](https://code.claude.com/docs/en/plugin-evals) suite generated from the 14 frozen smoke conversations. Each case replays a fixed multi-turn history, then compares runs with and without the plugin:
+The repository ships two [`claude plugin eval`](https://code.claude.com/docs/en/plugin-evals) suites generated from frozen development conversations. Each case replays a fixed multi-turn history.
 
 ```sh
+# With vs. without the plugin, 14 smoke + 8 long stress conversations
 claude plugin eval . --ablation with-without --runs 3 --max-cost-usd 5
+
+# A/B/C/D on the 8 stress conversations: no plugin, one-line "be brief"-style control,
+# policy as system prompt, installed plugin
+claude plugin eval . --eval-dir evals/conditions --ablation none --runs 3 --max-cost-usd 8
+node scripts/summarize-native.mjs evals/conditions/results/<timestamp>/aggregate-result.json
 ```
 
-`--ablation with-without` is required because history-replay cases otherwise run with the plugin only. Every run and judge call is billed to your account; set a cost ceiling. Graders are model-judged (`essentials` checks required facts and critical omissions, weighted 2; one `no-echo-N` grader per predeclared unnecessary repetition), so treat results as **screening, not release evidence**. Holdout cases are excluded from this suite on purpose. The human-graded A/B/C/D protocol, including the short-instruction control, is in [evals/rubric.md](evals/rubric.md).
+`--ablation with-without` is required in the first suite because history-replay cases otherwise run with the plugin only. The second suite answers the question terse-style skills leave open: does SkipEcho beat a one-line instruction (condition B)? Every run and judge call is billed to your account; set a cost ceiling. Graders are model-judged (`essentials` checks required facts and critical omissions, weighted 2; one `no-echo-N` grader per predeclared unnecessary repetition), so treat results as **screening, not release evidence**. Holdout cases are excluded from this suite on purpose. The human-graded A/B/C/D protocol, including the short-instruction control, is in [evals/rubric.md](evals/rubric.md).
 
 ## How it works
 
@@ -114,6 +120,6 @@ claude plugin validate .
 node scripts/prepare-eval.mjs smoke 1
 ```
 
-The corpus has 68 synthetic cases in 34 bilingual pairs (40 development, 28 holdout) across 14 categories. `prepare-eval` creates fixed-history A/B/C/D jobs and does not call a model. Variants share templates, so they are not 68 independent observations.
+The corpus has 84 synthetic cases in 42 bilingual pairs (48 development, 36 holdout) across 18 categories, including long multi-turn stress conversations. `prepare-eval` creates fixed-history A/B/C/D jobs and does not call a model. Variants share templates, so they are not 84 independent observations.
 
 See [CONTRIBUTING](CONTRIBUTING.md), [SECURITY](SECURITY.md), [compatibility](docs/compatibility.md), [design](docs/design.md), and [sources](docs/sources.md). Issue forms cover over-omission, repetition, and activation failures. Submit only synthetic or redacted examples.

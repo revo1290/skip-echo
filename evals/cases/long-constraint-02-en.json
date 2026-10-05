@@ -1,0 +1,50 @@
+{
+  "id": "long-constraint-02-en",
+  "pair_id": "long-constraint-02",
+  "language": "en",
+  "category": "long-constraint",
+  "split": "holdout",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Our product API is slow (p95 900 ms). Compare caching options: CDN, Redis, and in-process memory."
+    },
+    {
+      "role": "assistant",
+      "content": "A CDN caches whole HTTP responses at edge locations, which removes load from your servers entirely, but only for responses that are safe to share, and it needs cache headers or purge rules. Redis is a shared cache your app reads and writes explicitly; all instances see the same data, and you control keys and TTLs. In-process memory is the fastest and simplest, but each instance keeps its own copy, so instances can disagree and the cache is lost on restart. For a read-heavy product catalog, a CDN in front of public endpoints usually gives the biggest p95 gain."
+    },
+    {
+      "role": "user",
+      "content": "We run 6 instances behind a load balancer."
+    },
+    {
+      "role": "assistant",
+      "content": "That mainly affects in-process caching: six separate caches mean more misses and possible inconsistency between instances. Redis gives one shared cache, and a CDN is unaffected by the instance count."
+    },
+    {
+      "role": "user",
+      "content": "Product data changes about once an hour."
+    },
+    {
+      "role": "assistant",
+      "content": "A TTL of a few minutes, or an explicit purge on update, keeps staleness bounded. Both the CDN and Redis support purging; with in-process caches you would have to notify all six instances."
+    },
+    {
+      "role": "user",
+      "content": "Wait, the product endpoints return prices personalized for each logged-in user."
+    }
+  ],
+  "required_facts": [
+    "Personalized responses must not be cached in a shared CDN cache keyed only by URL, because one user's prices could be served to another",
+    "Workable options: cache per user or price tier in Redis, cache only the shared non-personalized data, or mark personalized responses private or no-store at the CDN",
+    "Revises the earlier recommendation that a CDN gives the biggest gain"
+  ],
+  "critical_omissions": [
+    "Recommending shared CDN caching of personalized responses",
+    "Leaving the earlier CDN recommendation unrevised"
+  ],
+  "unnecessary_repetition": [
+    "Re-describing all three caching options from the start",
+    "Re-explaining the 6-instance and hourly-update points"
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "id": "long-constraint-01-en",
+  "pair_id": "long-constraint-01",
+  "language": "en",
+  "category": "long-constraint",
+  "split": "dev",
+  "messages": [
+    {
+      "role": "user",
+      "content": "We need a message queue for order events between 4 services. Compare SQS, RabbitMQ, and Kafka briefly."
+    },
+    {
+      "role": "assistant",
+      "content": "SQS is fully managed, scales without capacity planning, and charges per request; standard queues do not guarantee order, while FIFO queues do, with lower throughput limits. RabbitMQ is a broker you run or rent; it supports flexible routing through exchanges, and messages in classic queues are removed once acknowledged. Kafka is a partitioned log: consumers track their own offsets, order is guaranteed within a partition, and it needs more operational work unless you use a managed service. For 4 services with moderate traffic, SQS is the lowest operational burden; Kafka is strongest when you need high throughput or many independent consumers."
+    },
+    {
+      "role": "user",
+      "content": "We need ordering per customer."
+    },
+    {
+      "role": "assistant",
+      "content": "All three can do it. With SQS, use a FIFO queue with the customer ID as the message group ID. With Kafka, use the customer ID as the partition key. With RabbitMQ, order holds per queue with a single consumer, so per-customer ordering needs consistent-hash routing to several queues, which is more setup."
+    },
+    {
+      "role": "user",
+      "content": "Our team is 2 engineers and the budget is small."
+    },
+    {
+      "role": "assistant",
+      "content": "That favors SQS FIFO: no servers to run, and cost scales with usage. Self-hosting Kafka or RabbitMQ would take a large share of a 2-person team's time."
+    },
+    {
+      "role": "user",
+      "content": "One more requirement: we must be able to replay the last 7 days of events into a new service."
+    }
+  ],
+  "required_facts": [
+    "SQS deletes messages once consumed, so it cannot replay 7 days of history to a new consumer by itself",
+    "A log-based option fits replay (for example Kafka with at least 7-day retention, Kinesis, or RabbitMQ Streams)",
+    "Addresses the 2-engineer, small-budget constraint (for example a managed log service, or archiving events alongside SQS)"
+  ],
+  "critical_omissions": [
+    "Claiming SQS can natively replay consumed messages to a new consumer",
+    "Ignoring the team and budget constraint"
+  ],
+  "unnecessary_repetition": [
+    "Re-comparing all three systems from the start",
+    "Re-explaining how per-customer ordering works in each system"
+  ]
+}

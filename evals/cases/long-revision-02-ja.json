@@ -1,0 +1,52 @@
+{
+  "id": "long-revision-02-ja",
+  "pair_id": "long-revision-02",
+  "language": "ja",
+  "category": "long-revision",
+  "split": "holdout",
+  "messages": [
+    {
+      "role": "user",
+      "content": "うちのnginx.conf:\n```nginx\nworker_processes auto;\nevents {\n    worker_connections 1024;\n}\nhttp {\n    sendfile on;\n    keepalive_timeout 65;\n    gzip on;\n    gzip_types text/css application/javascript application/json;\n    upstream app {\n        server 127.0.0.1:3000;\n        server 127.0.0.1:3001;\n    }\n    server {\n        listen 80;\n        server_name example.com;\n        client_max_body_size 10m;\n        location / {\n            proxy_pass http://app;\n            proxy_set_header Host $host;\n            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\n        }\n        location /static/ {\n            root /var/www;\n            expires 7d;\n        }\n    }\n}\n```\nupstreamブロックは何をしてる？"
+    },
+    {
+      "role": "assistant",
+      "content": "`app` という名前のサーバーグループを2台のバックエンドで定義しています。`proxy_pass http://app` でリクエストをこのグループに送り、既定ではラウンドロビンで振り分けます。バックエンドが失敗すると、`max_fails` と `fail_timeout`（既定は1回と10秒）に従ってしばらく振り分け対象から外します。"
+    },
+    {
+      "role": "user",
+      "content": "client_max_body_sizeを50mに上げて。"
+    },
+    {
+      "role": "assistant",
+      "content": "`server` ブロック内です:\n```nginx\n        client_max_body_size 50m;\n```\nほかは変わりません。"
+    },
+    {
+      "role": "user",
+      "content": "静的ファイルの有効期限を30dにして。"
+    },
+    {
+      "role": "assistant",
+      "content": "`location /static/` 内です:\n```nginx\n            expires 30d;\n```\nファイルのほかの部分は変更なしです。"
+    },
+    {
+      "role": "user",
+      "content": "upstreamに3台目として127.0.0.1:3002を追加して。"
+    }
+  ],
+  "required_facts": [
+    "upstream app内にserver 127.0.0.1:3002を追加",
+    "ファイルのほかの部分は変更なしと明示",
+    "upstreamブロック内の変更箇所が分かる"
+  ],
+  "critical_omissions": [
+    "ほかのディレクティブの変更",
+    "途中を省いたファイルを完全版として提示",
+    "以前のbody sizeやexpiresの変更を戻す"
+  ],
+  "unnecessary_repetition": [
+    "依頼のないnginx.conf全文の再掲",
+    "upstreamの振り分けの再説明",
+    "以前のbody sizeとexpires変更の詳しい再掲"
+  ]
+}

@@ -88,13 +88,18 @@ claude plugin uninstall skip-echo@skip-echo-marketplace --scope user
 
 ## 自分で効果を測る
 
-凍結済みのスモーク14会話から生成した、[`claude plugin eval`](https://code.claude.com/docs/en/plugin-evals) 用の評価スイートを同梱しています。各ケースで決まった会話履歴を再生し、プラグインあり・なしを比べます。
+凍結済みの開発用会話から生成した、[`claude plugin eval`](https://code.claude.com/docs/en/plugin-evals) 用の評価スイートを2つ同梱しています。どちらも決まった会話履歴を再生してから最後の質問に答えさせます。
 
 ```sh
+# プラグインあり・なし。スモーク14会話＋長い会話8件
 claude plugin eval . --ablation with-without --runs 3 --max-cost-usd 5
+
+# 長い会話8件でA/B/C/Dを比較（プラグインなし／短い1文の指示／ポリシーをシステムプロンプトで／実プラグイン）
+claude plugin eval . --eval-dir evals/conditions --ablation none --runs 3 --max-cost-usd 8
+node scripts/summarize-native.mjs evals/conditions/results/<timestamp>/aggregate-result.json
 ```
 
-履歴を再生するケースは、指定しないとプラグインありの側だけ実行されるので、`--ablation with-without` が必要です。実行と採点のモデル呼び出しはすべてご自身のアカウントに課金されます。上限額を必ず指定してください。採点はモデルが行います（`essentials` は必要事実と致命的な欠落を見て重み2、`no-echo-N` は事前に決めた不要な再掲を1項目ずつ見ます）。なので結果は**目安であって、リリース判断の根拠にはなりません**。holdoutケースは意図的に外してあります。短い指示を対照に入れた、人間が採点するA/B/C/D評価の手順は [evals/rubric.md](evals/rubric.md) にあります。
+1つ目は履歴を再生するケースなので、指定しないとプラグインありの側だけ実行されます。`--ablation with-without` が必要です。2つ目は、圧縮系スキルでは答えが出ていない「短い1文の指示（条件B）より効くのか」を確かめるためのものです。実行と採点のモデル呼び出しはすべてご自身のアカウントに課金されます。上限額を必ず指定してください。採点はモデルが行います（`essentials` は必要事実と致命的な欠落を見て重み2、`no-echo-N` は事前に決めた不要な再掲を1項目ずつ見ます）。なので結果は**目安であって、リリース判断の根拠にはなりません**。holdoutケースは意図的に外してあります。短い指示を対照に入れた、人間が採点するA/B/C/D評価の手順は [evals/rubric.md](evals/rubric.md) にあります。
 
 ## 仕組み
 
@@ -114,6 +119,6 @@ claude plugin validate .
 node scripts/prepare-eval.mjs smoke 1
 ```
 
-評価用の会話は日英68ケース（34組の対訳、開発40／holdout28、14カテゴリ）です。`prepare-eval` は履歴固定のA/B/C/Dジョブを作るだけで、モデルは呼び出しません。テンプレートを共有しているので、68件の独立した観測ではありません。
+評価用の会話は日英84ケース（42組の対訳、開発48／holdout36、18カテゴリ。長い複数往復の会話を含む）です。`prepare-eval` は履歴固定のA/B/C/Dジョブを作るだけで、モデルは呼び出しません。テンプレートを共有しているので、84件の独立した観測ではありません。
 
 省略しすぎ・繰り返し・発火不良のIssueフォームがあります。実会話や機密情報は投稿しないでください。

@@ -8,6 +8,7 @@
 | Node.js 22, macOS, Windows | CI matrix prepared; not executed here |
 | Claude Code plugin validation | Executed 2026-10-05 with Claude Code 2.1.289 on Linux: plugin and marketplace manifests pass without warnings |
 | `npx skills add` discovery | `skills add <local repo> --list` finds exactly one `skip-echo` skill; installation into each agent untested |
+| A/B/C/D condition suite (`evals/conditions`) | Pilot executed 2026-10-05: all four conditions load and run; the empty baseline plugin must sit inside each case directory |
 | Native `claude plugin eval` suite | Executed 2026-10-05, Claude Code 2.1.289, Linux: synthetic `history.jsonl` accepted and replayed; `SessionStart:resume` fired with the plugin and injected the policy, absent without it |
 | Cursor rule / AGENTS.md snippet | Generated only; untested in any client |
 | SessionStart context inside Claude Code | Observed only inside `claude plugin eval` child sessions (resume source); interactive sessions not observed |

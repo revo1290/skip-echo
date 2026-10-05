@@ -1,0 +1,54 @@
+{
+  "id": "long-progress-01-en",
+  "pair_id": "long-progress-01",
+  "language": "en",
+  "category": "long-progress",
+  "split": "dev",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Refactor the auth module: split session handling out of src/auth/index.ts, then move token refresh into its own service. Keep the public API the same."
+    },
+    {
+      "role": "assistant",
+      "content": "Plan: 1) extract session handling into src/auth/session.ts, 2) move token refresh into src/services/token.ts, 3) update imports and keep src/auth/index.ts re-exporting the same public functions, 4) run the full test suite. Step 1 is done: session create, validate, and destroy now live in src/auth/session.ts, and index.ts re-exports them. npm test: 208 passed, 0 failed."
+    },
+    {
+      "role": "user",
+      "content": "Good. Is there anything risky in step 2?"
+    },
+    {
+      "role": "assistant",
+      "content": "The main risk is the refresh timer. It reads the session store directly, so moving it creates a circular import between session.ts and token.ts unless the store is passed in; I plan to inject the store into the token service. Concurrent refreshes are the other risk: two requests can trigger a refresh at once, so the service should share one in-flight promise."
+    },
+    {
+      "role": "user",
+      "content": "Also, auth/refresh.spec.ts was flaky yesterday. Anything to know?"
+    },
+    {
+      "role": "assistant",
+      "content": "It uses real timers with a 50 ms margin, so it fails intermittently on slow CI runners. Switching it to fake timers would make it deterministic. I have not changed it yet."
+    },
+    {
+      "role": "user",
+      "content": "I did step 2 myself: token refresh is now in src/services/token.ts with the store injected and a shared in-flight promise. I also switched refresh.spec.ts to fake timers. npm test: 212 passed, 1 skipped, 0 failed. No staging deploy yet. Give me a status update based only on what I just told you."
+    }
+  ],
+  "required_facts": [
+    "Step 2 done: token refresh in src/services/token.ts with injected store and shared in-flight promise",
+    "refresh.spec.ts now uses fake timers",
+    "User-reported run: 212 passed, 1 skipped, 0 failed",
+    "Not deployed to staging, so not verified there"
+  ],
+  "critical_omissions": [
+    "Claiming staging or production verification",
+    "Claiming to have run the tests personally",
+    "Claiming step 3 (imports and public API check) is complete"
+  ],
+  "unnecessary_repetition": [
+    "The four-step plan",
+    "Step 1 details (session.ts extraction, 208 tests)",
+    "The circular-import and concurrency risk explanation",
+    "Why the flaky test was flaky"
+  ]
+}

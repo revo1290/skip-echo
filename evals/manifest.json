@@ -1,6 +1,6 @@
 {
-  "version": 2,
-  "description": "68 synthetic cases, 34 bilingual pairs; parameterized scenario families, not 68 independent real-world samples. v1 cases are unchanged; v2 adds progress and revision categories. Frozen before model evaluation.",
+  "version": 3,
+  "description": "84 synthetic cases, 42 bilingual pairs; parameterized scenario families, not 84 independent real-world samples. v1 and v2 cases are unchanged; v2 added progress and revision; v3 adds long multi-turn stress categories. Frozen before model evaluation.",
   "cases": [
     {
       "id": "added-constraint-01-en",
@@ -171,6 +171,86 @@
       "id": "handoff-02-ja",
       "split": "holdout",
       "sha256": "63c9a11ac551d391c5d97398cba386b42b9eb57e5bf7e1d1bc4931f79260fec4"
+    },
+    {
+      "id": "long-constraint-01-en",
+      "split": "dev",
+      "sha256": "b55fd005d7c01aa47920c73d5a30ac01de336e7da6e6ded8e8f104a4c4579cf5"
+    },
+    {
+      "id": "long-constraint-01-ja",
+      "split": "dev",
+      "sha256": "999803d1e86ecaa984e5c9392e2ebe946dd94f3bcabf1078f45e3d41df43a8bd"
+    },
+    {
+      "id": "long-constraint-02-en",
+      "split": "holdout",
+      "sha256": "701377c97155b43253e85a9c12caac2df8eb6898ce561dd745da10d1728dcfee"
+    },
+    {
+      "id": "long-constraint-02-ja",
+      "split": "holdout",
+      "sha256": "6bfb5bfdf00c30d1dd221c57c9161bbc9d9701dac4388a0692cda359c30ea2f6"
+    },
+    {
+      "id": "long-full-01-en",
+      "split": "dev",
+      "sha256": "5dcd4bb0c542ec684dc285ce506e73bdef2626766aac76898fdc62285e8ededb"
+    },
+    {
+      "id": "long-full-01-ja",
+      "split": "dev",
+      "sha256": "c70c0459a1360662155ca0adececac8c9eb9b3a4d2eec9daa4c8067e07183158"
+    },
+    {
+      "id": "long-full-02-en",
+      "split": "holdout",
+      "sha256": "d80f5cde108c9362c463b70d85a9a14fe22a71bb8f700bdcfc12837ef8962507"
+    },
+    {
+      "id": "long-full-02-ja",
+      "split": "holdout",
+      "sha256": "7264624c472b02004c4fb454d0e50053055d0283815dae6397c0dce0a9373ab8"
+    },
+    {
+      "id": "long-progress-01-en",
+      "split": "dev",
+      "sha256": "6083e6203df106ef2a1b4c8652c8e33b1ea49dd4901bdf54a4fac7fb108c69fc"
+    },
+    {
+      "id": "long-progress-01-ja",
+      "split": "dev",
+      "sha256": "afcaae18beb0d7930eae3981333fdc0806bd974865d08a7ab4817f07032bafb2"
+    },
+    {
+      "id": "long-progress-02-en",
+      "split": "holdout",
+      "sha256": "dfcab6bf726560bd1b8c3b3c5a50338bd581287461c43f32f6a00cbb8425e35b"
+    },
+    {
+      "id": "long-progress-02-ja",
+      "split": "holdout",
+      "sha256": "889bb0780f96ffed6494cc4095aedf1469e94563b4799aff937ded3abef1332b"
+    },
+    {
+      "id": "long-revision-01-en",
+      "split": "dev",
+      "sha256": "999306b47eb69556eb9fff216c3085af1dcc2d04abc0539c921b738fd990fc85"
+    },
+    {
+      "id": "long-revision-01-ja",
+      "split": "dev",
+      "sha256": "c27a566005a11cbd3f9f4e5ec7e8ef0399861a278009df98d1b2c8aba55b6a66"
+    },
+    {
+      "id": "long-revision-02-en",
+      "split": "holdout",
+      "sha256": "a4b6a2fbed95b0cded14b0b98644a3d113c36639e61cda7c773efa99ac7ac81e"
+    },
+    {
+      "id": "long-revision-02-ja",
+      "split": "holdout",
+      "sha256": "ee15dfd68c62843ed00587c9e04c712d46e00678fcd77e73de384cdb96e914b2"
     },
     {
       "id": "numeric-01-en",

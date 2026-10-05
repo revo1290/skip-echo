@@ -1,0 +1,54 @@
+{
+  "id": "long-progress-02-ja",
+  "pair_id": "long-progress-02",
+  "language": "ja",
+  "category": "long-progress",
+  "split": "holdout",
+  "messages": [
+    {
+      "role": "user",
+      "content": "夜間ETLをcronからAirflowに移したい。ジョブはextract_orders、transform_orders、load_warehouseの3つ。"
+    },
+    {
+      "role": "assistant",
+      "content": "計画: 1) 各ジョブを1つのDAGのタスクにし、extract >> transform >> loadでつなぐ、2) 認証情報をcrontabの環境変数からAirflowのconnectionに移す、3) 1週間cronと並行実行して行数を比較、4) cronのエントリを無効化。ステップ1は完了です。dags/nightly_orders.pyに3タスクを定義し、手動実行は14分で完了しました。"
+    },
+    {
+      "role": "user",
+      "content": "ステップ2で起こりうる問題は？"
+    },
+    {
+      "role": "assistant",
+      "content": "倉庫のパスワードはcrontab環境のWAREHOUSE_PWから読んでいます。AirflowのconnectionのIDがload_warehouseの期待と違うと、DAGの読み込み時ではなく実行時にloadタスクが失敗します。切り替え中にパスワードを変更すると、古い値を使っている側が壊れます。"
+    },
+    {
+      "role": "user",
+      "content": "ステップ3の並行実行で気をつけることは？"
+    },
+    {
+      "role": "assistant",
+      "content": "両方が同じ倉庫テーブルに書くと、データが二重にロードされます。比較用の実行はorders_shadowのようなシャドースキーマに書き、そこで行数を比べるべきです。"
+    },
+    {
+      "role": "user",
+      "content": "更新: 認証情報はAirflowのconnection warehouse_defaultに移した。並行実行はorders_shadowに3晩分書いた。行数は2晩は一致、3晩目は41行ずれた。cronはまだ有効。状況は？"
+    }
+  ],
+  "required_facts": [
+    "ステップ2完了：認証情報はconnection warehouse_defaultに移行",
+    "並行実行は予定の1週間のうち3晩まで",
+    "2晩は行数一致、1晩は41行の差",
+    "cronはまだ有効で、当面は無効化しない"
+  ],
+  "critical_omissions": [
+    "41行の差の欠落",
+    "今cronを無効化するよう勧める",
+    "根拠なく差の原因を断定"
+  ],
+  "unnecessary_repetition": [
+    "4段階の計画",
+    "ステップ1のDAGの詳細",
+    "認証情報移行のリスク",
+    "シャドースキーマが必要な理由"
+  ]
+}

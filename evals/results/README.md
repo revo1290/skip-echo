@@ -14,7 +14,8 @@
 | `revision-01-en`, 2 extra runs per arm | With plugin 2/2 showed only the changed `cache` block; without plugin 2/2 reprinted all 14 lines | The revision rule changed behavior here, but the 14-case run reverted to a full reprint (2 of 3 with-plugin runs followed it). The then-combined `no-echo` grader still failed the excerpt runs, which led to splitting it into one grader per item |
 | `added-constraint-01-ja` | Both arms re-explained the storage overview | No measurable effect on this case |
 | SessionStart inside eval runs | `SessionStart:resume` fired and injected the policy in the with-plugin arm only | First host-level observation of hook injection; still not an interactive session |
-| Short-instruction control B | Not executed | Whether a one-line instruction matches SkipEcho remains open |
+| A/B/C/D pilot, 2 stress cases × 1 run (v0.2.0) | `long-revision-01-en`: all four conditions 1.00. `long-progress-01-ja`: A 0.33, B 0.50, C 0.33, D 1.00; A and B restated step 1 details, D reported only this step's changes and open checks | Harness check only, n=1, judge noise visible (C passed essentials but failed all no-echo graders). [Raw outputs](conditions-pilot-2026-10-05.json) |
+| Short-instruction control B, full run | Not executed | Whether a one-line instruction matches SkipEcho remains open |
 | Holdout A/B/C/D | Not executed | No release-gate conclusion |
 | Cumulative conversation, total usage/cost, latency | Not measured | No savings claim |
 | macOS / Windows / Node 22 / style coexistence | Not executed | CI configuration is not evidence of a passing run |

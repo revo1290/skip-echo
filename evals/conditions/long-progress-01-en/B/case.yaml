@@ -1,0 +1,11 @@
+schema_version: "1.1"
+name: long-progress-01-en.B
+description: "Generated from evals/cases/long-progress-01-en.json (sha256 6083e6203df1). Do not edit."
+tags: [cond-B, long-progress, en]
+plugins: ["baseline-plugin"]
+context:
+  history_file: history.jsonl
+execution:
+  max_turns: 3
+  allowed_tools: [Skill]
+  append_system_prompt: "This conversation has no codebase or workspace files. Do not search for, read, or create files; answer in your reply.\n\nAnswer the current question without unnecessarily repeating previous explanations. Preserve necessary context, explicit corrections, and requests for complete output."

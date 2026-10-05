@@ -1,0 +1,54 @@
+{
+  "id": "long-progress-02-en",
+  "pair_id": "long-progress-02",
+  "language": "en",
+  "category": "long-progress",
+  "split": "holdout",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Move our nightly ETL from cron to Airflow: three jobs, extract_orders, transform_orders, load_warehouse."
+    },
+    {
+      "role": "assistant",
+      "content": "Plan: 1) wrap each job as a task in one DAG with extract >> transform >> load, 2) move credentials from the crontab environment into Airflow connections, 3) run the DAG in parallel with cron for one week and compare row counts, 4) disable the cron entries. Step 1 is done: dags/nightly_orders.py defines the three tasks, and a manual trigger completed in 14 minutes."
+    },
+    {
+      "role": "user",
+      "content": "What could go wrong with step 2?"
+    },
+    {
+      "role": "assistant",
+      "content": "The warehouse password is read from WAREHOUSE_PW in the crontab environment. If the Airflow connection ID does not match what load_warehouse expects, the load task fails at run time rather than when the DAG is parsed. Rotating the password during the switch would also break whichever side still uses the old value."
+    },
+    {
+      "role": "user",
+      "content": "And the parallel run in step 3, any catch?"
+    },
+    {
+      "role": "assistant",
+      "content": "Both systems would write to the same warehouse tables, so data would be loaded twice. The comparison run should write to a shadow schema such as orders_shadow and compare row counts there."
+    },
+    {
+      "role": "user",
+      "content": "Update: credentials are now in the Airflow connection warehouse_default. The parallel run has written to orders_shadow for 3 nights; row counts matched on 2 nights and differed by 41 rows on the third. Cron is still enabled. What is the status?"
+    }
+  ],
+  "required_facts": [
+    "Step 2 done: credentials in the warehouse_default connection",
+    "Parallel run: 3 nights so far of the planned week",
+    "Row counts matched on 2 nights and differed by 41 rows on one",
+    "Cron is still enabled and should stay enabled for now"
+  ],
+  "critical_omissions": [
+    "Omitting the 41-row mismatch",
+    "Recommending disabling cron now",
+    "Claiming the mismatch is explained without evidence"
+  ],
+  "unnecessary_repetition": [
+    "The four-step plan",
+    "Step 1 DAG details",
+    "Risks of the credential move",
+    "Why a shadow schema is needed"
+  ]
+}

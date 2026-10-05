@@ -1,0 +1,13 @@
+{
+  "name": "skip-echo-marketplace",
+  "owner": {
+    "name": "SkipEcho contributors"
+  },
+  "plugins": [
+    {
+      "name": "skip-echo",
+      "source": "./",
+      "description": "Reduce unnecessary repetition while keeping complete answers."
+    }
+  ]
+}

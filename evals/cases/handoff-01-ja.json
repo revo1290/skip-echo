@@ -1,0 +1,40 @@
+{
+  "id": "handoff-01-ja",
+  "pair_id": "handoff-01",
+  "language": "ja",
+  "category": "handoff",
+  "split": "dev",
+  "messages": [
+    {
+      "role": "user",
+      "content": "架空プロジェクトMaple: CSVは対象外、JSON対応、期限2026-11-04 17:00 JST。"
+    },
+    {
+      "role": "assistant",
+      "content": "JSONのみ対応し、CSVは対象外です。"
+    },
+    {
+      "role": "user",
+      "content": "認証テスト成功、E2E未実行も伝えて。"
+    },
+    {
+      "role": "assistant",
+      "content": "認証テスト成功、E2Eは未実行です。"
+    },
+    {
+      "role": "user",
+      "content": "別の担当者への引き継ぎ文を全文で。"
+    }
+  ],
+  "required_facts": [
+    "JSON",
+    "CSV対象外",
+    "2026-11-04 17:00 JST",
+    "認証テスト成功",
+    "E2E未実行"
+  ],
+  "critical_omissions": [
+    "期限・除外条件・未検証範囲の欠落"
+  ],
+  "unnecessary_repetition": []
+}

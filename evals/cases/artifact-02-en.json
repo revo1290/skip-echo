@@ -1,0 +1,39 @@
+{
+  "id": "artifact-02-en",
+  "pair_id": "artifact-02",
+  "language": "en",
+  "category": "artifact",
+  "split": "holdout",
+  "messages": [
+    {
+      "role": "user",
+      "content": "JSON settings: timeoutMs=1500, retries=2, enabled=false."
+    },
+    {
+      "role": "assistant",
+      "content": "{\"timeoutMs\":1500,\"retries\":2,\"enabled\":false}"
+    },
+    {
+      "role": "user",
+      "content": "Keep all three keys."
+    },
+    {
+      "role": "assistant",
+      "content": "I will retain all three."
+    },
+    {
+      "role": "user",
+      "content": "Change only timeoutMs to 3500. Output the complete copy-ready JSON only."
+    }
+  ],
+  "required_facts": [
+    "timeoutMs=3500",
+    "retries=2",
+    "enabled=false",
+    "Valid JSON only"
+  ],
+  "critical_omissions": [
+    "Ellipses or prose instead of complete JSON"
+  ],
+  "unnecessary_repetition": []
+}

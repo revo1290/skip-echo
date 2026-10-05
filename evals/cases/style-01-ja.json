@@ -1,0 +1,39 @@
+{
+  "id": "style-01-ja",
+  "pair_id": "style-01",
+  "language": "ja",
+  "category": "style",
+  "split": "dev",
+  "messages": [
+    {
+      "role": "user",
+      "content": "丁寧語で、表を使ってください。要件Aは完了、Bは未完了。"
+    },
+    {
+      "role": "assistant",
+      "content": "|要件|状態|\n|---|---|\n|A|完了|\n|B|未完了|"
+    },
+    {
+      "role": "user",
+      "content": "Bは未完了のままです。"
+    },
+    {
+      "role": "assistant",
+      "content": "Bは未完了です。"
+    },
+    {
+      "role": "user",
+      "content": "Bも完了しました。変更点だけ、表で教えてください。"
+    }
+  ],
+  "required_facts": [
+    "B完了",
+    "表形式"
+  ],
+  "critical_omissions": [
+    "形式や明示指示を無視"
+  ],
+  "unnecessary_repetition": [
+    "既出全体"
+  ]
+}

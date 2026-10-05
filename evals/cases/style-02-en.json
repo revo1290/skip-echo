@@ -1,0 +1,39 @@
+{
+  "id": "style-02-en",
+  "pair_id": "style-02",
+  "language": "en",
+  "category": "style",
+  "split": "holdout",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Use a polite tone and tables. Requirement A is done; B is not done."
+    },
+    {
+      "role": "assistant",
+      "content": "|Requirement|Status|\n|---|---|\n|A|Done|\n|B|Not done|"
+    },
+    {
+      "role": "user",
+      "content": "B is still not done."
+    },
+    {
+      "role": "assistant",
+      "content": "B is not done."
+    },
+    {
+      "role": "user",
+      "content": "Suspend repetition reduction from now on. Summarize A and B with full context in a table."
+    }
+  ],
+  "required_facts": [
+    "A done",
+    "B not done",
+    "Table format",
+    "Honor suspension"
+  ],
+  "critical_omissions": [
+    "Ignoring format or explicit override"
+  ],
+  "unnecessary_repetition": []
+}

@@ -1,0 +1,25 @@
+name: Unnecessary repetition
+description: An unchanged explanation was repeated without helping answer the new request.
+body:
+  - type: markdown
+    attributes:
+      value: Share only synthetic or redacted examples. Never include tokens, private code, or raw personal transcripts.
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, Node version, Claude Code version, model, plugin version, other styles, and installation route.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal synthetic conversation or reproduction
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected and observed behavior
+    validations:
+      required: true

@@ -1,0 +1,41 @@
+{
+  "id": "added-constraint-01-en",
+  "pair_id": "added-constraint-01",
+  "language": "en",
+  "category": "added-constraint",
+  "split": "dev",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Compare session storage for fictional service Aster."
+    },
+    {
+      "role": "assistant",
+      "content": "In-process memory belongs to each process; a shared store can share state between processes."
+    },
+    {
+      "role": "user",
+      "content": "We currently have one server."
+    },
+    {
+      "role": "assistant",
+      "content": "In-process storage is an option if losing sessions on restart is acceptable."
+    },
+    {
+      "role": "user",
+      "content": "What if we scale to 3 servers? Is Redis mandatory?"
+    }
+  ],
+  "required_facts": [
+    "Assess whether 3 servers need shared state",
+    "Redis is not necessarily mandatory",
+    "Process memory is not automatically shared"
+  ],
+  "critical_omissions": [
+    "Claiming Redis is mandatory",
+    "Omitting the sharing condition"
+  ],
+  "unnecessary_repetition": [
+    "Whole introduction to storage types"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "id": "style-01-en",
+  "pair_id": "style-01",
+  "language": "en",
+  "category": "style",
+  "split": "dev",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Use a polite tone and tables. Requirement A is done; B is not done."
+    },
+    {
+      "role": "assistant",
+      "content": "|Requirement|Status|\n|---|---|\n|A|Done|\n|B|Not done|"
+    },
+    {
+      "role": "user",
+      "content": "B is still not done."
+    },
+    {
+      "role": "assistant",
+      "content": "B is not done."
+    },
+    {
+      "role": "user",
+      "content": "B is now done. Show only the change in a table, please."
+    }
+  ],
+  "required_facts": [
+    "B done",
+    "Table format"
+  ],
+  "critical_omissions": [
+    "Ignoring format or explicit override"
+  ],
+  "unnecessary_repetition": [
+    "All old status"
+  ]
+}

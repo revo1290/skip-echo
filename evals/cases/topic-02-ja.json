@@ -1,0 +1,39 @@
+{
+  "id": "topic-02-ja",
+  "pair_id": "topic-02",
+  "language": "ja",
+  "category": "topic",
+  "split": "dev",
+  "messages": [
+    {
+      "role": "user",
+      "content": "キャッシュの利点は？"
+    },
+    {
+      "role": "assistant",
+      "content": "結果を再利用して処理を減らせます。"
+    },
+    {
+      "role": "user",
+      "content": "弱点は？"
+    },
+    {
+      "role": "assistant",
+      "content": "元の情報より古くなる場合があります。"
+    },
+    {
+      "role": "user",
+      "content": "別の話。縦5cm、横2cmの長方形の面積と計算方法は？"
+    }
+  ],
+  "required_facts": [
+    "10cm²",
+    "5×2の計算"
+  ],
+  "critical_omissions": [
+    "新しい質問の計算方法省略"
+  ],
+  "unnecessary_repetition": [
+    "キャッシュの説明"
+  ]
+}

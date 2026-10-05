@@ -1,0 +1,42 @@
+{
+  "id": "correction-03-en",
+  "pair_id": "correction-03",
+  "language": "en",
+  "category": "correction",
+  "split": "holdout",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Does fictional product Cedar support CSV import?"
+    },
+    {
+      "role": "assistant",
+      "content": "It supports CSV."
+    },
+    {
+      "role": "user",
+      "content": "And JSON?"
+    },
+    {
+      "role": "assistant",
+      "content": "It supports JSON too."
+    },
+    {
+      "role": "user",
+      "content": "Official excerpt: “Cedar v2: CSV import is not supported. JSON import only.” Was your earlier answer correct? Use only this excerpt."
+    }
+  ],
+  "required_facts": [
+    "Explicitly correct earlier CSV claim",
+    "CSV import unsupported",
+    "JSON only",
+    "Ground correction in supplied v2 excerpt"
+  ],
+  "critical_omissions": [
+    "Silent reversal",
+    "Losing negation"
+  ],
+  "unnecessary_repetition": [
+    "General CSV tutorial"
+  ]
+}

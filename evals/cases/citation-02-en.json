@@ -1,0 +1,37 @@
+{
+  "id": "citation-02-en",
+  "pair_id": "citation-02",
+  "language": "en",
+  "category": "citation",
+  "split": "holdout",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Fictional excerpt: “Maximum 3500 items.” Source: https://example.org/spec-b. Use only this supplied excerpt."
+    },
+    {
+      "role": "assistant",
+      "content": "The limit is 3500 items."
+    },
+    {
+      "role": "user",
+      "content": "I will cite it in a document."
+    },
+    {
+      "role": "assistant",
+      "content": "You can cite the supplied source."
+    },
+    {
+      "role": "user",
+      "content": "Restate the limit and its source link."
+    }
+  ],
+  "required_facts": [
+    "3500",
+    "https://example.org/spec-b"
+  ],
+  "critical_omissions": [
+    "Omitting explicitly requested source"
+  ],
+  "unnecessary_repetition": []
+}

@@ -1,0 +1,41 @@
+{
+  "id": "added-constraint-01-ja",
+  "pair_id": "added-constraint-01",
+  "language": "ja",
+  "category": "added-constraint",
+  "split": "dev",
+  "messages": [
+    {
+      "role": "user",
+      "content": "架空サービスAsterのセッション保存方式を比較して。"
+    },
+    {
+      "role": "assistant",
+      "content": "アプリ内メモリは各プロセス内、共有ストアは複数プロセスで状態を共有できます。"
+    },
+    {
+      "role": "user",
+      "content": "今は1台です。"
+    },
+    {
+      "role": "assistant",
+      "content": "1台で再起動時の消失を許容するならアプリ内メモリも選択肢です。"
+    },
+    {
+      "role": "user",
+      "content": "3台に増やすと？ Redisは必須？"
+    }
+  ],
+  "required_facts": [
+    "3台で状態共有の必要性を判断",
+    "Redisは必須とは限らない",
+    "プロセス内メモリは自動共有されない"
+  ],
+  "critical_omissions": [
+    "Redisを必須と断定",
+    "共有の条件を欠落"
+  ],
+  "unnecessary_repetition": [
+    "保存方式の概要全体"
+  ]
+}

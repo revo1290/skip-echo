@@ -1,0 +1,40 @@
+{
+  "id": "handoff-01-en",
+  "pair_id": "handoff-01",
+  "language": "en",
+  "category": "handoff",
+  "split": "dev",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Fictional project: JSON supported, CSV excluded, deadline 2026-11-04 17:00 JST."
+    },
+    {
+      "role": "assistant",
+      "content": "JSON only; CSV is out of scope."
+    },
+    {
+      "role": "user",
+      "content": "Include authentication tests passed; E2E has not run."
+    },
+    {
+      "role": "assistant",
+      "content": "Authentication tests passed; E2E has not run."
+    },
+    {
+      "role": "user",
+      "content": "Write the complete handoff to a different assignee."
+    }
+  ],
+  "required_facts": [
+    "JSON",
+    "CSV excluded",
+    "2026-11-04 17:00 JST",
+    "Authentication tests passed",
+    "E2E not run"
+  ],
+  "critical_omissions": [
+    "Missing deadline, exclusion, or unverified scope"
+  ],
+  "unnecessary_repetition": []
+}

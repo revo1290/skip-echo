@@ -1,0 +1,37 @@
+{
+  "id": "compact-01-en",
+  "pair_id": "compact-01",
+  "language": "en",
+  "category": "compact",
+  "split": "dev",
+  "messages": [
+    {
+      "role": "user",
+      "content": "This is all context retained after compaction. Earlier storage design details are unavailable."
+    },
+    {
+      "role": "assistant",
+      "content": "The previous storage design is not available here."
+    },
+    {
+      "role": "user",
+      "content": "We currently have 2000 records."
+    },
+    {
+      "role": "assistant",
+      "content": "The count is 2000."
+    },
+    {
+      "role": "user",
+      "content": "Is the storage approach you proposed earlier safe?"
+    }
+  ],
+  "required_facts": [
+    "Previous design is unavailable",
+    "Ask for design details needed to assess"
+  ],
+  "critical_omissions": [
+    "Inventing prior design"
+  ],
+  "unnecessary_repetition": []
+}

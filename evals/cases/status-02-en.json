@@ -1,0 +1,41 @@
+{
+  "id": "status-02-en",
+  "pair_id": "status-02",
+  "language": "en",
+  "category": "status",
+  "split": "dev",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Status?"
+    },
+    {
+      "role": "assistant",
+      "content": "Implementation is done; authentication tests failed. E2E has not run."
+    },
+    {
+      "role": "user",
+      "content": "What is unverified?"
+    },
+    {
+      "role": "assistant",
+      "content": "E2E and production behavior remain unverified."
+    },
+    {
+      "role": "user",
+      "content": "After the fix, a rerun passed all 24 authentication tests. E2E and production checks have not run. Report status from these observations only."
+    }
+  ],
+  "required_facts": [
+    "Rerun passed 24 tests",
+    "E2E not run",
+    "Production unverified"
+  ],
+  "critical_omissions": [
+    "Omitting unverified scope",
+    "Claiming to have personally run tests"
+  ],
+  "unnecessary_repetition": [
+    "Implementation plan"
+  ]
+}

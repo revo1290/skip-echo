@@ -1,0 +1,38 @@
+{
+  "id": "reexplain-03-ja",
+  "pair_id": "reexplain-03",
+  "language": "ja",
+  "category": "reexplain",
+  "split": "holdout",
+  "messages": [
+    {
+      "role": "user",
+      "content": "キャッシュとは？"
+    },
+    {
+      "role": "assistant",
+      "content": "以前の計算結果などを保存し、再利用する仕組みです。"
+    },
+    {
+      "role": "user",
+      "content": "期限はなぜ必要？"
+    },
+    {
+      "role": "assistant",
+      "content": "元データが変わると保存結果が古くなるためです。"
+    },
+    {
+      "role": "user",
+      "content": "もう一度、専門用語なしで説明して。"
+    }
+  ],
+  "required_facts": [
+    "保存した結果を再利用する説明",
+    "古くなる可能性",
+    "再説明要求に応える"
+  ],
+  "critical_omissions": [
+    "既出を理由に説明拒否"
+  ],
+  "unnecessary_repetition": []
+}

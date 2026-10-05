@@ -1,0 +1,9 @@
+{
+  "name": "skip-echo",
+  "version": "0.1.0",
+  "description": "Less repetition. Complete answers. Experimental conversation-aware response policy.",
+  "license": "MIT",
+  "author": {
+    "name": "SkipEcho contributors"
+  }
+}

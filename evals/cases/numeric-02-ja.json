@@ -1,0 +1,42 @@
+{
+  "id": "numeric-02-ja",
+  "pair_id": "numeric-02",
+  "language": "ja",
+  "category": "numeric",
+  "split": "holdout",
+  "messages": [
+    {
+      "role": "user",
+      "content": "仕様: timeout=1500ms、再試行なし。"
+    },
+    {
+      "role": "assistant",
+      "content": "タイムアウトは1500ms、再試行はありません。"
+    },
+    {
+      "role": "user",
+      "content": "期限は2026-10-20 17:00 JSTです。"
+    },
+    {
+      "role": "assistant",
+      "content": "期限は2026-10-20 17:00 JSTです。"
+    },
+    {
+      "role": "user",
+      "content": "timeoutを3500ms、期限を2026-12-09 09:00 JSTに変更。再試行なしは維持。変更点だけ教えて。"
+    }
+  ],
+  "required_facts": [
+    "1500msから3500ms",
+    "2026-12-09 09:00 JST",
+    "再試行を有効化しない"
+  ],
+  "critical_omissions": [
+    "単位誤り",
+    "期限やタイムゾーン誤り",
+    "否定反転"
+  ],
+  "unnecessary_repetition": [
+    "一般的なタイムアウト解説"
+  ]
+}

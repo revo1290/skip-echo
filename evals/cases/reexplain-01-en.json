@@ -1,0 +1,38 @@
+{
+  "id": "reexplain-01-en",
+  "pair_id": "reexplain-01",
+  "language": "en",
+  "category": "reexplain",
+  "split": "dev",
+  "messages": [
+    {
+      "role": "user",
+      "content": "What is a cache?"
+    },
+    {
+      "role": "assistant",
+      "content": "It stores a result for reuse."
+    },
+    {
+      "role": "user",
+      "content": "Why does it expire?"
+    },
+    {
+      "role": "assistant",
+      "content": "Stored results can become outdated when source data changes."
+    },
+    {
+      "role": "user",
+      "content": "I still don't understand. Explain again using a library analogy."
+    }
+  ],
+  "required_facts": [
+    "Explain saving and reusing results",
+    "Possibility of stale information",
+    "Honor re-explanation request"
+  ],
+  "critical_omissions": [
+    "Refusing because already explained"
+  ],
+  "unnecessary_repetition": []
+}

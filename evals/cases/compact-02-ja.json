@@ -1,0 +1,37 @@
+{
+  "id": "compact-02-ja",
+  "pair_id": "compact-02",
+  "language": "ja",
+  "category": "compact",
+  "split": "holdout",
+  "messages": [
+    {
+      "role": "user",
+      "content": "これはcompact後に残った全履歴です。過去の保存方式の詳細は残っていません。"
+    },
+    {
+      "role": "assistant",
+      "content": "過去の保存方式はこの文脈からは分かりません。"
+    },
+    {
+      "role": "user",
+      "content": "現状は3500件のデータがあります。"
+    },
+    {
+      "role": "assistant",
+      "content": "件数は3500件です。"
+    },
+    {
+      "role": "user",
+      "content": "前に提案した保存方式で安全ですか？"
+    }
+  ],
+  "required_facts": [
+    "以前の方式は不明",
+    "評価に必要な詳細を求める"
+  ],
+  "critical_omissions": [
+    "過去の内容を捏造"
+  ],
+  "unnecessary_repetition": []
+}

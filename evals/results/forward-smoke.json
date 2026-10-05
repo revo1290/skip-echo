@@ -1,0 +1,27 @@
+{
+ "date":"2026-10-05",
+ "kind":"exploratory-explicit-policy-proxy",
+ "client":"ChatGPT Work subagent",
+ "model_exact":null,
+ "model_note":"Exact backend model identifier not exposed; do not treat as a reproducible named-model benchmark.",
+ "mode":"batch of independent synthetic conversation prompts, not native role replay",
+ "condition":"C-like explicit SKILL.md; not installed Claude Code plugin D",
+ "usage":null,
+ "latency_ms":null,
+ "human_reviewed":false,
+ "review":"Assistant inspection found the predeclared essentials preserved across these 12 outputs. No controlled A/B comparison, no human grading, no holdout execution. Not proof of superiority or automatic application.",
+ "outputs":[
+ {"case_id":"added-constraint-01-ja","output":"3台でセッションを共通に使うなら、共有ストアが有力です。アプリ内メモリだけでは、別のサーバーに振り分けられたときにセッションを参照できません。\n\nRedisは必須ではなく、DBなども使えます。同じ利用者を同じサーバーに振り分ける方法もありますが、そのサーバーの再起動や障害でセッションが失われる点は残ります。"},
+ {"case_id":"artifact-01-en","output":"{\"timeoutMs\":2000,\"retries\":2,\"enabled\":false}"},
+ {"case_id":"citation-01-ja","output":"上限は2000件です。根拠は、ご提示の架空仕様の記載「最大2000件」です。\n\n出典：[仕様A](https://example.org/spec-a)"},
+ {"case_id":"compact-01-en","output":"I can’t assess its safety without the earlier design. The count of 2000 records alone is insufficient. Please share the proposed storage approach, including how it handles concurrent writes, failures, and backups."},
+ {"case_id":"correction-01-ja","output":"先ほどの「CSVに対応しています」は誤りでした。ご提示の引用によると、Aster v2はCSVインポートに対応しておらず、JSONインポートのみ対応しています。「JSONにも対応しています」は、CSVにも対応するかのような表現が不適切でした。"},
+ {"case_id":"full-01-en","output":"# Aster\n\nAster is a fictional project.\n\n## Requirements\n\nNode.js 22 or later.\n\n## Start\n\nFrom the directory containing `app.mjs`, run:\n\n```sh\nnode app.mjs\n```\n\n## Stop\n\nPress `Ctrl+C` in the terminal running Aster.\n\n## License\n\nMIT."},
+ {"case_id":"handoff-01-ja","output":"Mapleプロジェクトを引き継ぎます。\n\n対応範囲はJSONのみで、CSVは対象外です。期限は2026-11-04 17:00 JSTです。\n\n認証テストは成功しています。E2Eテストは未実行のため、E2Eでの動作は未確認です。"},
+ {"case_id":"numeric-01-en","output":"- Timeout: 1500ms → 2000ms\n- Deadline: 2026-10-20 17:00 JST → 2026-11-04 17:00 JST"},
+ {"case_id":"reexplain-01-ja","output":"図書館で、本の場所を毎回検索する代わりに、一度調べた「この本は3番の棚」という情報をメモしておくとします。次はそのメモを見ればすぐに探せます。このメモがキャッシュです。\n\nただし、本が別の棚に移動すると、メモは古い情報になります。そこで「このメモは1日だけ使い、その後は検索し直す」と期限を決めます。期限は、古い情報をいつまでも使い続けないためにあります。ただし、期限内に本が移動することもあるので、常に正しい情報になるとは限りません。"},
+ {"case_id":"status-01-en","output":"After the fix, the rerun passed all 12 authentication tests. E2E and production checks have not run, so both remain unverified."},
+ {"case_id":"style-01-ja","output":"| 要件 | 変更点 |\n|---|---|\n| B | 未完了から完了になりました。 |"},
+ {"case_id":"topic-01-en","output":"The area is **6 cm²**. Multiply length by width: 3 cm × 2 cm = 6 cm²."}
+ ]
+}

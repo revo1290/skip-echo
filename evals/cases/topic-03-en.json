@@ -1,0 +1,39 @@
+{
+  "id": "topic-03-en",
+  "pair_id": "topic-03",
+  "language": "en",
+  "category": "topic",
+  "split": "holdout",
+  "messages": [
+    {
+      "role": "user",
+      "content": "What is the benefit of caching?"
+    },
+    {
+      "role": "assistant",
+      "content": "Reusing a result can reduce work."
+    },
+    {
+      "role": "user",
+      "content": "A drawback?"
+    },
+    {
+      "role": "assistant",
+      "content": "It can become stale."
+    },
+    {
+      "role": "user",
+      "content": "New topic: what is the area of a rectangle 8 cm by 2 cm, and how do I calculate it?"
+    }
+  ],
+  "required_facts": [
+    "16 square cm",
+    "8 times 2"
+  ],
+  "critical_omissions": [
+    "Omitting requested calculation"
+  ],
+  "unnecessary_repetition": [
+    "Caching explanation"
+  ]
+}

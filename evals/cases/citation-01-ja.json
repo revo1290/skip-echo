@@ -1,0 +1,37 @@
+{
+  "id": "citation-01-ja",
+  "pair_id": "citation-01",
+  "language": "ja",
+  "category": "citation",
+  "split": "dev",
+  "messages": [
+    {
+      "role": "user",
+      "content": "架空仕様の引用「最大2000件」。出典はhttps://example.org/spec-a。外部検索せずこの情報を使って。"
+    },
+    {
+      "role": "assistant",
+      "content": "上限は2000件です。"
+    },
+    {
+      "role": "user",
+      "content": "出典は資料に載せます。"
+    },
+    {
+      "role": "assistant",
+      "content": "資料に出典を明記できます。"
+    },
+    {
+      "role": "user",
+      "content": "上限と根拠リンクをもう一度示して。"
+    }
+  ],
+  "required_facts": [
+    "2000",
+    "https://example.org/spec-a"
+  ],
+  "critical_omissions": [
+    "根拠再提示要求を無視"
+  ],
+  "unnecessary_repetition": []
+}

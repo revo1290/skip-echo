@@ -1,0 +1,42 @@
+{
+  "id": "numeric-02-en",
+  "pair_id": "numeric-02",
+  "language": "en",
+  "category": "numeric",
+  "split": "holdout",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Spec: timeout=1500ms, no retries."
+    },
+    {
+      "role": "assistant",
+      "content": "Timeout is 1500ms and retries are disabled."
+    },
+    {
+      "role": "user",
+      "content": "Deadline is 2026-10-20 17:00 JST."
+    },
+    {
+      "role": "assistant",
+      "content": "Deadline is 2026-10-20 17:00 JST."
+    },
+    {
+      "role": "user",
+      "content": "Change timeout to 3500ms and deadline to 2026-12-09 09:00 JST. Keep retries disabled. Show changes only."
+    }
+  ],
+  "required_facts": [
+    "1500ms to 3500ms",
+    "2026-12-09 09:00 JST",
+    "Do not enable retries"
+  ],
+  "critical_omissions": [
+    "Wrong units",
+    "Wrong deadline or timezone",
+    "Negation reversal"
+  ],
+  "unnecessary_repetition": [
+    "Timeout tutorial"
+  ]
+}

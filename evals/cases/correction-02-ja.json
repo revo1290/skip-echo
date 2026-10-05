@@ -1,0 +1,42 @@
+{
+  "id": "correction-02-ja",
+  "pair_id": "correction-02",
+  "language": "ja",
+  "category": "correction",
+  "split": "dev",
+  "messages": [
+    {
+      "role": "user",
+      "content": "架空製品BirchはCSVインポート対応？"
+    },
+    {
+      "role": "assistant",
+      "content": "CSVに対応しています。"
+    },
+    {
+      "role": "user",
+      "content": "JSONは？"
+    },
+    {
+      "role": "assistant",
+      "content": "JSONにも対応しています。"
+    },
+    {
+      "role": "user",
+      "content": "公式仕様の引用:「Birch v2: CSV import is not supported. JSON import only.」。先ほどの回答は正しい？ この引用だけで答えて。"
+    }
+  ],
+  "required_facts": [
+    "以前のCSV対応発言を明示的に訂正",
+    "CSVインポート非対応",
+    "JSONのみ",
+    "与えられたv2仕様を根拠とする"
+  ],
+  "critical_omissions": [
+    "訂正を隠す",
+    "非対応の否定を落とす"
+  ],
+  "unnecessary_repetition": [
+    "一般的なCSV解説"
+  ]
+}

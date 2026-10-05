@@ -1,0 +1,39 @@
+{
+  "id": "style-02-ja",
+  "pair_id": "style-02",
+  "language": "ja",
+  "category": "style",
+  "split": "holdout",
+  "messages": [
+    {
+      "role": "user",
+      "content": "丁寧語で、表を使ってください。要件Aは完了、Bは未完了。"
+    },
+    {
+      "role": "assistant",
+      "content": "|要件|状態|\n|---|---|\n|A|完了|\n|B|未完了|"
+    },
+    {
+      "role": "user",
+      "content": "Bは未完了のままです。"
+    },
+    {
+      "role": "assistant",
+      "content": "Bは未完了です。"
+    },
+    {
+      "role": "user",
+      "content": "ここから重複抑制をやめてください。AとBの状況を前提から表で詳しくまとめてください。"
+    }
+  ],
+  "required_facts": [
+    "A完了",
+    "B未完了",
+    "表形式",
+    "解除要求に従う"
+  ],
+  "critical_omissions": [
+    "形式や明示指示を無視"
+  ],
+  "unnecessary_repetition": []
+}

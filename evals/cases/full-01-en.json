@@ -1,0 +1,41 @@
+{
+  "id": "full-01-en",
+  "pair_id": "full-01",
+  "language": "en",
+  "category": "full",
+  "split": "dev",
+  "messages": [
+    {
+      "role": "user",
+      "content": "README facts for fictional Aster: Node.js 22+, start with node app.mjs."
+    },
+    {
+      "role": "assistant",
+      "content": "Requires Node.js 22+; start with node app.mjs."
+    },
+    {
+      "role": "user",
+      "content": "Add Ctrl+C to stop and the MIT license."
+    },
+    {
+      "role": "assistant",
+      "content": "Stop with Ctrl+C. License: MIT."
+    },
+    {
+      "role": "user",
+      "content": "Write the complete README for someone who has not read this conversation."
+    }
+  ],
+  "required_facts": [
+    "Aster",
+    "Node.js 22+",
+    "node app.mjs",
+    "Ctrl+C",
+    "MIT"
+  ],
+  "critical_omissions": [
+    "Replacing content with see above",
+    "Missing start command"
+  ],
+  "unnecessary_repetition": []
+}

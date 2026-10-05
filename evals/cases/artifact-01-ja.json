@@ -1,0 +1,39 @@
+{
+  "id": "artifact-01-ja",
+  "pair_id": "artifact-01",
+  "language": "ja",
+  "category": "artifact",
+  "split": "dev",
+  "messages": [
+    {
+      "role": "user",
+      "content": "JSON設定: timeoutMs=1500, retries=2, enabled=false。"
+    },
+    {
+      "role": "assistant",
+      "content": "{\"timeoutMs\":1500,\"retries\":2,\"enabled\":false}"
+    },
+    {
+      "role": "user",
+      "content": "3項目をすべて残してね。"
+    },
+    {
+      "role": "assistant",
+      "content": "3項目を残します。"
+    },
+    {
+      "role": "user",
+      "content": "timeoutMsだけ2000に変更。コピペ用JSON全文だけ。"
+    }
+  ],
+  "required_facts": [
+    "timeoutMs=2000",
+    "retries=2",
+    "enabled=false",
+    "有効なJSONのみ"
+  ],
+  "critical_omissions": [
+    "省略や説明混入"
+  ],
+  "unnecessary_repetition": []
+}

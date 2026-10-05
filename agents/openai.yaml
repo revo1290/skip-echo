@@ -1,0 +1,4 @@
+interface:
+  display_name: "SkipEcho"
+  short_description: "Reduce repeated explanations while keeping complete answers"
+  default_prompt: "Use $skip-echo to answer this follow-up without unnecessary repetition while preserving necessary context."

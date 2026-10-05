@@ -1,0 +1,9 @@
+schema_version: "1.1"
+name: progress-01-ja
+description: "Generated from evals/cases/progress-01-ja.json (sha256 b72df40e6938). Do not edit."
+tags: [progress, ja, smoke]
+context:
+  history_file: history.jsonl
+execution:
+  max_turns: 3
+  allowed_tools: [Skill]

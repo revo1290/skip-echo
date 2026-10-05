@@ -4,10 +4,14 @@
 
 | Evidence | Result | Interpretation |
 | --- | --- | --- |
-| Node tests, Linux / Node 24.19.0 | 14 tests passed | Generation, hook contract, failure handling, package structure, corpus split and evaluator plumbing |
+| Node tests, Linux / Node 22.22.0 (v0.2.0) | 16 tests passed | Adds native-suite and mode-argument checks; earlier v0.1.0 run: 14 tests on Node 24.19.0 |
+| `claude plugin validate`, Claude Code 2.1.289 (v0.2.0) | Passed, no warnings | Manifest format only |
+| Node tests, Linux / Node 24.19.0 (v0.1.0) | 14 tests passed | Generation, hook contract, failure handling, package structure, corpus split and evaluator plumbing |
 | Skill format validator | Passed | Format only, not behavioral effectiveness |
 | 12 development conversations, explicit policy | Outputs captured; assistant review found essentials preserved | Exploratory proxy; not blind human grading, not A/B, not exact-model benchmark |
-| Claude Code plugin / five lifecycle events | Not executed | Claude Code executable unavailable |
+| Claude Code plugin / five lifecycle events | Not executed | Not yet observed in a real session |
+| Native `claude plugin eval` smoke suite | Not executed | No judge-scored results exist yet |
+| v0.2 policy (progress / revision rules) | No model outputs | The exploratory outputs below predate it |
 | Holdout A/B/C/D | Not executed | No release-gate conclusion |
 | Cumulative conversation, total usage/cost, latency | Not measured | No savings claim |
 | macOS / Windows / Node 22 / style coexistence | Not executed | CI configuration is not evidence of a passing run |

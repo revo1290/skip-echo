@@ -1,0 +1,42 @@
+{
+  "id": "revision-01-ja",
+  "pair_id": "revision-01",
+  "language": "ja",
+  "category": "revision",
+  "split": "dev",
+  "messages": [
+    {
+      "role": "user",
+      "content": "config.yamlはこれ:\nserver:\n  host: 0.0.0.0\n  port: 8080\n  workers: 4\nlogging:\n  level: info\n  format: json\ncache:\n  enabled: true\n  ttl: 300\n  max_entries: 1000\nauth:\n  provider: oidc\n  session_minutes: 60\ncache.ttlって何を決めてる？"
+    },
+    {
+      "role": "assistant",
+      "content": "cache.ttlは、キャッシュした値を何秒間有効とみなすかです。ttl: 300なら5分で期限切れになり、再取得されます。"
+    },
+    {
+      "role": "user",
+      "content": "アクティブユーザー800人くらいなら1000件で足りる？"
+    },
+    {
+      "role": "assistant",
+      "content": "1人あたり1件程度なら、1000件で800人分を少し余裕をもってまかなえます。1人で複数件使うなら足りない可能性があります。"
+    },
+    {
+      "role": "user",
+      "content": "cache.ttlを600にして。ほかはそのままで。"
+    }
+  ],
+  "required_facts": [
+    "cache.ttlが600",
+    "ほかの設定は変更なしと明示",
+    "cache配下の変更箇所が分かる"
+  ],
+  "critical_omissions": [
+    "ほかの値の変更",
+    "途中を省いたファイルを完全版として提示"
+  ],
+  "unnecessary_repetition": [
+    "依頼のない設定ファイル全文の再掲",
+    "ttlの意味の再説明"
+  ]
+}

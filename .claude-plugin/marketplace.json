@@ -1,5 +1,6 @@
 {
   "name": "skip-echo-marketplace",
+  "description": "SkipEcho: a conversation-aware policy that stops re-explaining unchanged context while keeping complete answers.",
   "owner": {
     "name": "SkipEcho contributors"
   },
@@ -7,7 +8,7 @@
     {
       "name": "skip-echo",
       "source": "./",
-      "description": "Reduce unnecessary repetition while keeping complete answers."
+      "description": "Reduce unnecessary repetition across turns while keeping complete answers."
     }
   ]
 }

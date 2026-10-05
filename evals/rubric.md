@@ -2,11 +2,13 @@
 
 ## Corpus and split
 
-60 synthetic conversations: 30 Japanese, 30 English; 30 bilingual pairs. Each case contains three user turns (five messages, final response withheld). There are 12 categories. Six categories have three parameter variants per language; six have two. These are templated fixtures, not 60 independent observations. Expand scenario diversity before broad effectiveness claims.
+68 synthetic conversations: 34 Japanese, 34 English; 34 bilingual pairs. Each case contains three user turns (five messages, final response withheld). There are 14 categories. Six categories have three parameter variants per language; eight have two. Manifest v2 added the `progress` (multi-step status reports) and `revision` (unrequested reprint of an existing artifact) categories without changing any v1 case. These are templated fixtures, not 68 independent observations. Expand scenario diversity before broad effectiveness claims.
 
-36 development / 24 holdout, fixed by `manifest.json` SHA-256 values before model tests. Translation pairs share their split. Because category templates occur in both splits, holdout evaluates transfer across variants rather than novel domains. Never tune on holdout outputs; replace exposed holdout cases for a future confirmatory run.
+40 development / 28 holdout, fixed by `manifest.json` SHA-256 values before model tests. Translation pairs share their split. Because category templates occur in both splits, holdout evaluates transfer across variants rather than novel domains. Never tune on holdout outputs; replace exposed holdout cases for a future confirmatory run.
 
-`smoke.json` selects 12 development cases, six per language and one per category. The smoke suite is not the release gate.
+`smoke.json` selects 14 development cases, seven per language and one per category. The smoke suite is not the release gate.
+
+`evals/native/` is generated from the smoke cases by `node scripts/build.mjs` for `claude plugin eval`. It replays each fixed history through Claude Code with and without the installed plugin (A versus D) and grades with model judges. Use it for screening and regressions only: judge-based scores are not human review, the suite cannot express condition B or C, and it never contains holdout cases.
 
 ## Conditions
 
@@ -19,7 +21,7 @@
 
 For non-English prompts the same English control instruction is used to hold instruction language constant with C; prompts remain Japanese or English. Keep model, generation settings, client, tools, other system instructions, and context budget identical. If that is impossible, report the confound.
 
-`node scripts/prepare-eval.mjs smoke 1` generates 48 jobs and a blinded output template; it does not run models. `holdout 3` generates 288 fixed-history jobs/model. Cost must be budgeted before generation using actual model prices and estimated input/output lengths. Record the chosen repetition count before seeing results. Do not silently spend on additional runs.
+`node scripts/prepare-eval.mjs smoke 1` generates 56 jobs and a blinded output template; it does not run models. `holdout 3` generates 336 fixed-history jobs/model. Cost must be budgeted before generation using actual model prices and estimated input/output lengths. Record the chosen repetition count before seeing results. Do not silently spend on additional runs.
 
 For fixed-history evaluation, replay the same messages via a client/API that supports proper user/assistant roles. Pasting them into one user prompt is only a proxy, not equivalent role-based evaluation. D requires the real Claude Code plugin path and evidence of injection; do not relabel C as D. If a comparable history mechanism is unavailable, report D separately.
 

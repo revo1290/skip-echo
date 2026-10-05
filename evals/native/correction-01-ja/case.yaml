@@ -1,0 +1,9 @@
+schema_version: "1.1"
+name: correction-01-ja
+description: "Generated from evals/cases/correction-01-ja.json (sha256 978a107a3461). Do not edit."
+tags: [correction, ja, smoke]
+context:
+  history_file: history.jsonl
+execution:
+  max_turns: 3
+  allowed_tools: [Skill]

@@ -1,0 +1,42 @@
+{
+  "id": "progress-01-ja",
+  "pair_id": "progress-01",
+  "language": "ja",
+  "category": "progress",
+  "split": "dev",
+  "messages": [
+    {
+      "role": "user",
+      "content": "サインアップフォームに入力チェックを追加して、テストも回して。"
+    },
+    {
+      "role": "assistant",
+      "content": "計画: 1) src/signup.jsにメールとパスワードの検証を追加、2) 単体テスト追加、3) npm test実行。結果: validateEmailとvalidatePassword（12文字以上）を追加し、単体テストを6件追加。npm testは48件成功、0件失敗でした。"
+    },
+    {
+      "role": "user",
+      "content": "パスワードにメールアドレスが含まれていたら拒否もして。"
+    },
+    {
+      "role": "assistant",
+      "content": "validatePasswordでメールアドレスを含むパスワードを拒否するようにし、テストを1件追加しました。npm testは49件成功、0件失敗です。"
+    },
+    {
+      "role": "user",
+      "content": "エラーメッセージ4件をt(\"signup.*\")キーに移し、locales/en.jsonに追加した。npm testは引き続き49件成功。locales/ja.jsonにはまだsignupのキーがない。この観測だけで現状報告して。"
+    }
+  ],
+  "required_facts": [
+    "4件のメッセージがt()キー化されen.jsonに追加済み",
+    "ユーザー報告の実行で49件成功",
+    "locales/ja.jsonのsignupキーは未追加"
+  ],
+  "critical_omissions": [
+    "ja.json未対応の欠落",
+    "自分でテストを実行したとの主張"
+  ],
+  "unnecessary_repetition": [
+    "最初の3段階の計画",
+    "前のターンのメール・パスワード検証の詳細"
+  ]
+}

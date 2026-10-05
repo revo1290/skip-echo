@@ -1,0 +1,42 @@
+{
+  "id": "revision-02-ja",
+  "pair_id": "revision-02",
+  "language": "ja",
+  "category": "revision",
+  "split": "holdout",
+  "messages": [
+    {
+      "role": "user",
+      "content": "うちのDockerfile:\nFROM node:20-slim\nWORKDIR /app\nCOPY package*.json ./\nRUN npm ci --omit=dev\nCOPY . .\nENV NODE_ENV=production\nEXPOSE 3000\nUSER node\nCMD [\"node\", \"server.js\"]\nなんでnpm installじゃなくてnpm ciなの？"
+    },
+    {
+      "role": "assistant",
+      "content": "npm ciはpackage-lock.jsonどおりに入れ、package.jsonと食い違えば失敗するので、コンテナのビルドを再現可能にできます。"
+    },
+    {
+      "role": "user",
+      "content": "USER nodeで動かすのは良いこと？"
+    },
+    {
+      "role": "assistant",
+      "content": "はい。権限の低いnodeユーザーで動かすと、プロセスが乗っ取られてもコンテナ内でできることを制限できます。"
+    },
+    {
+      "role": "user",
+      "content": "ベースイメージをnode:22-slimに変えて。ほかは一切変えないで。"
+    }
+  ],
+  "required_facts": [
+    "ベースイメージがnode:22-slim",
+    "ほかの行は変更なしと明示",
+    "FROM行の変更を示す"
+  ],
+  "critical_omissions": [
+    "ほかの命令の変更",
+    "途中を省いたDockerfileを完全版として提示"
+  ],
+  "unnecessary_repetition": [
+    "依頼のないDockerfile全文の再掲",
+    "npm ciやUSER nodeの再説明"
+  ]
+}

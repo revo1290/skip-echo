@@ -48,13 +48,33 @@ test('single default hook registration with five match sources',()=>{
  assert.equal(json('.claude-plugin/marketplace.json').plugins[0].source,'./');
  assert.equal(manifest.version,json('package.json').version);
 });
-test('60 frozen cases with paired-language split isolation and 12 smoke cases',()=>{
- const manifest=json('evals/manifest.json');assert.equal(manifest.cases.length,60);
+test('68 frozen cases with paired-language split isolation and 14 smoke cases',()=>{
+ const manifest=json('evals/manifest.json');assert.equal(manifest.cases.length,68);
  const cases=manifest.cases.map(c=>{const raw=read('evals/cases/'+c.id+'.json');assert.equal(createHash('sha256').update(raw).digest('hex'),c.sha256);const obj=JSON.parse(raw);assert.equal(c.split,obj.split);assert.equal(c.id,obj.id);return obj;});
- assert.equal(new Set(cases.map(c=>c.id)).size,60);
- assert.equal(readdirSync(resolve(root,'evals/cases')).length,60);
- assert.equal(cases.filter(c=>c.split==='dev').length,36);assert.equal(cases.filter(c=>c.split==='holdout').length,24);
- for(const lang of ['ja','en'])assert.equal(cases.filter(c=>c.language===lang).length,30);
+ assert.equal(new Set(cases.map(c=>c.id)).size,68);
+ assert.equal(readdirSync(resolve(root,'evals/cases')).length,68);
+ assert.equal(cases.filter(c=>c.split==='dev').length,40);assert.equal(cases.filter(c=>c.split==='holdout').length,28);
+ for(const lang of ['ja','en'])assert.equal(cases.filter(c=>c.language===lang).length,34);
  for(const c of cases){assert.equal(c.messages.length,5);assert.deepEqual(c.messages.map(m=>m.role),['user','assistant','user','assistant','user']);assert.ok(c.required_facts.length>0);assert.ok(c.critical_omissions.length>0);assert.equal(new Set(cases.filter(p=>p.pair_id===c.pair_id).map(p=>p.split)).size,1);}
- const smoke=json('evals/smoke.json').map(id=>cases.find(c=>c.id===id));assert.equal(smoke.length,12);assert.ok(smoke.every(c=>c.split==='dev'));assert.equal(new Set(smoke.map(c=>c.category)).size,12);
+ const smoke=json('evals/smoke.json').map(id=>cases.find(c=>c.id===id));assert.equal(smoke.length,14);assert.ok(smoke.every(c=>c.split==='dev'));assert.equal(new Set(smoke.map(c=>c.category)).size,14);
+});
+test('native plugin eval suite mirrors smoke cases only, with replayable history',()=>{
+ assert.equal(json('.claude-plugin/plugin.json').experimental.evals,'evals/native');
+ const smoke=json('evals/smoke.json');const dirs=readdirSync(resolve(root,'evals/native'),{withFileTypes:true}).filter(e=>e.isDirectory()&&e.name!=='results').map(e=>e.name).sort();
+ assert.deepEqual(dirs,[...smoke].sort());
+ for(const id of smoke){
+  const c=json('evals/cases/'+id+'.json');assert.equal(c.split,'dev');
+  assert.match(read(`evals/native/${id}/case.yaml`),/history_file: history\.jsonl/);
+  assert.equal(read(`evals/native/${id}/prompt.md`),c.messages.at(-1).content+'\n');
+  const lines=read(`evals/native/${id}/history.jsonl`).trim().split('\n').map(l=>JSON.parse(l));
+  assert.deepEqual(lines.map(l=>l.message.role),['user','assistant','user','assistant']);
+  for(let i=1;i<lines.length;i++)assert.equal(lines[i].parentUuid,lines[i-1].uuid);
+  const g=read(`evals/native/${id}/graders/essentials.md`);for(const f of c.required_facts)assert.ok(g.includes(f));
+ }
+});
+test('manual mode arguments are documented in the shipped policy',()=>{
+ const skill=read('skills/skip-echo/SKILL.md');assert.match(skill,/argument-hint: "\[on\|off\|full\]"/);
+ for(const mode of ['`off`','`full`','`on`'])assert.ok(skill.includes(mode));
+ assert.ok(read('integrations/cursor/skip-echo.mdc').startsWith('---\ndescription:'));
+ assert.ok(read('integrations/AGENTS.md').includes(read('src/response-policy.md').trim()));
 });

@@ -1,0 +1,9 @@
+schema_version: "1.1"
+name: status-01-en
+description: "Generated from evals/cases/status-01-en.json (sha256 1b3a19b0a0bc). Do not edit."
+tags: [status, en, smoke]
+context:
+  history_file: history.jsonl
+execution:
+  max_turns: 3
+  allowed_tools: [Skill]

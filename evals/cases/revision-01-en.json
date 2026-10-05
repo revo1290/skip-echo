@@ -1,0 +1,42 @@
+{
+  "id": "revision-01-en",
+  "pair_id": "revision-01",
+  "language": "en",
+  "category": "revision",
+  "split": "dev",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Here is config.yaml:\nserver:\n  host: 0.0.0.0\n  port: 8080\n  workers: 4\nlogging:\n  level: info\n  format: json\ncache:\n  enabled: true\n  ttl: 300\n  max_entries: 1000\nauth:\n  provider: oidc\n  session_minutes: 60\nWhat does cache.ttl control?"
+    },
+    {
+      "role": "assistant",
+      "content": "cache.ttl is how many seconds a cached entry stays valid before it is fetched again. With ttl: 300, entries expire after 5 minutes."
+    },
+    {
+      "role": "user",
+      "content": "Is 1000 entries enough for about 800 active users?"
+    },
+    {
+      "role": "assistant",
+      "content": "If each active user needs roughly one cached entry, 1000 covers about 800 users with some headroom. If users need several entries each, it may not."
+    },
+    {
+      "role": "user",
+      "content": "Change cache.ttl to 600. Leave everything else as is."
+    }
+  ],
+  "required_facts": [
+    "cache.ttl set to 600",
+    "States the other settings stay unchanged",
+    "Change is locatable under cache"
+  ],
+  "critical_omissions": [
+    "Changing any other value",
+    "Presenting a truncated file as complete"
+  ],
+  "unnecessary_repetition": [
+    "Reprinting the entire config file without a request",
+    "Re-explaining what ttl means"
+  ]
+}

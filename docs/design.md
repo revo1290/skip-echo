@@ -8,6 +8,14 @@ SessionStart is used instead of per-prompt injection to limit repeated instructi
 
 The plugin uses only the default `hooks/hooks.json` registration; plugin.json deliberately does not add it again. The standalone Skill can still be discovered after hook injection, so duplicate model context is possible and must be counted. No output-style override is installed.
 
+Positioning: terse-output skills compress wording within one reply; SkipEcho selects claims across turns. The policy states that it does not choose wording and must not drop required facts to satisfy another style, so the two can be combined. A competing claim that only `be brief` is needed is exactly what control B tests.
+
+v0.2 adds two rules aimed at the most common repetition in agent sessions. Progress reports lead with this step's outcome and omit an unchanged plan or earlier steps. Revisions of an existing artifact show the changed part with locating context unless the user asks for the full or copy-ready version, the artifact is short, or an excerpt would be harder to apply; files already written by a tool are named, not pasted. Requested artifacts remain protected from abbreviation, and an excerpt may never be presented as complete. These rules have dedicated `progress` and `revision` cases.
+
+Manual control uses skill arguments (`off`, `full`, `on`) rather than a separate command, so there is one user-facing name and the hook-injected policy already explains the modes. No state is stored; the mode lives in the conversation.
+
+The generated `evals/native/` suite lets users run `claude plugin eval` themselves. It mirrors only smoke (development) cases so holdout outputs are never exposed during iteration, and its model-judged scores are screening data, not the human-graded release gate.
+
 B is a strong one-sentence control. If C/D cannot improve on B without losing information, simplify the product. Any future Output Style experiment must be isolated from the hook and retain coding instructions; it is not shipped here.
 
 Names: Delta was replaced because of ambiguity with the established git pager. Public search on 2026-10-05 for SkipEcho/skip-echo plus skill/Claude did not identify the intended same-named skill, but did surface unrelated uses of Skipecho. This is neither name reservation nor trademark clearance. The chosen distribution identifier is `skip-echo`; no registry or public repository has been reserved.

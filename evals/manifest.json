@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "description": "60 synthetic cases, 30 bilingual pairs; parameterized scenario families, not 60 independent real-world samples. Frozen before model evaluation.",
+  "version": 2,
+  "description": "68 synthetic cases, 34 bilingual pairs; parameterized scenario families, not 68 independent real-world samples. v1 cases are unchanged; v2 adds progress and revision categories. Frozen before model evaluation.",
   "cases": [
     {
       "id": "added-constraint-01-en",
@@ -193,6 +193,26 @@
       "sha256": "044356ee5bb5eee9b30c2135e369cd53f0553d3b45dfee4544461f8d1d367700"
     },
     {
+      "id": "progress-01-en",
+      "split": "dev",
+      "sha256": "0d785ee1358431cb4dd0e5b38980ab34da5f95199ddb7a79efc5c7e6c288a188"
+    },
+    {
+      "id": "progress-01-ja",
+      "split": "dev",
+      "sha256": "b72df40e6938b85e9c6a070daa7e79093c82a7d3b9b05460f5e0b180d147d655"
+    },
+    {
+      "id": "progress-02-en",
+      "split": "holdout",
+      "sha256": "80a18069331eeeca0e15617511d284ec12c20f7eb2932bd5020cd8e9d043609f"
+    },
+    {
+      "id": "progress-02-ja",
+      "split": "holdout",
+      "sha256": "d764fb17627b77fe3eba435a655baf4b2d2a41a0f74d6fb25890683eb6736af6"
+    },
+    {
       "id": "reexplain-01-en",
       "split": "dev",
       "sha256": "1c00a3facd6680743e047b9f400c9e05dfad880ab51123392a20d2f9759b3278"
@@ -221,6 +241,26 @@
       "id": "reexplain-03-ja",
       "split": "holdout",
       "sha256": "57bbe7e5d17558ee9bdec0e93b1a7e2f3825a1171ea7950f49c571a7524894ea"
+    },
+    {
+      "id": "revision-01-en",
+      "split": "dev",
+      "sha256": "2b1ea7174d1379f13bbbab8c2df9d1d9ad5ad122d5323782b4826fe05d1832c0"
+    },
+    {
+      "id": "revision-01-ja",
+      "split": "dev",
+      "sha256": "3235d2853ee7583d59c486a8854d3d468865fe82466e597236ecf2a9092f0bd7"
+    },
+    {
+      "id": "revision-02-en",
+      "split": "holdout",
+      "sha256": "a2ff40084e82f516ff7e003932e4d75373bee93c538d43239d5da04591a78b14"
+    },
+    {
+      "id": "revision-02-ja",
+      "split": "holdout",
+      "sha256": "ba54452adabcca9e435c14e66be5ba5d4a1fb34cd09b512e79d0951868d4d63b"
     },
     {
       "id": "status-01-en",

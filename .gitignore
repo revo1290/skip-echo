@@ -2,3 +2,4 @@ node_modules/
 .DS_Store
 *.log
 evals/runs/
+evals/native/results/

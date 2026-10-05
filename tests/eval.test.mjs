@@ -17,6 +17,6 @@ test('scoring refuses missing fact grades, duplicates and AI-only review',()=>{
 });
 test('preparation creates four conditions without leaking rubric into model messages',()=>{
  const p=spawnSync(process.execPath,[resolve(root,'scripts/prepare-eval.mjs'),'smoke','1'],{encoding:'utf8'});assert.equal(p.status,0,p.stderr);
- const jobs=JSON.parse(readFileSync(resolve(root,'evals/runs/smoke-1/jobs.json')));assert.equal(jobs.length,48);assert.equal(new Set(jobs.map(j=>j.id)).size,48);
+ const jobs=JSON.parse(readFileSync(resolve(root,'evals/runs/smoke-1/jobs.json')));assert.equal(jobs.length,56);assert.equal(new Set(jobs.map(j=>j.id)).size,56);
  for(const j of jobs){assert.ok(!('required_facts' in j));assert.equal(j.messages.length,5);if(j.condition==='D'){assert.equal(j.instruction,null);assert.equal(j.environment,'installed-plugin-no-manual-invocation');}}
 });

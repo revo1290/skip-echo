@@ -24,6 +24,8 @@ const listFiles = dir => existsSync(dir) ? readdirSync(dir, { withFileTypes: tru
 for (const file of listFiles(nativeRoot)) {
  const rel = relative(root, file).split('\\').join('/');
  if (outputs.has(rel)) continue;
+ // `claude plugin eval` copies the replayed history next to each case as <session-id>.jsonl; they are gitignored.
+ if (/\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.jsonl$/.test(rel)) continue;
  if (check) throw new Error(`Unexpected file in generated eval suite: ${rel}`);
  rmSync(file);
 }

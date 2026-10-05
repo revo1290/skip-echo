@@ -10,8 +10,11 @@
 | Skill format validator | Passed | Format only, not behavioral effectiveness |
 | 12 development conversations, explicit policy | Outputs captured; assistant review found essentials preserved | Exploratory proxy; not blind human grading, not A/B, not exact-model benchmark |
 | Claude Code plugin / five lifecycle events | Not executed | Not yet observed in a real session |
-| Native `claude plugin eval` smoke suite | Not executed | No judge-scored results exist yet |
-| v0.2 policy (progress / revision rules) | No model outputs | The exploratory outputs below predate it |
+| Native `claude plugin eval` smoke suite, Claude Code 2.1.289 (v0.2.0) | 14 cases × 1 run: Δ 0.00 on every case; 12 cases score 1.00 in both arms | Ceiling effect: the default model already passes most fixtures without the plugin. Judge-scored screening, not human review. [Raw outputs](native-smoke-2026-10-05.json) |
+| `revision-01-en`, 2 extra runs per arm | With plugin 2/2 showed only the changed `cache` block; without plugin 2/2 reprinted all 14 lines | The revision rule changed behavior here, but the 14-case run reverted to a full reprint (2 of 3 with-plugin runs followed it). The then-combined `no-echo` grader still failed the excerpt runs, which led to splitting it into one grader per item |
+| `added-constraint-01-ja` | Both arms re-explained the storage overview | No measurable effect on this case |
+| SessionStart inside eval runs | `SessionStart:resume` fired and injected the policy in the with-plugin arm only | First host-level observation of hook injection; still not an interactive session |
+| Short-instruction control B | Not executed | Whether a one-line instruction matches SkipEcho remains open |
 | Holdout A/B/C/D | Not executed | No release-gate conclusion |
 | Cumulative conversation, total usage/cost, latency | Not measured | No savings claim |
 | macOS / Windows / Node 22 / style coexistence | Not executed | CI configuration is not evidence of a passing run |

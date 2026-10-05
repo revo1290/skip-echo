@@ -1,0 +1,370 @@
+{
+ "date": "2026-10-05",
+ "kind": "native-claude-plugin-eval-screening",
+ "client": "Claude Code 2.1.289",
+ "os": "Linux",
+ "model_exact": null,
+ "model_note": "Default model of the eval child session and default judge (haiku per CLI help); exact IDs not recorded in the result document.",
+ "mode": "fixed-history replay via context.history_file; append_system_prompt identical in both arms",
+ "human_reviewed": false,
+ "hook_evidence": "Trace of a with-arm run (progress-01-ja, earlier iteration) showed SessionStart:resume hook_started/hook_response with the policy as additionalContext; the without-arm trace contained no hook output.",
+ "runs": [
+  {
+   "suite": "revision-01-en only, 2 runs per arm",
+   "cost_usd": 0.12162759999999999,
+   "results": [
+    {
+     "case_id": "revision-01-en",
+     "arm": "with",
+     "run": 1,
+     "score": 0.667,
+     "graders": {
+      "essentials": true,
+      "no-echo": false
+     },
+     "output": "I can't edit the file here, so make this change yourself. Only the `cache` block changes:\n\n```yaml\ncache:\n  enabled: true\n  ttl: 600\n  max_entries: 1000\n```\n\nEverything else in `config.yaml` stays as it is. Entries will now stay valid for 600 seconds (10 minutes) instead of 300."
+    },
+    {
+     "case_id": "revision-01-en",
+     "arm": "with",
+     "run": 2,
+     "score": 0.667,
+     "graders": {
+      "essentials": true,
+      "no-echo": false
+     },
+     "output": "I can't edit your file from here, so here is the updated `cache` block. Every other setting stays as you had it.\n\n```yaml\ncache:\n  enabled: true\n  ttl: 600\n  max_entries: 1000\n```\n\nWith `ttl: 600`, entries stay valid for 10 minutes instead of 5."
+    },
+    {
+     "case_id": "revision-01-en",
+     "arm": "without",
+     "run": 1,
+     "score": 0.667,
+     "graders": {
+      "essentials": true,
+      "no-echo": false
+     },
+     "output": "I can't edit a file here, so this is the updated `config.yaml` with only `cache.ttl` changed:\n\n```yaml\nserver:\n  host: 0.0.0.0\n  port: 8080\n  workers: 4\nlogging:\n  level: info\n  format: json\ncache:\n  enabled: true\n  ttl: 600\n  max_entries: 1000\nauth:\n  provider: oidc\n  session_minutes: 60\n```\n\nCached entries now stay valid for 10 minutes instead of 5."
+    },
+    {
+     "case_id": "revision-01-en",
+     "arm": "without",
+     "run": 2,
+     "score": 0.667,
+     "graders": {
+      "essentials": true,
+      "no-echo": false
+     },
+     "output": "Here is the updated `config.yaml`. I haven't written it to disk, because this session has no workspace files. The only change is `cache.ttl`, which is now 600.\n\n```yaml\nserver:\n  host: 0.0.0.0\n  port: 8080\n  workers: 4\nlogging:\n  level: info\n  format: json\ncache:\n  enabled: true\n  ttl: 600\n  max_entries: 1000\nauth:\n  provider: oidc\n  session_minutes: 60\n```\n\nEntries now stay valid for 10 minutes instead of 5. Cached data can be up to twice as stale as before. Entries also live longer, so the cache will sit closer to the 1000-entry cap."
+    }
+   ]
+  },
+  {
+   "suite": "14 smoke cases, 1 run per arm",
+   "cost_usd": 0.9111292,
+   "results": [
+    {
+     "case_id": "added-constraint-01-ja",
+     "arm": "with",
+     "run": 1,
+     "score": 0.667,
+     "graders": {
+      "essentials": true,
+      "no-echo-1": false
+     },
+     "output": "3台にするとアプリ内メモリだけでは足りなくなりますが、Redisは必須ではありません。\n\n**アプリ内メモリが問題になる理由**\nリクエストが別のプロセスに届くと、そのプロセスはセッションを持っていないため、ログインが外れたように見えます。\n\n**3台での選択肢**\n\n| 方式 | 長所 | 短所 |\n|---|---|---|\n| アプリ内メモリ + スティッキーセッション（LBで同一クライアントを同じ台に固定） | 構成が最小で、追加インフラが不要 | 台の再起動や障害でその台のセッションが消えます。負荷も偏りやすいです |\n| 共有ストア（Redis、Memcached） | 高速で、どの台でも同じ状態を参照できます。TTL管理も簡単です | 運用対象が増え、ストアが単一障害点になります。永続化が必要かどうかも検討が要ります |\n| 既存のDBにセッションを保存 | 新しい部品が不要で、永続性もあります | 毎リクエストでDBアクセスが発生し、負荷が増えます |\n| ステートレス方式（署名・暗号化したCookie/JWT） | サーバー側のストアが不要で、台数を増やしやすいです | 即時の失効（強制ログアウト）が難しく、サイズ制限もあります |\n\n**おすすめ**\n- 再起動時にログインし直しになっても許容できる場合は、スティッキーセッションと現状のメモリ保存で当面は足ります。\n- 再起動やデプロイでセッションを切りたくない場合や、強制ログアウトが必要な場合は、共有ストアにします。この場合Redisが最も一般的ですが、すでにDBがあれば、負荷が小さいうちはDB保存でも十分です。\n- 今後さらに台数を増やす予定があるなら、最初から共有ストアにしておく方が移行の手間がありません。\n\nAsterは架空のサービスなので、実際の対応状況（対応しているセッションストアやスティッキーの設定方法）は把握していません。Asterの仕様がわかれば、それに合わせて絞り込めます。"
+    },
+    {
+     "case_id": "added-constraint-01-ja",
+     "arm": "without",
+     "run": 1,
+     "score": 0.667,
+     "graders": {
+      "essentials": true,
+      "no-echo-1": false
+     },
+     "output": "Redisは必須ではありません。ただ、3台になると「アプリ内メモリのみ」はそのままでは使えません。リクエストが別のプロセスに振られると、セッションが見つからなくなるためです。\n\n**3台での選択肢**\n\n| 方式 | 長所 | 短所 |\n|---|---|---|\n| アプリ内メモリ + スティッキーセッション | 追加インフラ不要 | 再起動や障害でそのサーバーのセッションが消える。負荷が偏りやすい |\n| 署名/暗号化Cookie(ステートレス) | 共有ストア不要で、台数を増やしやすい | Cookieサイズに上限がある。サーバー側からの即時失効が難しい |\n| 既存のRDBに保存 | 新しい運用対象が増えない | 毎リクエストでDBアクセスが発生する。期限切れの掃除が必要 |\n| Redisなどの共有ストア | 高速で、TTLや即時失効が簡単。台数の増減に強い | 運用対象が増える。単一障害点になりうる(冗長化が必要) |\n\n**おすすめ**\n- 再ログインを許容できるなら、スティッキーセッションで当面しのげます。\n- セッションに入れる情報が小さく、強制ログアウトも不要なら、署名Cookieが最も手軽です。\n- 即時失効が必要な場合や、今後さらに台数が増える見込みがある場合は、Redisなどの共有ストアが標準的な選択です。\n- すでにRDBがあり、アクセスが多くなければ、RDB保存も十分現実的です。\n\n判断の分かれ目は、再起動時にセッションが消えても困らないか、サーバー側から即時失効させる必要があるか、の2点です。Asterの要件がどちらかを教えてもらえれば、1案に絞れます。"
+    },
+    {
+     "case_id": "artifact-01-en",
+     "arm": "with",
+     "run": 1,
+     "score": 1,
+     "graders": {
+      "essentials": true
+     },
+     "output": "{\"timeoutMs\":2000,\"retries\":2,\"enabled\":false}"
+    },
+    {
+     "case_id": "artifact-01-en",
+     "arm": "without",
+     "run": 1,
+     "score": 1,
+     "graders": {
+      "essentials": true
+     },
+     "output": "{\"timeoutMs\":2000,\"retries\":2,\"enabled\":false}"
+    },
+    {
+     "case_id": "citation-01-ja",
+     "arm": "with",
+     "run": 1,
+     "score": 1,
+     "graders": {
+      "essentials": true
+     },
+     "output": "上限は**最大2000件**です。\n\n出典: https://example.org/spec-a\n\nこの情報は、あなたが提示した架空仕様の引用に基づいています。外部検索はしておらず、リンク先の内容は確認していません。"
+    },
+    {
+     "case_id": "citation-01-ja",
+     "arm": "without",
+     "run": 1,
+     "score": 1,
+     "graders": {
+      "essentials": true
+     },
+     "output": "上限は**最大2000件**です。\n\n根拠リンク: https://example.org/spec-a\n\n（ご指定のとおり、外部検索はせず、いただいた情報のみを使っています。）"
+    },
+    {
+     "case_id": "compact-01-en",
+     "arm": "with",
+     "run": 1,
+     "score": 1,
+     "graders": {
+      "essentials": true
+     },
+     "output": "I can't say whether it's safe, because I don't have the storage approach. The earlier design details were lost when the conversation was compacted. If I guessed at what I proposed, I'd be judging something I can't see.\n\nThe only relevant fact I have is that you currently have 2000 records. That's a small dataset, so scale is unlikely to be the main risk. Safety will mostly depend on other things, such as durability, concurrent writes, backups, and access control.\n\nTo assess it, I need either of these:\n- **The approach itself:** paste the design or summarize it (for example, \"single JSON file\", \"SQLite\", \"Postgres\", or \"localStorage\").\n- **Your safety concerns:** tell me what \"safe\" means for you. It could be data loss, corruption from concurrent writes, security or privacy of the data, or ease of migration.\n\nWith that, I can give you a concrete assessment."
+    },
+    {
+     "case_id": "compact-01-en",
+     "arm": "without",
+     "run": 1,
+     "score": 1,
+     "graders": {
+      "essentials": true
+     },
+     "output": "I can't say whether it's safe, because I don't have the storage approach. The earlier design details were lost in compaction, and all I have is that there are 2000 records. I also shouldn't assume what I proposed, since that would mean vouching for something I can't see.\n\nIf you paste the design again, or summarize it (storage engine, where the data lives, how it's written and backed up), I'll review it for safety. These are the things I'd check:\n\n- **Durability:** whether writes are atomic, whether a crash mid-write can corrupt data, and whether there are backups.\n- **Concurrency:** whether two writers can overwrite each other.\n- **Access and secrets:** who can read or write the data, and whether any sensitive fields are stored unencrypted.\n- **Scale:** 2000 records is small, so almost any approach works now. I'd still check what happens if the count grows 100x.\n\nIf you describe what the records are and how they're used, I can also suggest an approach from scratch."
+    },
+    {
+     "case_id": "correction-01-ja",
+     "arm": "with",
+     "run": 1,
+     "score": 1,
+     "graders": {
+      "essentials": true,
+      "no-echo-1": true
+     },
+     "output": "いいえ、先ほどの回答は一部間違っていました。\n\n- **CSV**: 「CSVに対応しています」と答えましたが、引用では「CSV import is not supported」とあるため誤りです。対応していません。\n- **JSON**: 「JSONにも対応しています」は、引用の「JSON import only」と一致します。\n\nこの引用(Aster v2)だけで判断すると、インポートに対応しているのはJSONのみです。\n\nまた、前の2回は根拠となる資料がないまま断定していました。架空の製品なので、本来は確認できないと答えるべきでした。なお、引用はv2についての記述なので、他のバージョンでは違う可能性があります。"
+    },
+    {
+     "case_id": "correction-01-ja",
+     "arm": "without",
+     "run": 1,
+     "score": 1,
+     "graders": {
+      "essentials": true,
+      "no-echo-1": true
+     },
+     "output": "いいえ、先ほどの回答は一部誤りでした。\n\n- **CSV**: 引用では「CSV import is not supported」とあるため、「対応しています」は誤りです。正しくは非対応です。\n- **JSON**: 引用では「JSON import only」とあるため、「対応しています」は正しいです。\n\nなお、Asterは架空の製品で、私は最初の2回の回答を裏づける情報を持っていませんでした。確認せずに答えたのは私の誤りです。この引用に基づく結論は「Aster v2はJSONインポートのみ対応で、CSVは非対応」です。ただし、この引用はv2についてのものです。他のバージョンでの対応状況は、この引用からは分かりません。"
+    },
+    {
+     "case_id": "full-01-en",
+     "arm": "with",
+     "run": 1,
+     "score": 1,
+     "graders": {
+      "essentials": true
+     },
+     "output": "# Aster\n\n## Requirements\n\n- Node.js 22 or later\n\n## Usage\n\nStart the app:\n\n```\nnode app.mjs\n```\n\nStop it with Ctrl+C.\n\n## License\n\nMIT"
+    },
+    {
+     "case_id": "full-01-en",
+     "arm": "without",
+     "run": 1,
+     "score": 1,
+     "graders": {
+      "essentials": true
+     },
+     "output": "# Aster\n\n## Requirements\n\n- Node.js 22 or later\n\n## Usage\n\nStart the app:\n\n```sh\nnode app.mjs\n```\n\nStop it with Ctrl+C.\n\n## License\n\nMIT"
+    },
+    {
+     "case_id": "handoff-01-ja",
+     "arm": "with",
+     "run": 1,
+     "score": 1,
+     "graders": {
+      "essentials": true
+     },
+     "output": "# 引き継ぎ文(Maple)\n\nお疲れさまです。架空プロジェクト「Maple」の現状を共有します。\n\n**対応範囲**\n- JSON形式のみ対応します。\n- CSVは対象外です。対応の予定や要望があっても、今回のスコープには含めません。\n\n**期限**\n- 2026-11-04 17:00 JST\n\n**テスト状況**\n- 認証テストは成功しています。\n- E2Eテストは未実行です。したがって、E2Eを含む全体の動作は未確認です。\n\n**次の担当者にお願いしたいこと**\n- 期限までにE2Eテストを実行し、結果を確認してください。\n- JSON対応の範囲で、CSVを含めない前提のまま進めてください。\n\n**補足**\n- 上記のテスト結果は、私が受けた報告に基づく内容です。この引き継ぎ時点で再実行して確認したものではありません。必要に応じて認証テストを再確認してください。\n- 上記以外の詳細(実装状況、課題、関係者など)は、この引き継ぎ文には含まれていません。"
+    },
+    {
+     "case_id": "handoff-01-ja",
+     "arm": "without",
+     "run": 1,
+     "score": 1,
+     "graders": {
+      "essentials": true
+     },
+     "output": "# Maple 引き継ぎ文\n\nお疲れさまです。架空プロジェクト「Maple」の現状を引き継ぎます。\n\n## 対応範囲\n- **対応するもの:** JSON\n- **対象外:** CSV(対応不要です)\n\n## 期限\n- **2026-11-04 17:00 JST**\n\n## テスト状況\n- **認証テスト:** 成功\n- **E2Eテスト:** 未実行\n\n## 次の担当者にお願いしたいこと\n- 期限までにE2Eテストを実行し、結果を確認してください。\n- 対応範囲はJSONのみです。CSV関連の依頼があった場合は、対象外であることを伝えてください。\n\n上記以外の進捗や課題は、私の手元では把握していません。必要であれば追記します。"
+    },
+    {
+     "case_id": "numeric-01-en",
+     "arm": "with",
+     "run": 1,
+     "score": 1,
+     "graders": {
+      "essentials": true,
+      "no-echo-1": true
+     },
+     "output": "- **Timeout:** 1500ms → **2000ms**\n- **Deadline:** 2026-10-20 17:00 JST → **2026-11-04 17:00 JST**\n- **Retries:** still disabled (unchanged)"
+    },
+    {
+     "case_id": "numeric-01-en",
+     "arm": "without",
+     "run": 1,
+     "score": 1,
+     "graders": {
+      "essentials": true,
+      "no-echo-1": true
+     },
+     "output": "- timeout: 1500ms → **2000ms**\n- deadline: 2026-10-20 17:00 JST → **2026-11-04 17:00 JST**\n- retries: disabled (unchanged)"
+    },
+    {
+     "case_id": "progress-01-ja",
+     "arm": "with",
+     "run": 1,
+     "score": 1,
+     "graders": {
+      "essentials": true,
+      "no-echo-1": true,
+      "no-echo-2": true
+     },
+     "output": "エラーメッセージ4件を `t(\"signup.*\")` キーに置き換え、対応する英語の文言を `locales/en.json` に追加しました。`npm test` は引き続き49件成功です。\n\n**未完了:** `locales/ja.json` にはまだ signup のキーがありません。日本語ロケールでは、この4件のメッセージが翻訳されません。\n\n**未確認:**\n- キーが無いときの挙動は確認していません。フォールバックで英語が出るのか、キー名がそのまま表示されるのかは分かりません。\n- 49件成功という結果が日本語ロケールのメッセージを検証しているかは不明です。テストが通っていても、ja の欠落は検出されていない可能性があります。\n\n次の作業は、`ja.json` に同じ4キーの日本語訳を追加することです。"
+    },
+    {
+     "case_id": "progress-01-ja",
+     "arm": "without",
+     "run": 1,
+     "score": 1,
+     "graders": {
+      "essentials": true,
+      "no-echo-1": true,
+      "no-echo-2": true
+     },
+     "output": "**現状**\n\n- サインアップのエラーメッセージ4件を `t(\"signup.*\")` キーに移し、`locales/en.json` にキーを追加済みです。\n- `npm test` は引き続き49件成功です。\n\n**未対応・注意点**\n\n- `locales/ja.json` には `signup` のキーがまだありません。日本語ロケールでは、キーがそのまま表示されるか、英語へのフォールバックになる可能性があります。実際の挙動は、i18n の設定を確認していないので分かりません。\n- テストが全件通っていても、ja の欠落が問題ないとは言えません。テストが ja のメッセージを検証しているかは、今回の情報からは分かりません。\n\n**次の一手**\n\n`ja.json` に同じ4キーの日本語訳を追加するのが妥当です。そのうえで、en と ja のキー一覧が一致することを確認するテストがあれば、同じ漏れを防げます。"
+    },
+    {
+     "case_id": "reexplain-01-ja",
+     "arm": "with",
+     "run": 1,
+     "score": 1,
+     "graders": {
+      "essentials": true
+     },
+     "output": "図書館にたとえて、最初から説明します。\n\n**キャッシュとは**\n本を探すとき、毎回遠くの書庫まで取りに行くと時間がかかります。そこで、よく借りられる本をカウンターの手元の棚に置いておきます。次に同じ本を頼まれたら、書庫へ行かずにすぐ渡せます。この手元の棚がキャッシュです。コンピュータでは、書庫がデータベースや遠くのサーバー、手元の棚がメモリなどの近くて速い置き場所にあたります。\n\n**期限（有効期限）がなぜ必要か**\n書庫の本が新しい版に入れ替わったとします。手元の棚に古い版が残っていると、利用者に古い内容を渡してしまいます。\n\nそこで「この棚の本は1時間たったら下げて、次は書庫から取り直す」と決めます。これが期限です。期限があれば、古い情報を渡し続ける期間に上限ができます。\n\n**期限の長さの決め方**\n- 短くすると、情報は新しくなりますが、書庫へ行く回数が増えて速さの利点が減ります。\n- 長くすると、速くなりますが、古い情報が出やすくなります。\n\n頻繁に変わるデータは短く、ほとんど変わらないデータは長くするのが一般的です。"
+    },
+    {
+     "case_id": "reexplain-01-ja",
+     "arm": "without",
+     "run": 1,
+     "score": 1,
+     "graders": {
+      "essentials": true
+     },
+     "output": "図書館にたとえて説明します。\n\n**キャッシュ = 手元に置いた本**\n\nあなたが調べものをするとき、毎回、遠くの大きな書庫まで本を取りに行くと時間がかかります。そこで、よく使う本を自分の机の上に置いておきます。これがキャッシュです。次に必要になったとき、机から取るだけなので速く済みます。\n\n**期限 = 机の上の本の「古くなるかも」という目安**\n\n書庫の本が新しい版に差し替えられても、机の上の本は古い版のままです。気づかずに使い続けると、間違った情報を読むことになります。\n\nそこで「この本は1週間たったら書庫で最新版か確認し、取り替える」というルールを決めます。これが期限(有効期限)です。\n\n- 期限が短い: 常に新しいが、書庫に行く回数が増えて遅くなる\n- 期限が長い: 速いが、古い情報を使う危険が増える\n\nこの兼ね合いで、期限の長さを決めます。"
+    },
+    {
+     "case_id": "revision-01-en",
+     "arm": "with",
+     "run": 1,
+     "score": 0.5,
+     "graders": {
+      "essentials": true,
+      "no-echo-1": false,
+      "no-echo-2": false
+     },
+     "output": "I can't edit files in this session, so here is the updated `config.yaml` with only `cache.ttl` changed:\n\n```yaml\nserver:\n  host: 0.0.0.0\n  port: 8080\n  workers: 4\nlogging:\n  level: info\n  format: json\ncache:\n  enabled: true\n  ttl: 600\n  max_entries: 1000\nauth:\n  provider: oidc\n  session_minutes: 60\n```\n\nEntries now stay valid for 600 seconds (10 minutes) instead of 300. Longer-lived entries can mean more stale data. They also stay in the cache longer, which matters for the 1000-entry limit."
+    },
+    {
+     "case_id": "revision-01-en",
+     "arm": "without",
+     "run": 1,
+     "score": 0.5,
+     "graders": {
+      "essentials": true,
+      "no-echo-1": false,
+      "no-echo-2": false
+     },
+     "output": "I can't edit the file here, so here is the updated `config.yaml` with `cache.ttl` set to 600 and everything else unchanged:\n\n```yaml\nserver:\n  host: 0.0.0.0\n  port: 8080\n  workers: 4\nlogging:\n  level: info\n  format: json\ncache:\n  enabled: true\n  ttl: 600\n  max_entries: 1000\nauth:\n  provider: oidc\n  session_minutes: 60\n```\n\nCached entries now stay valid for 10 minutes instead of 5."
+    },
+    {
+     "case_id": "status-01-en",
+     "arm": "with",
+     "run": 1,
+     "score": 1,
+     "graders": {
+      "essentials": true,
+      "no-echo-1": true
+     },
+     "output": "Authentication tests now pass. After the fix, a rerun passed all 12, which corrects my earlier report that they failed.\n\nE2E tests and production checks have not run, so behavior there is still unverified. I have no other observations to add."
+    },
+    {
+     "case_id": "status-01-en",
+     "arm": "without",
+     "run": 1,
+     "score": 1,
+     "graders": {
+      "essentials": true,
+      "no-echo-1": true
+     },
+     "output": "Status: the fix is in, and a rerun passed all 12 authentication tests. The earlier failures are resolved.\n\nStill unverified:\n- E2E tests have not run.\n- Production behavior has not been checked."
+    },
+    {
+     "case_id": "style-01-ja",
+     "arm": "with",
+     "run": 1,
+     "score": 1,
+     "graders": {
+      "essentials": true,
+      "no-echo-1": true
+     },
+     "output": "| 要件 | 変更前 | 変更後 |\n|---|---|---|\n| B | 未完了 | 完了 |\n\n要件Aは変更ありません(完了のままです)。"
+    },
+    {
+     "case_id": "style-01-ja",
+     "arm": "without",
+     "run": 1,
+     "score": 1,
+     "graders": {
+      "essentials": true,
+      "no-echo-1": true
+     },
+     "output": "| 要件 | 変更前 | 変更後 |\n|---|---|---|\n| B | 未完了 | 完了 |"
+    },
+    {
+     "case_id": "topic-01-en",
+     "arm": "with",
+     "run": 1,
+     "score": 1,
+     "graders": {
+      "essentials": true,
+      "no-echo-1": true
+     },
+     "output": "The area of a rectangle is its length times its width.\n\n**Formula:** Area = length × width\n\n**For your rectangle:** 3 cm × 2 cm = **6 cm²**\n\nThe units are square centimeters (cm²), because you're multiplying centimeters by centimeters. One way to picture it is a grid of 1 cm × 1 cm squares: the rectangle has 2 rows of 3 squares, which makes 6 squares."
+    },
+    {
+     "case_id": "topic-01-en",
+     "arm": "without",
+     "run": 1,
+     "score": 1,
+     "graders": {
+      "essentials": true,
+      "no-echo-1": true
+     },
+     "output": "The area is **6 cm²**.\n\n**How to calculate it:** multiply the length by the width.\n\nArea = length × width = 3 cm × 2 cm = 6 cm²\n\nThe units are square centimeters because you're multiplying centimeters by centimeters. You can picture it as a grid of 1 cm × 1 cm squares: 3 columns and 2 rows make 6 squares."
+    }
+   ]
+  }
+ ],
+ "interpretation": "Screening only, judge-scored, n=1-2 per case. Not human-reviewed, no condition B, not release evidence."
+}

@@ -8,9 +8,9 @@
 | Node.js 22, macOS, Windows | CI matrix prepared; not executed here |
 | Claude Code plugin validation | Executed 2026-10-05 with Claude Code 2.1.289 on Linux: plugin and marketplace manifests pass without warnings |
 | `npx skills add` discovery | `skills add <local repo> --list` finds exactly one `skip-echo` skill; installation into each agent untested |
-| Native `claude plugin eval` suite | Suite directory resolves from `experimental.evals`; no case has been run, so history replay and SessionStart firing inside eval runs are unverified |
+| Native `claude plugin eval` suite | Executed 2026-10-05, Claude Code 2.1.289, Linux: synthetic `history.jsonl` accepted and replayed; `SessionStart:resume` fired with the plugin and injected the policy, absent without it |
 | Cursor rule / AGENTS.md snippet | Generated only; untested in any client |
-| SessionStart context inside Claude Code | Not observed |
+| SessionStart context inside Claude Code | Observed only inside `claude plugin eval` child sessions (resume source); interactive sessions not observed |
 | startup / resume / clear / compact / fork | Hook unit inputs covered; real host lifecycle untested |
 | Standalone skill format | Local skill validator checked; discovery is client-specific |
 | Agent forward tests | Explicit policy, development-only; not Claude Code auto-application |

@@ -30,7 +30,7 @@ Independent write-ups have found that terse styles cut a modest share of output 
 | Add one constraint | Address its effect without restarting the explanation |
 | Correct an earlier answer | Acknowledge the error and state the corrected conclusion |
 | Progress or completion report | Lead with the outcome; report only what changed, what was verified now, and what remains |
-| Change one value in an existing file or block | Show the changed part and say the rest is unchanged; give the full version if requested or if an excerpt would be harder to apply |
+| Change one value in an existing file or block | Show the changed part and say the rest is unchanged; give the full version if requested, if it is only a few lines, or if an excerpt would be harder to apply |
 | Full text, final version, copy-ready, handoff | Restore all necessary context; never elide |
 | Explain again, more detail, confusion | Explain afresh; never assume the user understood |
 | New topic, or history lost after compaction | Complete answer using only the context actually available |
@@ -94,7 +94,7 @@ The repository ships a native [`claude plugin eval`](https://code.claude.com/doc
 claude plugin eval . --ablation with-without --runs 3 --max-cost-usd 5
 ```
 
-`--ablation with-without` is required because history-replay cases otherwise run with the plugin only. Every run and judge call is billed to your account; set a cost ceiling. Graders are model-judged (`essentials` checks required facts and critical omissions, weighted 2; `no-echo` checks unnecessary restatement), so treat results as **screening, not release evidence**. Holdout cases are excluded from this suite on purpose. The human-graded A/B/C/D protocol, including the short-instruction control, is in [evals/rubric.md](evals/rubric.md).
+`--ablation with-without` is required because history-replay cases otherwise run with the plugin only. Every run and judge call is billed to your account; set a cost ceiling. Graders are model-judged (`essentials` checks required facts and critical omissions, weighted 2; one `no-echo-N` grader per predeclared unnecessary repetition), so treat results as **screening, not release evidence**. Holdout cases are excluded from this suite on purpose. The human-graded A/B/C/D protocol, including the short-instruction control, is in [evals/rubric.md](evals/rubric.md).
 
 ## How it works
 

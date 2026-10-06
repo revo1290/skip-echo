@@ -11,4 +11,6 @@ Do not claim savings from character counts. Report raw outputs, model and client
 
 `claude plugin eval . --ablation with-without --max-cost-usd <budget>` runs the generated smoke and stress suite against Claude Code, and `claude plugin eval . --eval-dir evals/conditions --ablation none --max-cost-usd <budget>` compares A/B/C/D; judge scores are screening only and must not be reported as human-reviewed results.
 
+Versioning: any change to `src/response-policy.md` is at least a minor version, even if it only rewords. Patch releases never change the policy text. Changing a mode name, the installation route, or the hook contract is a major change after 1.0. See the versioning rules in `evals/rubric.md`.
+
 Run the integration checklist in `docs/compatibility.md` before expanding compatibility claims. CI checks JavaScript and packaging, not Claude Code integration or model quality.

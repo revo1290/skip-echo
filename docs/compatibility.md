@@ -10,6 +10,7 @@
 | `npx skills add` discovery | `skills add <local repo> --list` finds exactly one `skip-echo` skill; installation into each agent untested |
 | A/B/C/D condition suite (`evals/conditions`) | Pilot executed 2026-10-05: all four conditions load and run; the empty baseline plugin must sit inside each case directory |
 | Native `claude plugin eval` suite | Executed 2026-10-05, Claude Code 2.1.289, Linux: synthetic `history.jsonl` accepted and replayed; `SessionStart:resume` fired with the plugin and injected the policy, absent without it |
+| History with `tool_use` / `tool_result` blocks in `claude plugin eval` | Executed 2026-10-06, Claude Code 2.1.292, Linux: a prototype and `evals/hard/tool-report-01-en` replay and are answered from the tool history, with and without the plugin; one case, no other client |
 | Cursor rule / AGENTS.md snippet | Generated only; untested in any client |
 | SessionStart context inside Claude Code | Observed only inside `claude plugin eval` child sessions (resume source); interactive sessions not observed |
 | startup / resume / clear / compact / fork | Hook unit inputs covered; real host lifecycle untested |

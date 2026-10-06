@@ -1,0 +1,53 @@
+{
+  "id": "doc-writing-04-en",
+  "pair_id": "doc-writing-04",
+  "language": "en",
+  "category": "doc-writing",
+  "split": "holdout",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Here is a draft ADR:\n\n# ADR-0007: Use PostgreSQL for the orders service\n\nStatus: Proposed\n\n## Context\nThe orders service needs transactional writes and flexible reporting queries. The team already operates PostgreSQL for billing.\n\n## Decision\nWe will use PostgreSQL 16 as the primary datastore for the orders service.\n\n## Consequences\n- We reuse the existing backup and monitoring tooling.\n- Reporting queries can use SQL directly.\n- We accept vertical scaling limits for write throughput.\n\nIs the Context section enough?"
+    },
+    {
+      "role": "assistant",
+      "content": "It is enough to follow the decision, but it does not name the alternatives that were considered. A sentence on why a document store or a managed service was rejected would make the record more useful."
+    },
+    {
+      "role": "user",
+      "content": "Change the status to Accepted and add a line \"Date: 2026-10-06\" right under it."
+    },
+    {
+      "role": "assistant",
+      "content": "The top of the file now reads:\n\nStatus: Accepted\nDate: 2026-10-06\n\nThe rest is unchanged."
+    },
+    {
+      "role": "user",
+      "content": "Add a consequence: we must plan a partitioning strategy before we reach 50M orders."
+    },
+    {
+      "role": "assistant",
+      "content": "Added as the last bullet under ## Consequences:\n\n- We must plan a partitioning strategy before we reach 50M orders.\n\nThe rest is unchanged."
+    },
+    {
+      "role": "user",
+      "content": "Give me the final ADR as a complete file I can commit."
+    }
+  ],
+  "required_facts": [
+    "The status is Accepted and the line \"Date: 2026-10-06\" follows it",
+    "The Context section is complete: transactional writes and flexible reporting queries, and the team already operates PostgreSQL for billing",
+    "The Decision says PostgreSQL 16 is the primary datastore for the orders service",
+    "Consequences has all four bullets: reuse backup and monitoring tooling, reporting queries in SQL, vertical scaling limits for write throughput, and planning a partitioning strategy before 50M orders",
+    "The text is complete, with no placeholders or elision markers"
+  ],
+  "critical_omissions": [
+    "Using \"...\", \"unchanged\" or similar placeholders in place of any section",
+    "Missing the status change, the date, or the partitioning consequence",
+    "Altering the decision"
+  ],
+  "unnecessary_repetition": [
+    "Re-explaining the earlier feedback on alternatives",
+    "Commentary on each edit beyond a one-line note"
+  ]
+}

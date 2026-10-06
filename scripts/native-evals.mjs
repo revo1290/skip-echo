@@ -1,6 +1,7 @@
 // Converts frozen cases into `claude plugin eval` suites.
 // evals/native/: smoke + stress dev cases, run with/without the plugin (A vs D).
 // evals/conditions/: stress dev cases × A/B/C/D, run with `--ablation none`.
+// evals/hard/: dev cases from evals/hard.json (agent-session and tool-use families), run with/without the plugin.
 // Holdout cases are deliberately excluded so both suites can be run while iterating.
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -8,6 +9,7 @@ import { createHash } from 'node:crypto';
 
 export const NATIVE_DIR = 'evals/native';
 export const CONDITIONS_DIR = 'evals/conditions';
+export const HARD_DIR = 'evals/hard';
 // Same text in every arm: the frozen cases are chat conversations, so stop the agent from hunting for files.
 const CHAT_ONLY = 'This conversation has no codebase or workspace files. Do not search for, read, or create files; answer in your reply.';
 
@@ -17,6 +19,7 @@ const uuid = seed => {
 };
 const bullets = items => items.map(x => `- ${x}`).join('\n');
 
+// A message's content is a string, or an array of Messages API blocks (text, tool_use, tool_result) for tool-use histories.
 function history(c) {
  const sessionId = uuid(`${c.id}:session`);
  let parent = null;
@@ -26,7 +29,7 @@ function history(c) {
   parent = id;
   const message = m.role === 'user'
    ? { role: 'user', content: m.content }
-   : { id: `msg_synthetic_${i}`, type: 'message', role: 'assistant', model: '<synthetic>', content: [{ type: 'text', text: m.content }], stop_reason: 'end_turn', stop_sequence: null, usage: { input_tokens: 0, output_tokens: 0 } };
+   : { id: `msg_synthetic_${i}`, type: 'message', role: 'assistant', model: '<synthetic>', content: typeof m.content === 'string' ? [{ type: 'text', text: m.content }] : m.content, stop_reason: 'end_turn', stop_sequence: null, usage: { input_tokens: 0, output_tokens: 0 } };
   return JSON.stringify({ ...base, message });
  }).join('\n') + '\n';
 }
@@ -45,9 +48,10 @@ function load(root) {
  const read = item => {
   const c = JSON.parse(readFileSync(resolve(root, 'evals/cases', item.id + '.json')));
   if (c.split !== 'dev') throw new Error('Generated suites must not contain holdout cases: ' + c.id);
+  if (typeof c.messages.at(-1).content !== 'string') throw new Error('The final user message must be plain text: ' + c.id);
   return { c, item };
  };
- return { manifest, smoke: list('smoke'), stress: list('stress'), read };
+ return { manifest, smoke: list('smoke'), stress: list('stress'), hard: list('hard'), read };
 }
 
 function caseFiles(files, dir, { c, item }, { name, tags, appendix = '', plugins }) {
@@ -66,6 +70,16 @@ export function nativeEvalFiles(root) {
  for (const item of manifest.cases.filter(c => smoke.has(c.id) || stress.has(c.id))) {
   const x = read(item);
   caseFiles(files, `${NATIVE_DIR}/${x.c.id}`, x, { name: x.c.id, tags: [x.c.category, x.c.language, smoke.has(x.c.id) ? 'smoke' : 'stress'] });
+ }
+ return files;
+}
+
+export function hardEvalFiles(root) {
+ const { manifest, hard, read } = load(root);
+ const files = new Map();
+ for (const item of manifest.cases.filter(c => hard.has(c.id))) {
+  const x = read(item);
+  caseFiles(files, `${HARD_DIR}/${x.c.id}`, x, { name: x.c.id, tags: [x.c.category, x.c.language, 'hard'] });
  }
  return files;
 }

@@ -1,0 +1,43 @@
+{
+  "id": "data-analysis-01-en",
+  "pair_id": "data-analysis-01",
+  "language": "en",
+  "category": "data-analysis",
+  "split": "dev",
+  "messages": [
+    {
+      "role": "user",
+      "content": "We have 12,400 active customers at the start of the quarter and 508 of them cancelled during it. What is our quarterly churn rate?"
+    },
+    {
+      "role": "assistant",
+      "content": "Quarterly churn is 508 / 12,400 = 4.1%. Method: customers active on day 1 form the base, a cancellation counts if it happened within the 90-day quarter, trial accounts (1,200) are not in the 12,400, and reactivations are not netted out. By plan it splits as 3.2% on annual plans and 5.0% on monthly plans."
+    },
+    {
+      "role": "user",
+      "content": "How many customers are on each plan, and how many cancellations came from each?"
+    },
+    {
+      "role": "assistant",
+      "content": "Monthly plans: 6,200 customers and 310 cancellations. Annual plans: 6,200 customers and 198 cancellations. Together that is 508."
+    },
+    {
+      "role": "user",
+      "content": "Fine. Now, the data team says 300 of those 508 cancellations were duplicates: the same customer re-registered and was counted twice. Recompute the churn rate using only that information."
+    }
+  ],
+  "required_facts": [
+    "Recomputed churn is 208 / 12,400, about 1.7%, replacing the earlier 4.1%, which was overstated",
+    "This assumes all 300 duplicates are among the 508 cancellations and that the base of 12,400 is not itself affected by duplicates; if the base also holds duplicate records the rate would differ",
+    "The earlier split by plan (3.2% annual, 5.0% monthly) is no longer valid and cannot be recomputed without the plan of each duplicate"
+  ],
+  "critical_omissions": [
+    "Keeping 4.1% as the current churn rate",
+    "Stating 1.7% as certain without the assumptions",
+    "Keeping the plan split as still valid"
+  ],
+  "unnecessary_repetition": [
+    "The explanation of the method (day-1 base, 90-day window, trials excluded, reactivations)",
+    "The original calculation 508 / 12,400 spelled out again"
+  ]
+}

@@ -1,0 +1,1 @@
+I applied the first option in staging: 3/3 pods Running and readiness has been OK for 10 minutes. Production uses a different secret, db-credentials-prod, which I have not looked at. Update me, based only on that.

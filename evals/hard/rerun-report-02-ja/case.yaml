@@ -1,0 +1,10 @@
+schema_version: "1.1"
+name: rerun-report-02-ja
+description: "Generated from evals/cases/rerun-report-02-ja.json (sha256 97c27c1c5001). Do not edit."
+tags: [rerun-report, ja, hard]
+context:
+  history_file: history.jsonl
+execution:
+  max_turns: 3
+  allowed_tools: [Skill]
+  append_system_prompt: "This conversation has no codebase or workspace files. Do not search for, read, or create files; answer in your reply."

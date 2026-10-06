@@ -1,0 +1,109 @@
+{
+  "id": "long-session-01-en",
+  "pair_id": "long-session-01",
+  "language": "en",
+  "category": "long-session",
+  "split": "dev",
+  "messages": [
+    {
+      "role": "user",
+      "content": "This session is being continued from an earlier conversation that ran out of context. Summary: we are moving cron jobs to a job queue. Done: queue installed; send_invoice and sync_users migrated; 130 tests pass. Remaining: cleanup_tmp, export_report, rotate_keys; choose a retry policy; update docs/runbook.md. Continue from here."
+    },
+    {
+      "role": "assistant",
+      "content": "Understood. I'll continue with the remaining jobs."
+    },
+    {
+      "role": "user",
+      "content": "Migrate cleanup_tmp."
+    },
+    {
+      "role": "assistant",
+      "content": "Done: cleanup_tmp now runs on the queue, scheduled daily at 02:00 UTC. Tests: 133 passed."
+    },
+    {
+      "role": "user",
+      "content": "What retry policy would you use for export_report?"
+    },
+    {
+      "role": "assistant",
+      "content": "Three retries with exponential backoff (1 minute, 5 minutes, 25 minutes), then a dead-letter queue. The job is idempotent, so retries are safe."
+    },
+    {
+      "role": "user",
+      "content": "Use that and migrate export_report."
+    },
+    {
+      "role": "assistant",
+      "content": "Done: export_report is on the queue with 3 retries (1m, 5m, 25m) and the dead-letter queue export_dead. Tests: 137 passed."
+    },
+    {
+      "role": "user",
+      "content": "Is rotate_keys safe to move?"
+    },
+    {
+      "role": "assistant",
+      "content": "Not yet. It is not idempotent: a retry could rotate the keys twice. I recommend keeping it on cron until it takes a lock."
+    },
+    {
+      "role": "user",
+      "content": "Agree, leave it on cron. Update the runbook."
+    },
+    {
+      "role": "assistant",
+      "content": "Done: docs/runbook.md now lists the four migrated jobs and the retry policy, and notes that rotate_keys stays on cron because it is not idempotent."
+    },
+    {
+      "role": "user",
+      "content": "Add an alert for the dead-letter queue growing."
+    },
+    {
+      "role": "assistant",
+      "content": "Done: the alert export_dead_depth fires when export_dead holds more than 10 jobs for 5 minutes (monitoring/alerts.yml)."
+    },
+    {
+      "role": "user",
+      "content": "How do we roll back if the queue misbehaves?"
+    },
+    {
+      "role": "assistant",
+      "content": "Re-enable the matching cron entries from crontab.disabled and stop the queue workers. Each job can be rolled back on its own."
+    },
+    {
+      "role": "user",
+      "content": "Run the full tests again."
+    },
+    {
+      "role": "assistant",
+      "content": "Full run: 141 passed, 0 failed."
+    },
+    {
+      "role": "user",
+      "content": "Good. Does the queue need its own backups?"
+    },
+    {
+      "role": "assistant",
+      "content": "Only if jobs carry data that cannot be re-created. These jobs can be re-enqueued, so an hourly Redis snapshot is enough."
+    },
+    {
+      "role": "user",
+      "content": "I ran it in staging for a day: all 4 migrated jobs ran on schedule, export_report had 1 retry that succeeded, and the dead-letter alert never fired. Production is untouched. Where are we and what is left? Base it only on what I just said."
+    }
+  ],
+  "required_facts": [
+    "Staging, one day (as reported by the user): all 4 migrated jobs ran on schedule, and export_report had 1 retry that succeeded",
+    "The dead-letter alert never firing does not show that the alert works, because it was never triggered",
+    "Production is untouched, so nothing is verified in production and the production rollout is still to do",
+    "rotate_keys is still on cron, not migrated, pending making it idempotent or locked"
+  ],
+  "critical_omissions": [
+    "Saying production is verified or migrated",
+    "Saying all five jobs are migrated",
+    "Saying the alert was tested and works"
+  ],
+  "unnecessary_repetition": [
+    "The retry policy numbers (3 retries, 1m/5m/25m) and the dead-letter queue name",
+    "The test count progression (130, 133, 137, 141)",
+    "The runbook and rollback procedure details"
+  ]
+}

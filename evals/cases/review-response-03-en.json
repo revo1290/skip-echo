@@ -1,0 +1,44 @@
+{
+  "id": "review-response-03-en",
+  "pair_id": "review-response-03",
+  "language": "en",
+  "category": "review-response",
+  "split": "holdout",
+  "messages": [
+    {
+      "role": "user",
+      "content": "PR #77 review, round 1: (1) validate `limit` is between 1 and 500 in list_orders, (2) return 404 instead of 500 for unknown order ids, (3) log the request id on errors, (4) remove the unused `legacy_format` flag, (5) add docs for the new query params. Address them."
+    },
+    {
+      "role": "assistant",
+      "content": "All five done: list_orders rejects a limit outside 1–500 with a 422; get_order returns 404 for unknown ids; errors now log request_id; legacy_format is removed from api/orders.py; docs/api.md documents limit and offset. pytest: 96 passed."
+    },
+    {
+      "role": "user",
+      "content": "Round 2: the reviewer wants an extra test for the 404 path and a changelog line."
+    },
+    {
+      "role": "assistant",
+      "content": "Done: added test_get_order_unknown_returns_404 and a line under Unreleased in CHANGELOG.md. pytest: 97 passed."
+    },
+    {
+      "role": "user",
+      "content": "Round 3 has two new comments: (1) a typo in the fetch_user docstring ('retrun'), (2) change the default page size from 100 to 50. I don't want to do (2): our public API contract says the default is 100. I haven't touched anything yet. Where does the PR stand?"
+    }
+  ],
+  "required_facts": [
+    "Both new comments are open; neither has been addressed yet",
+    "The docstring typo ('retrun') in fetch_user still needs fixing",
+    "Comment (2), the default page size of 50, will not be applied because the contract says 100; the reviewer needs a reply explaining that, and their agreement is not known"
+  ],
+  "critical_omissions": [
+    "Saying either new comment has been addressed",
+    "Saying the reviewer accepted the page-size decision",
+    "Saying the PR is ready to merge"
+  ],
+  "unnecessary_repetition": [
+    "The five round-1 comments and how each was fixed",
+    "The round-2 test and changelog line",
+    "The pytest counts of earlier rounds (96 and 97)"
+  ]
+}

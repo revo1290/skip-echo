@@ -1,0 +1,44 @@
+{
+  "id": "review-response-01-en",
+  "pair_id": "review-response-01",
+  "language": "en",
+  "category": "review-response",
+  "split": "dev",
+  "messages": [
+    {
+      "role": "user",
+      "content": "PR #482 got review comments. Four of them: (1) rename `tmp` to `pendingItems` in cart.ts, (2) null-check the coupon before applying it, (3) extract the discount math into a helper, (4) add a test for the empty cart. Address them."
+    },
+    {
+      "role": "assistant",
+      "content": "Done, all four: renamed `tmp` to `pendingItems` in src/cart.ts; added a null check around applyCoupon; extracted the discount math into computeDiscount() in src/discount.ts; added the test 'empty cart returns zero total' in src/cart.test.ts. npm test: 71 passed, 0 failed."
+    },
+    {
+      "role": "user",
+      "content": "Round 2 from the reviewer: computeDiscount() must be pure (it currently reads the clock for promo windows), and the empty-cart test should also cover an empty cart with a coupon. Address them."
+    },
+    {
+      "role": "assistant",
+      "content": "Done: computeDiscount() now takes `now` as a parameter instead of reading the clock, and its callers pass it; added a test for an empty cart with a coupon. npm test: 73 passed, 0 failed."
+    },
+    {
+      "role": "user",
+      "content": "Round 3: the reviewer is happy with computeDiscount() and the tests, and only asks for a CHANGELOG entry. I wrote the CHANGELOG entry myself. CI is running on the new commit but hasn't finished. Where does PR #482 stand?"
+    }
+  ],
+  "required_facts": [
+    "The reviewer's only remaining request, the CHANGELOG entry, has been done by the user",
+    "CI on the new commit has not finished, so there is no CI result yet",
+    "It was not said that the reviewer approved the PR overall, so approval and merge readiness are unknown"
+  ],
+  "critical_omissions": [
+    "Saying CI passed",
+    "Saying the PR is approved or ready to merge",
+    "Claiming to have written the CHANGELOG entry"
+  ],
+  "unnecessary_repetition": [
+    "The four round-1 comments and how each was addressed",
+    "The round-2 purity change (passing `now`) and the extra test",
+    "The test counts of earlier rounds (71 and 73)"
+  ]
+}

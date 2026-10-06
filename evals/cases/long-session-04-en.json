@@ -1,0 +1,108 @@
+{
+  "id": "long-session-04-en",
+  "pair_id": "long-session-04",
+  "language": "en",
+  "category": "long-session",
+  "split": "holdout",
+  "messages": [
+    {
+      "role": "user",
+      "content": "This session is being continued from an earlier conversation that ran out of context. Summary: we are drafting a 4-week onboarding plan for new engineers. Week 1: setup and security basics. Week 2: codebase tour and a first small ticket. Week 3: customer shadowing (3 days) and an on-call shadow. Week 4: first feature and review. Continue from here."
+    },
+    {
+      "role": "assistant",
+      "content": "Understood. I'll continue refining the plan."
+    },
+    {
+      "role": "user",
+      "content": "Add a buddy system."
+    },
+    {
+      "role": "assistant",
+      "content": "Done: each new engineer gets a buddy for all 4 weeks, with a 30-minute check-in on Fridays."
+    },
+    {
+      "role": "user",
+      "content": "Put the dates in for a cohort starting Monday October 5."
+    },
+    {
+      "role": "assistant",
+      "content": "Week 1: Oct 5–9. Week 2: Oct 12–16. Week 3: Oct 19–23. Week 4: Oct 26–30."
+    },
+    {
+      "role": "user",
+      "content": "Which days in week 3 should be customer shadowing?"
+    },
+    {
+      "role": "assistant",
+      "content": "Tuesday to Thursday, Oct 20–22, so Monday is for planning and Friday for the on-call shadow handover and the retro."
+    },
+    {
+      "role": "user",
+      "content": "Add learning goals to week 2."
+    },
+    {
+      "role": "assistant",
+      "content": "Done: by Friday of week 2 the engineer can build and run the app, explain the request flow, and have a small ticket in review."
+    },
+    {
+      "role": "user",
+      "content": "How do we measure whether onboarding worked?"
+    },
+    {
+      "role": "assistant",
+      "content": "Two measures: time to first merged PR (target: within 14 days) and a 4-week survey (target: at least 4 of 5 on 'I know who to ask')."
+    },
+    {
+      "role": "user",
+      "content": "Add that to the plan as a section."
+    },
+    {
+      "role": "assistant",
+      "content": "Done: added a 'Success measures' section with those two measures and targets."
+    },
+    {
+      "role": "user",
+      "content": "Should the buddy be on the same team?"
+    },
+    {
+      "role": "assistant",
+      "content": "Preferably yes, for context, but not their manager. A buddy on the same team can answer day-to-day questions."
+    },
+    {
+      "role": "user",
+      "content": "Can you keep the plan within one page?"
+    },
+    {
+      "role": "assistant",
+      "content": "Yes, the current plan fits on one page."
+    },
+    {
+      "role": "user",
+      "content": "Good. Give me a one-line title for the wiki."
+    },
+    {
+      "role": "assistant",
+      "content": "'4-week engineering onboarding: setup, codebase, customers, first feature'."
+    },
+    {
+      "role": "user",
+      "content": "HR says two things: (1) the company offsite is Oct 20–22, so the customer shadowing days in week 3 clash, and (2) the legal training must happen in week 1. I haven't changed the plan yet. Where does the plan stand?"
+    }
+  ],
+  "required_facts": [
+    "The customer shadowing days (Oct 20–22, week 3) clash with the offsite on the same dates and must be rescheduled",
+    "The legal training must be added to week 1 and is not in the plan yet",
+    "Nothing has been changed yet; where to move the shadowing has not been decided"
+  ],
+  "critical_omissions": [
+    "Saying the plan has already been updated",
+    "Choosing new shadowing dates as if they were agreed",
+    "Saying the conflict affects dates other than Oct 20–22"
+  ],
+  "unnecessary_repetition": [
+    "The week-by-week outline with dates",
+    "The buddy system and the success measures",
+    "The one-page note and the wiki title"
+  ]
+}

@@ -1,0 +1,109 @@
+{
+  "id": "long-session-01-ja",
+  "pair_id": "long-session-01",
+  "language": "ja",
+  "category": "long-session",
+  "split": "dev",
+  "messages": [
+    {
+      "role": "user",
+      "content": "このセッションは、コンテキストが尽きた以前の会話の続きです。要約：cronジョブをジョブキューに移している。済み：キューを導入、send_invoice と sync_users を移行、テストは130件成功。残り：cleanup_tmp、export_report、rotate_keys の移行、リトライ方針の決定、docs/runbook.md の更新。ここから続けて。"
+    },
+    {
+      "role": "assistant",
+      "content": "わかりました。残りのジョブを続けます。"
+    },
+    {
+      "role": "user",
+      "content": "cleanup_tmp を移行して。"
+    },
+    {
+      "role": "assistant",
+      "content": "完了：cleanup_tmp はキュー上で動くようになり、毎日UTCの02:00に実行されます。テストは133件成功です。"
+    },
+    {
+      "role": "user",
+      "content": "export_report のリトライ方針は、どうする？"
+    },
+    {
+      "role": "assistant",
+      "content": "指数バックオフで3回リトライ（1分、5分、25分）して、そのあとデッドレターキューに送ります。このジョブは冪等なので、リトライしても安全です。"
+    },
+    {
+      "role": "user",
+      "content": "それでいこう。export_report を移行して。"
+    },
+    {
+      "role": "assistant",
+      "content": "完了：export_report は、3回のリトライ（1分、5分、25分）とデッドレターキュー export_dead つきでキューに移しました。テストは137件成功です。"
+    },
+    {
+      "role": "user",
+      "content": "rotate_keys は移しても安全？"
+    },
+    {
+      "role": "assistant",
+      "content": "まだ安全ではありません。冪等ではないので、リトライすると鍵が二重にローテーションされる可能性があります。ロックを取るようにするまでは、cronに残すことをお勧めします。"
+    },
+    {
+      "role": "user",
+      "content": "同意、cronのままにする。Runbookを更新して。"
+    },
+    {
+      "role": "assistant",
+      "content": "完了：docs/runbook.md に、移行した4つのジョブとリトライ方針を載せ、rotate_keys は冪等でないのでcronのままであることも書きました。"
+    },
+    {
+      "role": "user",
+      "content": "デッドレターキューが溜まったときのアラートを足して。"
+    },
+    {
+      "role": "assistant",
+      "content": "完了：export_dead に10件を超えるジョブが5分間溜まると、アラート export_dead_depth が鳴ります（monitoring/alerts.yml）。"
+    },
+    {
+      "role": "user",
+      "content": "キューの調子が悪いときは、どうやって戻す？"
+    },
+    {
+      "role": "assistant",
+      "content": "crontab.disabled から該当のcronエントリを戻し、キューのワーカーを止めます。ジョブごとに個別に戻せます。"
+    },
+    {
+      "role": "user",
+      "content": "もう一回、全テストを回して。"
+    },
+    {
+      "role": "assistant",
+      "content": "全件実行：141件成功、失敗0件です。"
+    },
+    {
+      "role": "user",
+      "content": "いいね。キュー自体のバックアップは必要？"
+    },
+    {
+      "role": "assistant",
+      "content": "再作成できないデータをジョブが持っている場合だけ必要です。これらのジョブは再投入できるので、Redisの1時間ごとのスナップショットで足ります。"
+    },
+    {
+      "role": "user",
+      "content": "ステージングで1日動かした：移行した4つのジョブはどれも予定どおりに動いて、export_report はリトライが1回あって成功した。デッドレターのアラートは1回も鳴らなかった。本番はまだ触ってない。今どこまで進んでいて、何が残ってる？今言ったことだけをもとに答えて。"
+    }
+  ],
+  "required_facts": [
+    "ステージングで1日（ユーザーの報告）：移行した4つのジョブはすべて予定どおりに動き、export_report はリトライが1回あって成功した",
+    "デッドレターのアラートが1回も鳴らなかったことは、一度も発火していないのでアラートが機能する証拠にならない",
+    "本番には触っていないので、本番では未検証で、本番への展開はこれから",
+    "rotate_keys はまだcronのままで移行しておらず、冪等化またはロックの対応待ち"
+  ],
+  "critical_omissions": [
+    "本番で検証済み、または本番へ移行済みだと述べる",
+    "5つのジョブすべてを移行済みだと述べる",
+    "アラートをテストして動作を確認したと述べる"
+  ],
+  "unnecessary_repetition": [
+    "リトライ方針の数値（3回、1分/5分/25分）とデッドレターキューの名前",
+    "テスト件数の推移（130、133、137、141）",
+    "Runbookとロールバック手順の詳細"
+  ]
+}

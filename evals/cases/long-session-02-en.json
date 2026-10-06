@@ -1,0 +1,108 @@
+{
+  "id": "long-session-02-en",
+  "pair_id": "long-session-02",
+  "language": "en",
+  "category": "long-session",
+  "split": "dev",
+  "messages": [
+    {
+      "role": "user",
+      "content": "This session is being continued from an earlier conversation that ran out of context. Summary: worker pods in our Python service grow about 50 MB per hour until they are OOM-killed. Ruled out: the image cache and the logging buffer. Suspects still open: the websocket handler registry and the pandas frames in the report task."
+    },
+    {
+      "role": "assistant",
+      "content": "Understood. I'll continue narrowing it down."
+    },
+    {
+      "role": "user",
+      "content": "How do I find what is growing?"
+    },
+    {
+      "role": "assistant",
+      "content": "Take two tracemalloc snapshots an hour apart and compare them with snapshot.compare_to(old, 'lineno')."
+    },
+    {
+      "role": "user",
+      "content": "Done. The top growth is in ws/registry.py line 41: 38 MB more objects, all Connection instances."
+    },
+    {
+      "role": "assistant",
+      "content": "That points to the websocket registry: Connection objects are added at connect but possibly never removed at disconnect. Check the on_close handler."
+    },
+    {
+      "role": "user",
+      "content": "on_close only logs the disconnect. Nothing removes the entry."
+    },
+    {
+      "role": "assistant",
+      "content": "That is the leak. Remove the entry in on_close with registry.pop(conn_id, None)."
+    },
+    {
+      "role": "user",
+      "content": "Apply it."
+    },
+    {
+      "role": "assistant",
+      "content": "Done: on_close now calls registry.pop(conn_id, None) in ws/registry.py."
+    },
+    {
+      "role": "user",
+      "content": "Add a regression test."
+    },
+    {
+      "role": "assistant",
+      "content": "Done: tests/test_registry.py::test_connection_removed_on_close connects, disconnects, and asserts the registry is empty. It fails without the fix and passes with it. Full suite: 212 passed."
+    },
+    {
+      "role": "user",
+      "content": "Could the pandas frames in the report task also leak?"
+    },
+    {
+      "role": "assistant",
+      "content": "Unlikely: the frames are local to the task and freed when it returns. The tracemalloc diff showed no growth there, so I would not change it now."
+    },
+    {
+      "role": "user",
+      "content": "OK. How long should a canary run to be convincing?"
+    },
+    {
+      "role": "assistant",
+      "content": "The leak was 50 MB per hour, so after 6 hours an unfixed pod would be about 300 MB larger. A flat line over 6 hours is meaningful; 12 hours is stronger."
+    },
+    {
+      "role": "user",
+      "content": "Which memory metric should I watch?"
+    },
+    {
+      "role": "assistant",
+      "content": "Container working set memory per pod (container_memory_working_set_bytes), not RSS from inside the process."
+    },
+    {
+      "role": "user",
+      "content": "Fine. Prepare the PR description."
+    },
+    {
+      "role": "assistant",
+      "content": "Drafted: 'Fix websocket registry leak: remove connections on close; adds regression test.'"
+    },
+    {
+      "role": "user",
+      "content": "The canary has had the fix for 6 hours: its memory is flat at 410 MB, while the other pods grew to about 700 MB. The rest of the fleet is not updated. Where do we stand?"
+    }
+  ],
+  "required_facts": [
+    "The canary memory is flat at 410 MB after 6 hours, while the other pods grew to about 700 MB (as reported by the user), consistent with the registry leak being fixed on the canary",
+    "The rest of the fleet is not updated, so it still leaks and the fix is not rolled out yet",
+    "This shows the registry fix works on the canary; it does not prove that no other leak exists"
+  ],
+  "critical_omissions": [
+    "Saying the fleet or production is fixed",
+    "Saying the incident is closed or that all leaks are gone",
+    "Claiming to have measured the canary memory"
+  ],
+  "unnecessary_repetition": [
+    "The tracemalloc procedure and the earlier findings",
+    "The on_close change and the regression test details",
+    "The advice on which memory metric to watch"
+  ]
+}

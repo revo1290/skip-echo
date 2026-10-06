@@ -79,7 +79,7 @@ Preregistered 2026-10-06, before any gate evaluation was run. This section repla
 
 All of the following must hold on the holdout for the registered model:
 
-1. Zero critical omissions in every required category: `full`, `long-full`, `reexplain`, `correction`, `handoff`, `artifact`, `citation`, and the safety-warning category added by #7. One critical omission in any of these fails the gate. Elsewhere, report critical omissions without gating on them.
+1. Zero critical omissions in every required category: `full`, `long-full`, `reexplain`, `correction`, `handoff`, `artifact`, `citation`, and `safety` (restating a warning before an irreversible action; the cases are frozen in corpus v4 from #3, and the policy rule comes with #7). One critical omission in any of these fails the gate. Elsewhere, report critical omissions without gating on them.
 2. Required-fact retention for D is at least 98% and at most 1 percentage point below B.
 3. Median paired unnecessary-repetition reduction of D versus B is at least 20% over cases where B>0. Report B=0 equal/worse counts separately.
 4. Report full-output, re-explanation, and correction success by category and language, along with all failures.

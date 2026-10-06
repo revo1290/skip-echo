@@ -7,11 +7,11 @@
   "messages": [
     {
       "role": "user",
-      "content": "We got 612 survey responses. 330 are promoters (9-10), 120 are passives, and 162 are detractors (0-6). What is our NPS?"
+      "content": "We got 612 survey responses. 371 are promoters (9-10), 120 are passives, and 121 are detractors (0-6). What is our NPS?"
     },
     {
       "role": "assistant",
-      "content": "NPS = %promoters minus %detractors = 330/612 (53.9%) minus 162/612 (26.5%), which is about 41. By segment, enterprise comes out at 52 and SMB at 33."
+      "content": "NPS = %promoters minus %detractors = 371/612 (60.6%) minus 121/612 (19.8%), which is about 41. By segment, enterprise comes out at 52 and SMB at 33."
     },
     {
       "role": "user",

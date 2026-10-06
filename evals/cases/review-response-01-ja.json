@@ -1,0 +1,44 @@
+{
+  "id": "review-response-01-ja",
+  "pair_id": "review-response-01",
+  "language": "ja",
+  "category": "review-response",
+  "split": "dev",
+  "messages": [
+    {
+      "role": "user",
+      "content": "PR #482 にレビューコメントが付いた。4件：(1) cart.ts の `tmp` を `pendingItems` に改名、(2) クーポンを適用する前に null チェック、(3) 割引の計算をヘルパーに切り出す、(4) 空のカートのテストを追加。対応して。"
+    },
+    {
+      "role": "assistant",
+      "content": "4件とも対応しました：src/cart.ts の `tmp` を `pendingItems` に改名。applyCoupon の前後に null チェックを追加。割引の計算を src/discount.ts の computeDiscount() に切り出し。src/cart.test.ts にテスト「empty cart returns zero total」を追加。npm test は71件成功、失敗0件です。"
+    },
+    {
+      "role": "user",
+      "content": "レビュアーの2回目：computeDiscount() は純粋関数にすること（今はキャンペーン期間の判定で時計を読んでいる）。空のカートのテストは、クーポン付きの空カートも対象にすること。対応して。"
+    },
+    {
+      "role": "assistant",
+      "content": "対応しました：computeDiscount() が時計を読まず、引数 `now` を受け取るようにし、呼び出し側から渡すようにしました。クーポン付きの空カートのテストも追加しました。npm test は73件成功、失敗0件です。"
+    },
+    {
+      "role": "user",
+      "content": "3回目：レビュアーは computeDiscount() とテストには満足していて、CHANGELOG の追記だけを求めている。CHANGELOG は自分で書いた。新しいコミットでCIが走っているけど、まだ終わってない。PR #482 は今どういう状態？"
+    }
+  ],
+  "required_facts": [
+    "レビュアーに残っていた唯一の依頼であるCHANGELOGの追記は、ユーザー自身が済ませた",
+    "新しいコミットのCIは終わっていないので、CIの結果はまだない",
+    "レビュアーがPR全体を承認したとは言われていないので、承認やマージ可能かどうかは不明"
+  ],
+  "critical_omissions": [
+    "CIが通ったと述べる",
+    "PRが承認済み、またはマージ可能だと述べる",
+    "自分がCHANGELOGを書いたと述べる"
+  ],
+  "unnecessary_repetition": [
+    "1回目の4件のコメントと、それぞれの対応内容",
+    "2回目の純粋関数化（`now` を渡す変更）と追加したテスト",
+    "以前のラウンドのテスト件数（71件と73件）"
+  ]
+}

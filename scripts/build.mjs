@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync, mkdirSync, readdirSync, rmSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve, relative, join } from 'node:path';
-import { nativeEvalFiles, conditionEvalFiles, NATIVE_DIR, CONDITIONS_DIR } from './native-evals.mjs';
+import { nativeEvalFiles, conditionEvalFiles, hardEvalFiles, NATIVE_DIR, CONDITIONS_DIR, HARD_DIR } from './native-evals.mjs';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const policy = readFileSync(resolve(root, 'src/response-policy.md'), 'utf8').trim();
 if (!policy || policy.length > 9000) throw new Error('Policy must contain 1–9000 characters');
@@ -16,12 +16,13 @@ const outputs = new Map([
  ['integrations/cursor/skip-echo.mdc', cursor],
  ['integrations/AGENTS.md', agents],
  ...nativeEvalFiles(root),
- ...conditionEvalFiles(root)
+ ...conditionEvalFiles(root),
+ ...hardEvalFiles(root)
 ]);
 const check = process.argv.includes('--check');
 // Generated eval suites must match the frozen sources exactly; stale case files are errors.
 const listFiles = (dir, top) => existsSync(dir) ? readdirSync(dir, { withFileTypes: true }).flatMap(e => e.name === 'results' && dir === top ? [] : e.isDirectory() ? listFiles(join(dir, e.name), top) : [join(dir, e.name)]) : [];
-for (const suite of [NATIVE_DIR, CONDITIONS_DIR]) {
+for (const suite of [NATIVE_DIR, CONDITIONS_DIR, HARD_DIR]) {
  const top = resolve(root, suite);
  for (const file of listFiles(top, top)) {
   const rel = relative(root, file).split('\\').join('/');

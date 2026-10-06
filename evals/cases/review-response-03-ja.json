@@ -1,0 +1,44 @@
+{
+  "id": "review-response-03-ja",
+  "pair_id": "review-response-03",
+  "language": "ja",
+  "category": "review-response",
+  "split": "holdout",
+  "messages": [
+    {
+      "role": "user",
+      "content": "PR #77 のレビュー1回目：(1) list_orders で `limit` が1〜500の範囲か検証する、(2) 存在しない注文IDには500ではなく404を返す、(3) エラー時にリクエストIDをログに出す、(4) 使っていない `legacy_format` フラグを削除、(5) 新しいクエリパラメータのドキュメントを追加。対応して。"
+    },
+    {
+      "role": "assistant",
+      "content": "5件とも対応しました：list_orders は1〜500の範囲外の limit を422で拒否。get_order は存在しない ID に404を返す。エラー時に request_id をログ出力。api/orders.py から legacy_format を削除。docs/api.md に limit と offset を記載。pytest は96件成功です。"
+    },
+    {
+      "role": "user",
+      "content": "2回目：レビュアーは、404のパスのテストを追加することと、変更履歴の1行を求めている。"
+    },
+    {
+      "role": "assistant",
+      "content": "対応しました：test_get_order_unknown_returns_404 を追加し、CHANGELOG.md の Unreleased に1行追記しました。pytest は97件成功です。"
+    },
+    {
+      "role": "user",
+      "content": "3回目で新しいコメントが2件：(1) fetch_user の docstring に誤字（'retrun'）、(2) デフォルトのページサイズを100から50に変更。(2) はやりたくない：公開APIの仕様で、デフォルトは100と決まっているから。まだ何も触ってない。PRは今どういう状態？"
+    }
+  ],
+  "required_facts": [
+    "新しいコメント2件はどちらも未対応のまま",
+    "fetch_user の docstring の誤字（'retrun'）はまだ直す必要がある",
+    "コメント (2) のデフォルトのページサイズ50は、仕様が100なので適用しない。その理由をレビュアーに返信する必要があり、レビュアーが納得するかどうかは不明"
+  ],
+  "critical_omissions": [
+    "新しいコメントのどちらかを対応済みと述べる",
+    "レビュアーがページサイズの判断を受け入れたと述べる",
+    "PRがマージ可能だと述べる"
+  ],
+  "unnecessary_repetition": [
+    "1回目の5件のコメントと、それぞれの修正内容",
+    "2回目のテストと変更履歴の追記",
+    "以前のラウンドの pytest の件数（96件と97件）"
+  ]
+}

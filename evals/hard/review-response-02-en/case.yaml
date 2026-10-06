@@ -1,0 +1,10 @@
+schema_version: "1.1"
+name: review-response-02-en
+description: "Generated from evals/cases/review-response-02-en.json (sha256 700157727324). Do not edit."
+tags: [review-response, en, hard]
+context:
+  history_file: history.jsonl
+execution:
+  max_turns: 3
+  allowed_tools: [Skill]
+  append_system_prompt: "This conversation has no codebase or workspace files. Do not search for, read, or create files; answer in your reply."

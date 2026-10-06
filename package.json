@@ -14,6 +14,7 @@
     "eval:prepare": "node scripts/prepare-eval.mjs",
     "eval:score": "node scripts/score-eval.mjs",
     "eval:native": "claude plugin eval . --ablation with-without --runs 3 --max-cost-usd 5",
+    "eval:hard": "claude plugin eval . --eval-dir evals/hard --ablation with-without --runs 3 --max-cost-usd 10",
     "eval:conditions": "claude plugin eval . --eval-dir evals/conditions --ablation none --runs 3 --max-cost-usd 8",
     "eval:summary": "node scripts/summarize-native.mjs"
   },

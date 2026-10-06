@@ -1,0 +1,43 @@
+{
+  "id": "doc-writing-01-en",
+  "pair_id": "doc-writing-01",
+  "language": "en",
+  "category": "doc-writing",
+  "split": "dev",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Here is my proposal draft:\n\n# Proposal: Self-service password reset\n\n## Summary\nWe propose adding self-service password reset to the customer portal so that users can recover their accounts without contacting support.\n\n## Goals\n- Reduce password-related support tickets by 40%.\n- Keep the reset flow under 2 minutes for the user.\n- Meet our security policy for account recovery.\n\n## Timeline\n- Design review: February\n- Build and test: March\n- Launch: April\n\n## Risks\n- Email deliverability may delay reset messages.\n- Attackers may abuse the reset form to enumerate accounts.\n\nIs the Goals section specific enough?"
+    },
+    {
+      "role": "assistant",
+      "content": "Mostly. The first two goals are measurable, but \"Meet our security policy\" is vague. Name the policy items, such as token expiry and rate limiting, or drop the goal."
+    },
+    {
+      "role": "user",
+      "content": "Replace the third goal with: 'Reset tokens expire after 15 minutes and requests are rate limited to 5 per hour per account.' Keep the rest as is."
+    },
+    {
+      "role": "assistant",
+      "content": "Under ## Goals, the third bullet now reads:\n\n- Reset tokens expire after 15 minutes and requests are rate limited to 5 per hour per account.\n\nThe rest of the proposal is unchanged."
+    },
+    {
+      "role": "user",
+      "content": "Now move the launch from April to May and rename the Timeline heading to \"Schedule\"."
+    }
+  ],
+  "required_facts": [
+    "The Timeline heading is now \"## Schedule\"",
+    "The launch line now says May instead of April",
+    "States that everything else is unchanged, and the changes are locatable (under the Schedule heading)"
+  ],
+  "critical_omissions": [
+    "Changing any other line of the proposal",
+    "Presenting a partial excerpt as the complete proposal",
+    "Leaving the launch month as April"
+  ],
+  "unnecessary_repetition": [
+    "Reprinting the entire proposal without being asked",
+    "Re-explaining the earlier Goals feedback or the third-goal change"
+  ]
+}

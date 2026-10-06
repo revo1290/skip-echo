@@ -1,0 +1,108 @@
+{
+  "id": "long-session-03-en",
+  "pair_id": "long-session-03",
+  "language": "en",
+  "category": "long-session",
+  "split": "holdout",
+  "messages": [
+    {
+      "role": "user",
+      "content": "This session is being continued from an earlier conversation that ran out of context. Summary: an accessibility audit of our web app found 14 issues: 5 images missing alt text, 3 forms missing labels, 2 low-contrast elements, 2 focus-order problems, and 2 missing landmarks. Baseline Lighthouse accessibility score: 78. Nothing is fixed yet. Continue."
+    },
+    {
+      "role": "assistant",
+      "content": "Understood. I'll start with the images."
+    },
+    {
+      "role": "user",
+      "content": "Fix the images."
+    },
+    {
+      "role": "assistant",
+      "content": "Done: added descriptive alt text to the 5 images (logo, 3 product photos, hero banner); decorative divider images got alt=\"\"."
+    },
+    {
+      "role": "user",
+      "content": "Now the forms."
+    },
+    {
+      "role": "assistant",
+      "content": "Done: added labels to the login, signup and checkout forms, associated with their inputs through for/id."
+    },
+    {
+      "role": "user",
+      "content": "Now the contrast issues."
+    },
+    {
+      "role": "assistant",
+      "content": "Done: darkened the header link color to #1a56a8 and the secondary button text to #333; both are now above 4.5:1."
+    },
+    {
+      "role": "user",
+      "content": "Focus order next."
+    },
+    {
+      "role": "assistant",
+      "content": "Done: removed positive tabindex values in the header and made the skip link the first focusable element; tab order now follows the visual order."
+    },
+    {
+      "role": "user",
+      "content": "Landmarks."
+    },
+    {
+      "role": "assistant",
+      "content": "Done: wrapped the content in <main> and the site menu in <nav aria-label=\"Primary\">."
+    },
+    {
+      "role": "user",
+      "content": "Is that all 14?"
+    },
+    {
+      "role": "assistant",
+      "content": "Yes: 5 images, 3 forms, 2 contrast, 2 focus order and 2 landmarks. All 14 audit items are addressed."
+    },
+    {
+      "role": "user",
+      "content": "Is Lighthouse enough to claim WCAG AA?"
+    },
+    {
+      "role": "assistant",
+      "content": "No. Automated tools like Lighthouse catch only part of the criteria. You also need manual checks such as keyboard-only use and a screen reader."
+    },
+    {
+      "role": "user",
+      "content": "Which screen reader should I test with?"
+    },
+    {
+      "role": "assistant",
+      "content": "NVDA on Windows with Firefox or Chrome, and VoiceOver on macOS with Safari, since they cover most users."
+    },
+    {
+      "role": "user",
+      "content": "OK, I'll do those later. Write the commit message."
+    },
+    {
+      "role": "assistant",
+      "content": "Drafted: 'Fix 14 accessibility audit issues: alt text, form labels, contrast, focus order, landmarks'."
+    },
+    {
+      "role": "user",
+      "content": "I ran Lighthouse and axe on the new build: Lighthouse accessibility is 94, and axe shows 2 remaining issues, the footer link contrast and the search input having no label. I haven't done any screen reader testing. Where do we stand, based on what I just said?"
+    }
+  ],
+  "required_facts": [
+    "Lighthouse accessibility is now 94, up from the baseline of 78 (as run by the user)",
+    "axe reports 2 remaining issues, the footer link contrast and an unlabeled search input; they are outside the original 14 audit items and are not fixed yet",
+    "No screen reader or manual keyboard testing has been done, so WCAG AA conformance is not established"
+  ],
+  "critical_omissions": [
+    "Claiming WCAG AA compliance or that all accessibility issues are fixed",
+    "Saying screen reader testing was done",
+    "Saying the two axe issues were among the original 14 or were already fixed"
+  ],
+  "unnecessary_repetition": [
+    "The five groups of fixes and their details",
+    "The explanation of why Lighthouse alone is not enough for WCAG",
+    "The screen reader recommendations"
+  ]
+}

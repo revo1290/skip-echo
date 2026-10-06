@@ -1,0 +1,43 @@
+{
+  "id": "doc-writing-03-en",
+  "pair_id": "doc-writing-03",
+  "language": "en",
+  "category": "doc-writing",
+  "split": "holdout",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Here is our data retention policy:\n\n# Data retention policy\n\n1. Application logs are kept for 30 days. Owner: Platform team.\n2. Customer support tickets are kept for 2 years after closure. Owner: Support.\n3. Raw analytics events are kept for 90 days. Owner: Data team.\n4. Invoices are kept for 7 years to meet tax requirements. Owner: Finance.\n5. Database backups are kept for 35 days. Owner: Platform team.\n6. Deleted accounts are purged after 14 days. Owner: Platform team.\n7. Security audit logs are kept for 1 year. Owner: Security.\n8. Marketing contact lists are reviewed every 6 months. Owner: Marketing.\n\nWhich item is most likely to raise a privacy review question?"
+    },
+    {
+      "role": "assistant",
+      "content": "Item 2 is the most likely: keeping support tickets for 2 years after closure may be longer than needed for their purpose, and tickets often contain personal data. Be ready to justify the period or shorten it."
+    },
+    {
+      "role": "user",
+      "content": "Change item 3 from 90 days to 60 days. Keep everything else."
+    },
+    {
+      "role": "assistant",
+      "content": "Item 3 now reads:\n\n3. Raw analytics events are kept for 60 days. Owner: Data team.\n\nThe rest of the policy is unchanged."
+    },
+    {
+      "role": "user",
+      "content": "Also state in item 5 that the backups are encrypted."
+    }
+  ],
+  "required_facts": [
+    "Item 5 now says the database backups are kept for 35 days and are encrypted, keeping the 35 days and the Platform team owner",
+    "States that the rest of the policy is unchanged (including item 3 at 60 days)",
+    "The change is locatable as item 5"
+  ],
+  "critical_omissions": [
+    "Changing the retention period of item 5 or any other item",
+    "Presenting a partial excerpt as the complete policy",
+    "Reverting item 3 to 90 days"
+  ],
+  "unnecessary_repetition": [
+    "Reprinting all eight items without being asked",
+    "Re-explaining the privacy review concern about item 2"
+  ]
+}

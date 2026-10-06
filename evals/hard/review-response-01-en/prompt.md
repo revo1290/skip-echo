@@ -1,0 +1,1 @@
+Round 3: the reviewer is happy with computeDiscount() and the tests, and only asks for a CHANGELOG entry. I wrote the CHANGELOG entry myself. CI is running on the new commit but hasn't finished. Where does PR #482 stand?

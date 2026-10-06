@@ -20,3 +20,15 @@ test('preparation creates four conditions without leaking rubric into model mess
  const jobs=JSON.parse(readFileSync(resolve(root,'evals/runs/smoke-1/jobs.json')));assert.equal(jobs.length,56);assert.equal(new Set(jobs.map(j=>j.id)).size,56);
  for(const j of jobs){assert.ok(!('required_facts' in j));assert.equal(j.messages.length,5);if(j.condition==='D'){assert.equal(j.instruction,null);assert.equal(j.environment,'installed-plugin-no-manual-invocation');}}
 });
+
+function summarize(doc,...extra){const d=mkdtempSync(join(tmpdir(),'skip-echo-sum-'));try{const f=join(d,'aggregate.json');writeFileSync(f,JSON.stringify(doc));return spawnSync(process.execPath,[resolve(root,'scripts/summarize-native.mjs'),f,...extra],{encoding:'utf8'});}finally{rmSync(d,{recursive:true,force:true});}}
+const run=(passes)=>({score:1,error:null,graders:passes.map((p,i)=>({name:'no-echo-'+(i+1),passed:p}))});
+test('ceiling check passes only when the baseline fails enough no-echo graders, and flags saturated categories',()=>{
+ const doc=(without,partial=false)=>({partial,cases:[{name:'tool-report-01-en',arms:{with:[run([true,true])],without:[run(without)]}},{name:'safety-01-en',arms:{with:[run([true])],without:[run([true])]}}]});
+ const ok=JSON.parse(summarize(doc([false,false]),'--ceiling','0.6').stdout);
+ assert.equal(ok.ceiling_check.baseline_no_echo_pass,0.333);assert.equal(ok.ceiling_check.met,true);assert.deepEqual(ok.ceiling_check.categories_where_baseline_passes_every_no_echo,['safety']);
+ assert.equal(JSON.parse(summarize(doc([true,true]),'--ceiling','0.6').stdout).ceiling_check.met,false);
+ assert.equal(JSON.parse(summarize(doc([false,false],true),'--ceiling','0.6').stdout).ceiling_check.met,null);
+ assert.equal(JSON.parse(summarize(doc([false,false])).stdout).ceiling_check,undefined);
+ assert.notEqual(summarize(doc([false,false]),'--ceiling','2').status,0);
+});

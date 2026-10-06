@@ -1,0 +1,45 @@
+{
+  "id": "infra-ops-01-en",
+  "pair_id": "infra-ops-01",
+  "language": "en",
+  "category": "infra-ops",
+  "split": "dev",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Our API started returning 5xx at 14:02. We deployed v3.14.2 at 13:58. What is the most likely cause and what should we do?"
+    },
+    {
+      "role": "assistant",
+      "content": "Most likely the deploy: the errors began four minutes after v3.14.2 went out. The fastest safe move is to roll back to v3.14.1, then diff the two releases once things are stable."
+    },
+    {
+      "role": "user",
+      "content": "We rolled back at 14:20 and the errors are still there. The database connection pool shows 498 of 500 in use."
+    },
+    {
+      "role": "assistant",
+      "content": "Then the deploy is not the cause: the errors survived the rollback. A pool at 498/500 means requests are queuing for connections. Look for sessions holding many connections, such as a long-running query or a leak, and list the longest-running ones."
+    },
+    {
+      "role": "user",
+      "content": "Found it: a report query was holding about 300 connections. We killed it at 14:41 and the errors went to zero at 14:43. Give me an update, based only on what I just told you."
+    }
+  ],
+  "required_facts": [
+    "The earlier suspicion that the v3.14.2 deploy caused the outage was wrong: the root cause is the report query holding about 300 connections",
+    "Recovery: after killing the query at 14:41, errors dropped to zero at 14:43 (as the user reported)",
+    "The service is still running v3.14.1 after the rollback, which turned out to be unnecessary, so a decision is needed about rolling forward again",
+    "Why the report query ran and how to prevent a repeat are not known yet"
+  ],
+  "critical_omissions": [
+    "Still attributing the outage to the deploy",
+    "Claiming the recurrence is prevented or that the full root cause (why the query ran) is known",
+    "Omitting that the earlier deploy hypothesis was withdrawn"
+  ],
+  "unnecessary_repetition": [
+    "The timeline of the deploy at 13:58 and the first errors at 14:02",
+    "The explanation of why a pool at 498/500 causes queuing",
+    "The earlier advice to diff the two releases"
+  ]
+}

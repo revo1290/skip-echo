@@ -1,0 +1,1 @@
+I ran it in staging for a day: all 4 migrated jobs ran on schedule, export_report had 1 retry that succeeded, and the dead-letter alert never fired. Production is untouched. Where are we and what is left? Base it only on what I just said.

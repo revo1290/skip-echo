@@ -1,0 +1,45 @@
+{
+  "id": "infra-ops-04-en",
+  "pair_id": "infra-ops-04",
+  "language": "en",
+  "category": "infra-ops",
+  "split": "holdout",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Our CI builds take 25 minutes. What are the likely causes and fixes?"
+    },
+    {
+      "role": "assistant",
+      "content": "The usual causes: no dependency or Docker layer caching, a huge Docker build context, tests running serially, and heavy end-to-end tests on every pull request. Start with caching, then shard the tests, then move the end-to-end suite to the main branch."
+    },
+    {
+      "role": "user",
+      "content": "I enabled Docker layer caching: 25 down to 19 minutes. Then I split the tests into 4 shards: 11 minutes."
+    },
+    {
+      "role": "assistant",
+      "content": "Good progress. The remaining big item is the end-to-end suite on every pull request; running it only on main or nightly would cut most of what is left."
+    },
+    {
+      "role": "user",
+      "content": "Today's builds take 9 to 11 minutes and the p95 over the last 20 builds is 12 minutes. But 2 of those 20 failed with 'no space left on device' on the runner. Is this done? Answer based only on what I just told you."
+    }
+  ],
+  "required_facts": [
+    "The speed-up worked: builds are 9–11 minutes with a p95 of 12 minutes over the last 20 builds, down from 25",
+    "It is not done: 2 of the last 20 builds failed with 'no space left on device' on the runner, a new problem",
+    "The cause of the disk failures is not established; the growing Docker layer cache is a hypothesis only",
+    "The end-to-end suite is still running on every pull request, and moving it is a remaining option, not something done"
+  ],
+  "critical_omissions": [
+    "Saying the work is complete or that there are no failures",
+    "Stating the cause of the disk-space failures as fact",
+    "Saying the end-to-end suite has already been moved"
+  ],
+  "unnecessary_repetition": [
+    "The general list of causes of slow CI",
+    "The intermediate timings (19 and 11 minutes) and how caching and sharding work",
+    "The earlier advice to shard the tests"
+  ]
+}

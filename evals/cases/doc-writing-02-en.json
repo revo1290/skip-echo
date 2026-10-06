@@ -1,0 +1,54 @@
+{
+  "id": "doc-writing-02-en",
+  "pair_id": "doc-writing-02",
+  "language": "en",
+  "category": "doc-writing",
+  "split": "dev",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Here is our runbook:\n\n# Runbook: Payment API alerts\n\n## When this fires\nThe PagerDuty alert \"payments-5xx\" fires when the 5xx rate stays above 2% for 5 minutes.\n\n## First steps\n1. Open the Payments dashboard and check the 5xx panel.\n2. Check the latest deploy in the #releases channel.\n3. If a deploy happened in the last hour, roll it back first.\n\n## Escalation\n- If not resolved in 15 minutes, page the secondary on-call.\n- If customer payments are failing, notify the incident manager.\n\n## Contacts\n- Primary on-call: see the PagerDuty schedule \"payments-primary\".\n- Incident manager: #incident-command\n\nWhat is missing from it?"
+    },
+    {
+      "role": "assistant",
+      "content": "Two gaps: it never says how to confirm recovery, and it does not name a second contact. Consider a Recovery section with a concrete check, and add the secondary on-call channel under Contacts."
+    },
+    {
+      "role": "user",
+      "content": "Change the escalation time from 15 to 10 minutes, and add a Recovery section after Escalation: confirm the 5xx rate is under 0.5% for 10 minutes before closing the alert."
+    },
+    {
+      "role": "assistant",
+      "content": "Under ## Escalation the first bullet now says \"If not resolved in 10 minutes, page the secondary on-call.\" New section after Escalation:\n\n## Recovery\n- Confirm the 5xx rate is under 0.5% for 10 minutes before closing the alert.\n\nThe rest is unchanged."
+    },
+    {
+      "role": "user",
+      "content": "Also add the secondary on-call contact to Contacts: #payments-secondary."
+    },
+    {
+      "role": "assistant",
+      "content": "Under ## Contacts add:\n\n- Secondary on-call: #payments-secondary\n\nThe rest is unchanged."
+    },
+    {
+      "role": "user",
+      "content": "Give me the complete final runbook so I can paste it into the wiki."
+    }
+  ],
+  "required_facts": [
+    "The alert description is present: \"payments-5xx\" fires when the 5xx rate stays above 2% for 5 minutes",
+    "The three First steps are all present, including rolling back a deploy made in the last hour",
+    "Escalation says 10 minutes (not 15) and still includes notifying the incident manager if customer payments fail",
+    "A Recovery section requires the 5xx rate under 0.5% for 10 minutes before closing the alert",
+    "Contacts include the primary on-call (PagerDuty schedule \"payments-primary\"), the incident manager (#incident-command), and the secondary on-call (#payments-secondary)",
+    "The text is complete, with no placeholders or elision markers"
+  ],
+  "critical_omissions": [
+    "Using \"...\", \"unchanged\" or similar placeholders in place of any section",
+    "Missing any of the three earlier changes, or still saying 15 minutes",
+    "Dropping an original section or item"
+  ],
+  "unnecessary_repetition": [
+    "Re-explaining what the runbook was missing",
+    "Commentary on each edit beyond a one-line note"
+  ]
+}

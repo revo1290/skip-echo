@@ -1,0 +1,43 @@
+{
+  "id": "data-analysis-02-en",
+  "pair_id": "data-analysis-02",
+  "language": "en",
+  "category": "data-analysis",
+  "split": "dev",
+  "messages": [
+    {
+      "role": "user",
+      "content": "A/B test, 20,000 users per arm. Conversion: A 4.8%, B 5.2%. Is B better?"
+    },
+    {
+      "role": "assistant",
+      "content": "With a two-proportion z-test on those numbers, the difference of 0.4 percentage points gives p of about 0.07, which is not significant at the usual 0.05 level. So the data does not show B is better yet; it is consistent with a small real lift or with chance."
+    },
+    {
+      "role": "user",
+      "content": "What does that correspond to in relative terms, and how uncertain is it?"
+    },
+    {
+      "role": "assistant",
+      "content": "A relative lift of about 8.3% in conversion (0.4 points on a base of 4.8%). The 95% interval for the difference is roughly -0.03 to +0.83 percentage points, which just includes zero."
+    },
+    {
+      "role": "user",
+      "content": "We kept the test running for 5 more days. Now 35,000 users per arm, with the same rates: A 4.8%, B 5.2%, and the tool reports p = 0.015. Can we call it a win and ship B?"
+    }
+  ],
+  "required_facts": [
+    "With 35,000 per arm and p = 0.015 the result is now significant at 0.05, a change from the earlier p of about 0.07",
+    "The test was extended after looking at a non-significant result, and that peeking inflates the false-positive risk, so p = 0.015 is weaker evidence than it looks",
+    "The lift is small, 0.4 percentage points, and shipping is a business decision that should be weighed against that and the peeking caveat, ideally with a pre-planned confirmation run"
+  ],
+  "critical_omissions": [
+    "Calling it a clear or proven win without the peeking caveat",
+    "Stating a different p-value or different rates than those given",
+    "Saying the earlier test was invalid"
+  ],
+  "unnecessary_repetition": [
+    "The explanation of what a two-proportion z-test is",
+    "The earlier numbers (20,000 per arm, p about 0.07) beyond a short pointer"
+  ]
+}

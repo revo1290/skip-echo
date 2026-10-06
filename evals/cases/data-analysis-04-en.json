@@ -1,0 +1,43 @@
+{
+  "id": "data-analysis-04-en",
+  "pair_id": "data-analysis-04",
+  "language": "en",
+  "category": "data-analysis",
+  "split": "holdout",
+  "messages": [
+    {
+      "role": "user",
+      "content": "We got 612 survey responses. 371 are promoters (9-10), 120 are passives, and 121 are detractors (0-6). What is our NPS?"
+    },
+    {
+      "role": "assistant",
+      "content": "NPS = %promoters minus %detractors = 371/612 (60.6%) minus 121/612 (19.8%), which is about 41. By segment, enterprise comes out at 52 and SMB at 33."
+    },
+    {
+      "role": "user",
+      "content": "Do the passive responses affect the NPS?"
+    },
+    {
+      "role": "assistant",
+      "content": "They count in the base of 612 but in neither the promoter nor the detractor side, so they dilute the NPS toward zero. The 120 passives are 19.6% of responses."
+    },
+    {
+      "role": "user",
+      "content": "I found that 85 of the responses were test submissions from our QA team. After removing them I recalculated the overall NPS myself: 38 on 527 responses. I have not recomputed the segments. Update me, based only on that."
+    }
+  ],
+  "required_facts": [
+    "The overall NPS is now 38 on 527 responses (recalculated by the user) instead of 41 on 612, so the earlier figure was overstated by about 3 points",
+    "The segment figures (enterprise 52, SMB 33) were computed with the test submissions included, so they are not reliable until recomputed",
+    "It is not known which segment the QA responses were in, so the direction of the change in each segment is unknown"
+  ],
+  "critical_omissions": [
+    "Keeping 41 as the current NPS",
+    "Saying the segment figures are still valid",
+    "Claiming to have recalculated the NPS or the segments"
+  ],
+  "unnecessary_repetition": [
+    "The NPS formula and the promoter and detractor percentages",
+    "The initial counts of promoters, passives and detractors"
+  ]
+}

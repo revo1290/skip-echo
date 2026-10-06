@@ -1,0 +1,1 @@
+Security re-reviewed and is still blocking: they want port 5432 ingress removed entirely, with database access only through the bastion host. I haven't changed anything yet. Where do things stand, based only on this?

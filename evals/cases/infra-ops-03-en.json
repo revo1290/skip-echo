@@ -1,0 +1,45 @@
+{
+  "id": "infra-ops-03-en",
+  "pair_id": "infra-ops-03",
+  "language": "en",
+  "category": "infra-ops",
+  "split": "holdout",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Our cloud bill is up 40% this month. Where do I start?"
+    },
+    {
+      "role": "assistant",
+      "content": "Start with Cost Explorer grouped by service, then by usage type. The usual suspects: NAT gateway data processing, S3 request and transfer charges, idle or oversized RDS instances, forgotten EBS snapshots, and CloudWatch log ingestion. Tell me which line grew the most."
+    },
+    {
+      "role": "user",
+      "content": "NAT gateway data processing grew by about $1,900."
+    },
+    {
+      "role": "assistant",
+      "content": "Then check what traffic goes through the NAT. A frequent cause is private subnets reaching S3 through the NAT instead of directly. Add an S3 gateway endpoint to the VPC; gateway endpoints have no hourly or data charge."
+    },
+    {
+      "role": "user",
+      "content": "I added the gateway endpoint yesterday, but NAT bytes had not dropped. Today I found the cause: the endpoint was not associated with the private route tables. I associated it an hour ago and CloudWatch shows NAT bytes down about 90%. The bill lags by a day, so I cannot see the cost effect yet. Update me, based only on that."
+    }
+  ],
+  "required_facts": [
+    "Root cause found: the S3 gateway endpoint existed but was not associated with the private route tables, so adding the endpoint alone was not enough",
+    "After associating it an hour ago, NAT bytes are down about 90% in CloudWatch (as the user reported)",
+    "The saving on the bill is not confirmed yet because billing lags by a day",
+    "The other possible causes (S3 requests, RDS, snapshots, log ingestion) have not been checked"
+  ],
+  "critical_omissions": [
+    "Saying the cost problem is solved or that the savings are confirmed",
+    "Saying the other candidate causes were ruled out",
+    "Saying the endpoint alone was sufficient"
+  ],
+  "unnecessary_repetition": [
+    "The list of usual suspects for a cost increase",
+    "How gateway endpoints work and that they have no hourly or data charge",
+    "The Cost Explorer grouping steps"
+  ]
+}

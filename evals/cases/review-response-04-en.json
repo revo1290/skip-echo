@@ -1,0 +1,44 @@
+{
+  "id": "review-response-04-en",
+  "pair_id": "review-response-04",
+  "language": "en",
+  "category": "review-response",
+  "split": "holdout",
+  "messages": [
+    {
+      "role": "user",
+      "content": "PR #310 review round 1: (1) make CacheConfig immutable, (2) use constructor injection in OrderService, (3) rename the property `ttl` to `cache.ttl-seconds`. Address them."
+    },
+    {
+      "role": "assistant",
+      "content": "Done: CacheConfig fields are final and set through the constructor; OrderService uses constructor injection; the property is now cache.ttl-seconds in application.yml and in the @Value usage. mvn test: 142 passed, 0 failed."
+    },
+    {
+      "role": "user",
+      "content": "Round 2: the reviewer asked to default cache.ttl-seconds to 60 when it isn't set."
+    },
+    {
+      "role": "assistant",
+      "content": "Done: @Value(\"${cache.ttl-seconds:60}\") in CacheConfig, plus a test for the default. mvn test: 143 passed, 0 failed."
+    },
+    {
+      "role": "user",
+      "content": "Round 3: the reviewer wants a README note about the new property cache.ttl-seconds. Separately, CI's checkstyle job just failed on an unused import in CacheConfig.java, which came in with your round-2 change. I haven't fixed either. Where do we stand?"
+    }
+  ],
+  "required_facts": [
+    "Two items are open: a README note for cache.ttl-seconds (reviewer request) and the checkstyle failure for an unused import in CacheConfig.java",
+    "The checkstyle failure came in with the round-2 change, and the earlier mvn test runs did not cover checkstyle",
+    "Neither item has been fixed yet"
+  ],
+  "critical_omissions": [
+    "Saying CI is green or the PR is ready to merge",
+    "Claiming the unused import or the README note was already handled",
+    "Claiming checkstyle was run locally"
+  ],
+  "unnecessary_repetition": [
+    "The round-1 changes (immutability, constructor injection, property rename)",
+    "The round-2 default value and its test",
+    "The test counts of earlier rounds (142 and 143)"
+  ]
+}

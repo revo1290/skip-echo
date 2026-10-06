@@ -1,6 +1,6 @@
 {
-  "version": 3,
-  "description": "84 synthetic cases, 42 bilingual pairs; parameterized scenario families, not 84 independent real-world samples. v1 and v2 cases are unchanged; v2 added progress and revision; v3 adds long multi-turn stress categories. Frozen before model evaluation.",
+  "version": 4,
+  "description": "148 synthetic cases, 74 bilingual pairs; parameterized scenario families, not 148 independent real-world samples. v1 to v3 cases (84) are unchanged. v4 adds 64 cases in eight families built to expose repetition in agent sessions: tool-report (tool_use/tool_result histories), rerun-report, review-response, infra-ops, data-analysis, doc-writing, long-session (11 user turns, compaction summary first), and safety. Each family has 2 development and 2 holdout pairs. Frozen before model evaluation.",
   "cases": [
     {
       "id": "added-constraint-01-en",
@@ -421,6 +421,326 @@
       "id": "topic-03-ja",
       "split": "holdout",
       "sha256": "319d31442fc79ac129acec353587362fce6ac5315e02c7fe5a78f2eef6c8412c"
+    },
+    {
+      "id": "data-analysis-01-en",
+      "split": "dev",
+      "sha256": "d5c0c10f8f79ca87b1204bae14b4aa7b992cdb4e2c188bebd58eb536d283cce6"
+    },
+    {
+      "id": "data-analysis-01-ja",
+      "split": "dev",
+      "sha256": "435578032da30b3cb91ff53499796526efd0701a3b6e1170f99632902e09a3bf"
+    },
+    {
+      "id": "data-analysis-02-en",
+      "split": "dev",
+      "sha256": "324c2bbca9d57b31e2a229210d22e3099fbb762026662ba7be378f4d67d9a974"
+    },
+    {
+      "id": "data-analysis-02-ja",
+      "split": "dev",
+      "sha256": "6c201520f427a8919988d8fccd79975186780fbaa4234015e7705c6a68c3bd82"
+    },
+    {
+      "id": "data-analysis-03-en",
+      "split": "holdout",
+      "sha256": "29e18652885d05a0d9efa854b777b922aac35854edc4d26dc18e44d732bd7658"
+    },
+    {
+      "id": "data-analysis-03-ja",
+      "split": "holdout",
+      "sha256": "98065fe4d42cff1bcee0564037ff9dfd4119d8e76f004e14d684a09297b22cf6"
+    },
+    {
+      "id": "data-analysis-04-en",
+      "split": "holdout",
+      "sha256": "ae0f81ba88c7d4b6329df307bbe0a125e05b47279fbe47eb79af666b4fe2d0df"
+    },
+    {
+      "id": "data-analysis-04-ja",
+      "split": "holdout",
+      "sha256": "87b6247f12dc7213329a9218fb5289b776dd76baafce6f5a7e74bcd693461786"
+    },
+    {
+      "id": "doc-writing-01-en",
+      "split": "dev",
+      "sha256": "e23114a32085e77f7c136c6535a8ccb2d8f00b9f1a1bc9cd4572667f6cec6d2c"
+    },
+    {
+      "id": "doc-writing-01-ja",
+      "split": "dev",
+      "sha256": "85448b46a0252baab61f7bc70187f92d0eeb47defc253d6af7655f6259cb6562"
+    },
+    {
+      "id": "doc-writing-02-en",
+      "split": "dev",
+      "sha256": "1fee9ae2634f1da36ab66f47d51aa67fb405a808a8a9b7f167aa225854904eb7"
+    },
+    {
+      "id": "doc-writing-02-ja",
+      "split": "dev",
+      "sha256": "b3c8aeb145a02c2384a1fbc948b1499eb7ddd4f44e90d075d88e5f940ea1316d"
+    },
+    {
+      "id": "doc-writing-03-en",
+      "split": "holdout",
+      "sha256": "8b6074dcfe5e12741c9565879e839262b3b1492273b435b0f879c6dd11859c5b"
+    },
+    {
+      "id": "doc-writing-03-ja",
+      "split": "holdout",
+      "sha256": "2caae697f0168f82fcc2fc35fca8c98c34e0a484ff229f70dc59f4f06e6c226d"
+    },
+    {
+      "id": "doc-writing-04-en",
+      "split": "holdout",
+      "sha256": "1822ec76a88d967b056fbd46d23ea1158f7ae47edc71be3cea8af1cce82db898"
+    },
+    {
+      "id": "doc-writing-04-ja",
+      "split": "holdout",
+      "sha256": "7e1009a255450c0a7688855f11f0e9b827c5d7f3b4c14c31ff4d57ac961106f0"
+    },
+    {
+      "id": "infra-ops-01-en",
+      "split": "dev",
+      "sha256": "5f9c7d403c3cdbcdafb5287c2e50a802dd70e16bcd5d897136bfc43d68ab025d"
+    },
+    {
+      "id": "infra-ops-01-ja",
+      "split": "dev",
+      "sha256": "550aa3aefc3ccb24f10d7d5237f064d13a04dac096a21b164dbf8164ba690d22"
+    },
+    {
+      "id": "infra-ops-02-en",
+      "split": "dev",
+      "sha256": "afd99ce8f05195fe51a532b1001b15262b104971e1ba017df9f2cdb501f93df7"
+    },
+    {
+      "id": "infra-ops-02-ja",
+      "split": "dev",
+      "sha256": "64728981c9710f9039ffe095407b848041a52f4434d239d38230b366141e73b6"
+    },
+    {
+      "id": "infra-ops-03-en",
+      "split": "holdout",
+      "sha256": "53d263619105c5f6659e81e2b38a4875be5411a8601ff80a2feea5435406bf5a"
+    },
+    {
+      "id": "infra-ops-03-ja",
+      "split": "holdout",
+      "sha256": "abfd570cb8923037a274953fe5d4fdc0cec798a98de2d2629278a14718b0135b"
+    },
+    {
+      "id": "infra-ops-04-en",
+      "split": "holdout",
+      "sha256": "ca2b265d7499bd2b3373b4c797530993a8d8d109ca240d5164fadc921f30d2e9"
+    },
+    {
+      "id": "infra-ops-04-ja",
+      "split": "holdout",
+      "sha256": "4b05183c6ca8eb90e2ad9a4b22e39f157ee368f1472f6feec8e2db2c95f71a24"
+    },
+    {
+      "id": "long-session-01-en",
+      "split": "dev",
+      "sha256": "555388799e484dd162c169a91f7c6a7ea6e85611cd733766d1dfd6bca8da1a54"
+    },
+    {
+      "id": "long-session-01-ja",
+      "split": "dev",
+      "sha256": "171dc0e8540c05c59573b6b7ac05d681ec48448983c75ee13296ceda0c2b80ba"
+    },
+    {
+      "id": "long-session-02-en",
+      "split": "dev",
+      "sha256": "0c90002d984cced802c24259e81167f98154867c1844b71d8f0555117d15339a"
+    },
+    {
+      "id": "long-session-02-ja",
+      "split": "dev",
+      "sha256": "bf93dfe07150ca34ca9a357134cec20a14a6c02ab33b9cfb4d6dface16996e86"
+    },
+    {
+      "id": "long-session-03-en",
+      "split": "holdout",
+      "sha256": "f697abc5ca60974a8f65d27807324b066eb0f567aa75c36677f6d254ff29bd10"
+    },
+    {
+      "id": "long-session-03-ja",
+      "split": "holdout",
+      "sha256": "8cfde6a540cd676f729ae10cfb4900ab26e41c7e23d90a0d81357afb909b6ff1"
+    },
+    {
+      "id": "long-session-04-en",
+      "split": "holdout",
+      "sha256": "dd333a3a774be243d825018e80e0873f64cf186ae29d56ea71f75c5b295ca0a2"
+    },
+    {
+      "id": "long-session-04-ja",
+      "split": "holdout",
+      "sha256": "30983c853502d8fab208d82817e73eb1b35c73882c3757ae799381e5865331be"
+    },
+    {
+      "id": "rerun-report-01-en",
+      "split": "dev",
+      "sha256": "d7a62b90b9746b61f4e0674df6eab1009e94fb4b4ef7dbd02b95f4b1becd8993"
+    },
+    {
+      "id": "rerun-report-01-ja",
+      "split": "dev",
+      "sha256": "c5173e85091a741ed673d13c2512e52c46d5d273931c67ac97d7fbdb58c06148"
+    },
+    {
+      "id": "rerun-report-02-en",
+      "split": "dev",
+      "sha256": "4bfc2d941302282adfa23c4a432e3ee966b74d0f3eafdfbbb1f2baf16e632ada"
+    },
+    {
+      "id": "rerun-report-02-ja",
+      "split": "dev",
+      "sha256": "97c27c1c50019acf8421a28ef1d9b693b3585803a1f35080c392d6ce46f5f44d"
+    },
+    {
+      "id": "rerun-report-03-en",
+      "split": "holdout",
+      "sha256": "5c85802254efdcfc857296a9282affe5c5a64e73e7d28bde9b7596b7d3cc9cdb"
+    },
+    {
+      "id": "rerun-report-03-ja",
+      "split": "holdout",
+      "sha256": "41aa67dd7546a0f89d0437d673e727ee2985ff756f491d80637e22aa7d7056c8"
+    },
+    {
+      "id": "rerun-report-04-en",
+      "split": "holdout",
+      "sha256": "977f6892af8452270949ed2de8787539ac93329d3dda29928889729e86e2734e"
+    },
+    {
+      "id": "rerun-report-04-ja",
+      "split": "holdout",
+      "sha256": "4054a6f41a7cb25c4ea807a5bc7bd409a742cd1c358afd71b25fef231ff2c572"
+    },
+    {
+      "id": "review-response-01-en",
+      "split": "dev",
+      "sha256": "9ce80d964d3d044d0a19a23adb3054c1e7502d16a265e0ac4b892cc90e79c6b2"
+    },
+    {
+      "id": "review-response-01-ja",
+      "split": "dev",
+      "sha256": "8a9212a8c57901dab0c55091cf4f4ba52598afeb49fed1c2b41aecaa5b6dac65"
+    },
+    {
+      "id": "review-response-02-en",
+      "split": "dev",
+      "sha256": "70015772732482659cbc2e27fde6066b603ceda67b755d5fafe39094cb65bfbb"
+    },
+    {
+      "id": "review-response-02-ja",
+      "split": "dev",
+      "sha256": "da85435a097581d98526d531db90b107fcc2dc38ea68e38e99c02af81a238243"
+    },
+    {
+      "id": "review-response-03-en",
+      "split": "holdout",
+      "sha256": "c9b7ff2056b663206f3b1ed8ca01b3a8165644cd50fa926b3c85fd0228b59b45"
+    },
+    {
+      "id": "review-response-03-ja",
+      "split": "holdout",
+      "sha256": "c66d8db7731d536fd5d695276aae29286ed43e23048d500121f1537d57dd4285"
+    },
+    {
+      "id": "review-response-04-en",
+      "split": "holdout",
+      "sha256": "6bf6d5630e34f187d176ffca91b977af3674f75d12f2d69ca73e741b193f4f22"
+    },
+    {
+      "id": "review-response-04-ja",
+      "split": "holdout",
+      "sha256": "db1cf273e05b01f6ea396b83c4a53ec67045ada7c85dad11cd6f2f8c35d1dfd9"
+    },
+    {
+      "id": "safety-01-en",
+      "split": "dev",
+      "sha256": "32360f1eb4db334d5829e7732acd7950a0540e42c78fa806d576aa798c38bd97"
+    },
+    {
+      "id": "safety-01-ja",
+      "split": "dev",
+      "sha256": "f950df12b4e3ec16ec0bfb41596795a5fdd2c5b5d043891336dca9eb0c55120e"
+    },
+    {
+      "id": "safety-02-en",
+      "split": "dev",
+      "sha256": "7a9dd38bf3981015fe8656fffcfce829edb90095b0f4136f826933eda87bc1fc"
+    },
+    {
+      "id": "safety-02-ja",
+      "split": "dev",
+      "sha256": "a96474be8e430b07e68d6616eb41c552b4a7f172e30c88fb5d62c7adf77f960d"
+    },
+    {
+      "id": "safety-03-en",
+      "split": "holdout",
+      "sha256": "7d7f75875bb4a0ad821d7091d7f328f7c720978988f303e703af43489502e899"
+    },
+    {
+      "id": "safety-03-ja",
+      "split": "holdout",
+      "sha256": "44a43238f7c3abd27458a8a4dc5440e621a7b36a8ff4416655200db7b369418d"
+    },
+    {
+      "id": "safety-04-en",
+      "split": "holdout",
+      "sha256": "2ff4a42671cfaf5c02d600853408bcde9beb36a4e17e3cad7d4bd4845512fd6a"
+    },
+    {
+      "id": "safety-04-ja",
+      "split": "holdout",
+      "sha256": "6baed1a3ad78588000aedaf7a8e7e416a74001def9a345216d49ad2756d0b83e"
+    },
+    {
+      "id": "tool-report-01-en",
+      "split": "dev",
+      "sha256": "d7fc6d1ad14cc14f25c1b65b9e847fe9175d64f678a65e4b2bd5f5278d5f5aff"
+    },
+    {
+      "id": "tool-report-01-ja",
+      "split": "dev",
+      "sha256": "4d60640bad81b245e581d3248d044f370e3921e3d0c29e4b452bb64afd57efbd"
+    },
+    {
+      "id": "tool-report-02-en",
+      "split": "dev",
+      "sha256": "21936b66031a759769cbe77201b853fcc1f11575645a64e152adef5cf466a085"
+    },
+    {
+      "id": "tool-report-02-ja",
+      "split": "dev",
+      "sha256": "8ffe401c2ecb0197d1b7307a3c6207fceb675161b6c7956969be9fcb4b2df671"
+    },
+    {
+      "id": "tool-report-03-en",
+      "split": "holdout",
+      "sha256": "b564b0da3cb12a6c5dab5366a7c083338d0886f59c3e2e4709249f2242d93a1e"
+    },
+    {
+      "id": "tool-report-03-ja",
+      "split": "holdout",
+      "sha256": "4b9f94027c04fbe43e8b2bc3adfdca8b4d1fd5c6c454fec7f65d31a49e417084"
+    },
+    {
+      "id": "tool-report-04-en",
+      "split": "holdout",
+      "sha256": "180a7ebb68b0f40e9ce7c0bac75beda6832d1f1f17971c2e0647275ff5c970a0"
+    },
+    {
+      "id": "tool-report-04-ja",
+      "split": "holdout",
+      "sha256": "782a760a3d516381de1ef7cf351dff2d21f435dd3715a0f9d15681d2e32d0643"
     }
   ]
 }

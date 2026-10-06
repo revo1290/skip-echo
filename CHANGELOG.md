@@ -13,6 +13,8 @@ Status: experimental. No efficacy or cost claim.
 - Evaluation: manifest v3 adds 16 long multi-turn stress cases (`long-revision`, `long-full`, `long-progress`, `long-constraint`; 84 total, earlier cases unchanged) and `evals/stress.json`. A generated `evals/conditions/` suite runs the 8 dev stress cases under A/B/C/D with `claude plugin eval`; `scripts/summarize-native.mjs` groups results by condition.
 - Evaluation: the v1.0 release gate is finalized and preregistered in `evals/rubric.md` (2026-10-06): Sonnet 5.5 only, 3 repetitions, hard per-set budget caps, unchanged thresholds, zero critical omissions in the protective categories, a step-by-step decision procedure, and SemVer rules for policy changes.
 - Verified with Claude Code 2.1.289: native suite runs end to end, history replay works, and SessionStart:resume injects the policy in eval runs. Screening shows a ceiling effect (Δ 0.00 on all 14 smoke cases, n=1); see evals/results.
+- Evaluation: manifest v4 adds 64 cases (148 total, v1 to v3 unchanged) in eight families aimed at agent sessions: `tool-report` (tool_use / tool_result histories), `rerun-report`, `review-response`, `infra-ops`, `data-analysis`, `doc-writing`, `long-session` (11 user turns after a compaction summary) and `safety`. 32 development and 32 holdout cases, frozen by SHA-256. Case messages may now hold Messages API blocks.
+- Evaluation: generated `evals/hard/` suite (the 32 development cases, with/without the plugin), `npm run eval:hard`, and `summarize-native.mjs --ceiling <share>` for the corpus ceiling check. Not yet run at full scale: a first single-case run scored 1.00 with and without the plugin, so the set may still be too easy.
 
 ## 0.1.0 — 2026-10-06
 

@@ -15,6 +15,8 @@
 | `added-constraint-01-ja` | Both arms re-explained the storage overview | No measurable effect on this case |
 | SessionStart inside eval runs | `SessionStart:resume` fired and injected the policy in the with-plugin arm only | First host-level observation of hook injection; still not an interactive session |
 | A/B/C/D pilot, 2 stress cases × 1 run (v0.2.0) | `long-revision-01-en`: all four conditions 1.00. `long-progress-01-ja`: A 0.33, B 0.50, C 0.33, D 1.00; A and B restated step 1 details, D reported only this step's changes and open checks | Harness check only, n=1, judge noise visible (C passed essentials but failed all no-echo graders). [Raw outputs](conditions-pilot-2026-10-05.json) |
+| Corpus v4 (`evals/hard`, 32 development cases), `tool-report-01-en`, 1 run per arm, Claude Code 2.1.292 | Replays end to end. Both arms scored 1.00 and the baseline passed all 3 no-echo graders; cost $0.078 for the two runs. [Raw result](hard-check-2026-10-06.json) | Harness check only, n=1. It shows the family can still be too easy for the baseline; the ceiling check below has not been run |
+| Corpus ceiling check (baseline passes at most 60% of no-echo graders on the 32 v4 development cases) | Not executed | See the procedure below. A full run is roughly 192 runs, about $8 at the measured $0.04 per run, which is why `eval:hard` is capped at $10 |
 | Short-instruction control B, full run | Not executed | Whether a one-line instruction matches SkipEcho remains open |
 | Holdout A/B/C/D | Not executed | No release-gate conclusion |
 | Cumulative conversation, total usage/cost, latency | Not measured | No savings claim |

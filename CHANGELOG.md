@@ -11,6 +11,7 @@ Status: experimental. No efficacy or cost claim.
 - Distribution: verified `npx skills add` discovery; generated Cursor rule and AGENTS.md snippet; marketplace description; plugin metadata.
 - Docs: README positioning against terse-output skills, in-conversation controls, self-measurement instructions.
 - Evaluation: manifest v3 adds 16 long multi-turn stress cases (`long-revision`, `long-full`, `long-progress`, `long-constraint`; 84 total, earlier cases unchanged) and `evals/stress.json`. A generated `evals/conditions/` suite runs the 8 dev stress cases under A/B/C/D with `claude plugin eval`; `scripts/summarize-native.mjs` groups results by condition.
+- Evaluation: the v1.0 release gate is finalized and preregistered in `evals/rubric.md` (2026-10-06): Sonnet 5.5 only, 3 repetitions, hard per-set budget caps, unchanged thresholds, zero critical omissions in the protective categories, a step-by-step decision procedure, and SemVer rules for policy changes.
 - Verified with Claude Code 2.1.289: native suite runs end to end, history replay works, and SessionStart:resume injects the policy in eval runs. Screening shows a ceiling effect (Δ 0.00 on all 14 smoke cases, n=1); see evals/results.
 
 ## 0.1.0 — 2026-10-06

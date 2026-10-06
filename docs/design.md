@@ -16,6 +16,6 @@ Manual control uses skill arguments (`off`, `full`, `on`) rather than a separate
 
 The generated `evals/native/` suite lets users run `claude plugin eval` themselves. It mirrors only smoke (development) cases so holdout outputs are never exposed during iteration, and its model-judged scores are screening data, not the human-graded release gate.
 
-B is a strong one-sentence control. If C/D cannot improve on B without losing information, simplify the product. Any future Output Style experiment must be isolated from the hook and retain coding instructions; it is not shipped here.
+B is a strong one-sentence control. If C/D cannot improve on B without losing information, simplify the product. Any future Output Style experiment must be isolated from the hook and retain coding instructions; it is not shipped here. If D is no better than B at the v1.0 gate, the policy is shortened toward B and re-evaluated on a fresh holdout; if it still is not better, the project stays on 0.x as experimental (decision procedure in `evals/rubric.md`).
 
 Names: Delta was replaced because of ambiguity with the established git pager. Public search on 2026-10-05 for SkipEcho/skip-echo plus skill/Claude did not identify the intended same-named skill, but did surface unrelated uses of Skipecho. This is neither name reservation nor trademark clearance. The chosen distribution identifier is `skip-echo`; no registry or public repository has been reserved.

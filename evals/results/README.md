@@ -26,4 +26,4 @@ No failures were identified in the assistant's limited inspection; there is no h
 
 The hook's five source tests call the same script with synthetic input. They do not observe the host firing or consuming context. A missing Node executable and real subagent inheritance remain unverified.
 
-Next: run the integration checklist, then preregister budget/repetitions, collect A/B/C/D outputs, conduct blinded human review, report failures and usage, and only then assess the provisional gate in [rubric.md](../rubric.md). Remain experimental if the short control is equally effective.
+Next: run the integration checklist, then collect A/B/C/D outputs, conduct blinded human review, report failures and usage, and only then assess the [v1.0 release gate](../rubric.md#v10-release-gate-final), whose model, repetitions, thresholds, and decision procedure were preregistered on 2026-10-06. Remain experimental if the short control is equally effective.

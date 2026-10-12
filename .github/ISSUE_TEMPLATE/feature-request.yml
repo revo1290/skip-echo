@@ -1,0 +1,27 @@
+name: Feature request
+description: Suggest a change to the policy, packaging, evaluation, or documentation.
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: Share only synthetic or redacted examples. Never include tokens, private code, or raw personal transcripts.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or use case
+      description: What goes wrong or is missing today? A minimal synthetic conversation helps.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Would a one-line instruction such as "be brief" do the same job? If the change adds policy text, say what it costs in input tokens and what it might cause the model to drop.
+    validations:
+      required: false

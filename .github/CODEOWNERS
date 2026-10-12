@@ -1,0 +1,6 @@
+# Owners are requested for review automatically.
+*                        @revo1290
+
+# The policy and the evaluation corpus decide what the project can claim.
+/src/response-policy.md  @revo1290
+/evals/                  @revo1290

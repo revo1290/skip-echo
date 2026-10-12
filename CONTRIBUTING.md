@@ -14,3 +14,5 @@ Do not claim savings from character counts. Report raw outputs, model and client
 Versioning: any change to `src/response-policy.md` is at least a minor version, even if it only rewords. Patch releases never change the policy text. Changing a mode name, the installation route, or the hook contract is a major change after 1.0. See the versioning rules in `evals/rubric.md`.
 
 Run the integration checklist in `docs/compatibility.md` before expanding compatibility claims. CI checks JavaScript, packaging, manifest validation (`claude plugin validate --strict`), and relative Markdown links (`node scripts/check-links.mjs`), not Claude Code integration or model quality.
+
+Pull requests use the [template](.github/pull_request_template.md), and [CODEOWNERS](.github/CODEOWNERS) requests the maintainer's review on every change. [GOVERNANCE](GOVERNANCE.md) describes how decisions are made; [SUPPORT](SUPPORT.md) covers questions and bug reports.

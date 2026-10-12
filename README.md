@@ -124,4 +124,4 @@ node scripts/prepare-eval.mjs smoke 1
 
 The corpus has 148 synthetic cases in 74 bilingual pairs (80 development, 68 holdout) across 26 categories, including long multi-turn stress conversations and agent-session cases with tool_use histories. `prepare-eval` creates fixed-history A/B/C/D jobs and does not call a model. Variants share templates, so they are not 148 independent observations.
 
-See [CONTRIBUTING](CONTRIBUTING.md), [SECURITY](SECURITY.md), [compatibility](docs/compatibility.md), [design](docs/design.md), and [sources](docs/sources.md). Issue forms cover over-omission, repetition, and activation failures. Submit only synthetic or redacted examples.
+See [CONTRIBUTING](CONTRIBUTING.md), [GOVERNANCE](GOVERNANCE.md), [SUPPORT](SUPPORT.md), [SECURITY](SECURITY.md), [compatibility](docs/compatibility.md), [design](docs/design.md), and [sources](docs/sources.md). Issue forms cover over-omission, repetition, activation failures, feature requests, and questions. Submit only synthetic or redacted examples.

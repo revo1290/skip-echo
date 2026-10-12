@@ -117,7 +117,8 @@ No npm dependencies or install step.
 node scripts/build.mjs
 node scripts/build.mjs --check
 node --test tests/*.test.mjs
-claude plugin validate .
+claude plugin validate --strict .
+node scripts/check-links.mjs
 node scripts/prepare-eval.mjs smoke 1
 ```
 

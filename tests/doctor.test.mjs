@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {readFileSync,mkdtempSync,mkdirSync,writeFileSync,rmSync,cpSync,readdirSync} from 'node:fs';
+import {readFileSync,mkdtempSync,mkdirSync,writeFileSync,rmSync,cpSync,readdirSync,symlinkSync} from 'node:fs';
 import {resolve,dirname,join,sep} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {tmpdir} from 'node:os';
@@ -66,6 +66,15 @@ test('doctor warns about a standalone skill installed next to the plugin',()=>{
   mkdirSync(join(dir,'h','.claude','skills','skip-echo'),{recursive:true});writeFileSync(join(dir,'h','.claude','skills','skip-echo','SKILL.md'),'x');
   const found=report(doctor(['--json'],{cwd:dir,extra:{CLAUDE_CONFIG_DIR:undefined,HOME:join(dir,'h'),USERPROFILE:join(dir,'h')}}));
   assert.equal(check(found,'standalone-skill')[0].message,`a standalone skip-echo skill is also installed: ${join('~','.claude','skills','skip-echo','SKILL.md')}`);
+ }finally{rmSync(dir,{recursive:true,force:true});}
+});
+test('doctor runs when started through a symlinked path',()=>{
+ const dir=temp();
+ try{
+  for(const d of ['.claude-plugin','hooks','scripts'])cpSync(resolve(root,d),join(dir,'real',d),{recursive:true});
+  // A junction on Windows needs no extra privilege; elsewhere the type is ignored.
+  symlinkSync(join(dir,'real'),join(dir,'link'),'junction');
+  const p=doctor(['--json'],{script:join(dir,'link','scripts','doctor.mjs')});assert.equal(p.status,0,p.stderr);assert.equal(report(p).ok,true);
  }finally{rmSync(dir,{recursive:true,force:true});}
 });
 test('doctor fails, with exit code 1, on a broken copy of the plugin',()=>{

@@ -2,7 +2,7 @@
 // Reads only this plugin's own files, the SKIP_ECHO variable, whether a standalone skip-echo skill exists,
 // and a Claude Code debug log when one is passed explicitly. Prints no policy text and shortens the home directory to ~.
 // No network, no model call, nothing written. Exit code 1 when a check fails.
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, realpathSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { homedir } from 'node:os';
@@ -156,7 +156,9 @@ export function formatReport(report, script) {
  return lines.join('\n') + '\n';
 }
 
-if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
+// Node resolves symlinks in the main module's path (macOS /var -> /private/var, a symlinked ~/.claude), so compare real paths.
+const isMain = () => { try { return realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url)); } catch { return false; } };
+if (isMain()) {
  const args = process.argv.slice(2);
  const usage = 'Usage: node scripts/doctor.mjs [--json] [--debug-log <file>]';
  const at = args.indexOf('--debug-log');

@@ -5,6 +5,7 @@
 Status: experimental. No efficacy or cost claim.
 
 - Policy: progress reports lead with this step's outcome and skip an unchanged plan; revisions of an existing artifact show the changed part unless the full or copy-ready version is requested, the artifact is only a few lines, or an excerpt would be harder to apply; never present an excerpt as complete.
+- Policy: before an irreversible, destructive, or security-sensitive action, restate the warning that applies to this action (and the matching safeguard) even if it was given earlier. The `safety` cases from corpus v4 cover it. The regression suites (`smoke`, `stress`, `conditions`) were not re-run with this rule, so its effect on repetition in other categories is unmeasured. The policy grows from about 3,400 to about 3,900 characters.
 - Policy: explicit coexistence with terse styles (select claims, not wording; never drop required facts) and `off` / `full` / `on` skill arguments.
 - Skill: clearer discovery description and `argument-hint`.
 - Evaluation: manifest v2 adds 8 cases in `progress` and `revision` categories (68 total, v1 cases unchanged; smoke 14). A generated `claude plugin eval` suite under `evals/native/` replays smoke histories with and without the plugin.

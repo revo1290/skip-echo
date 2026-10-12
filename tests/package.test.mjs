@@ -118,6 +118,11 @@ test('manual mode arguments are documented in the shipped policy',()=>{
  assert.ok(read('integrations/cursor/skip-echo.mdc').startsWith('---\ndescription:'));
  assert.ok(read('integrations/AGENTS.md').includes(read('src/response-policy.md').trim()));
 });
+test('policy keeps the rule that restates warnings before irreversible actions',()=>{
+ const policy=read('src/response-policy.md');
+ assert.match(policy,/irreversible, destructive, or security-sensitive/);assert.match(policy,/restate the warning/);assert.match(policy,/even if it was given earlier/);
+ for(const file of ['SKILL.md','integrations/AGENTS.md','integrations/cursor/skip-echo.mdc'])assert.ok(read(file).includes(policy.trim()),file);
+});
 test('condition suite runs stress cases under A/B/C/D with matching instructions',()=>{
  const stress=json('evals/stress.json');const policy=read('src/response-policy.md').trim();const control=read('evals/control.txt').trim();
  for(const id of stress)for(const cond of ['A','B','C','D']){

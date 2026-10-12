@@ -5,7 +5,7 @@
 | Surface | Status |
 | --- | --- |
 | Linux / Node.js 24.19.0: build and unit tests | Executed; see results |
-| Node.js 22, macOS, Windows | CI matrix prepared; not executed here |
+| Node.js 22 and 26, macOS, Windows | CI matrix prepared; not executed here |
 | Claude Code plugin validation | Executed 2026-10-05 with Claude Code 2.1.289 on Linux: plugin and marketplace manifests pass without warnings |
 | `npx skills add` discovery | `skills add <local repo> --list` finds exactly one `skip-echo` skill; installation into each agent untested |
 | A/B/C/D condition suite (`evals/conditions`) | Pilot executed 2026-10-05: all four conditions load and run; the empty baseline plugin must sit inside each case directory |

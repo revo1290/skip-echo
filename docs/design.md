@@ -12,6 +12,8 @@ Positioning: terse-output skills compress wording within one reply; SkipEcho sel
 
 v0.2 adds two rules aimed at the most common repetition in agent sessions. Progress reports lead with this step's outcome and omit an unchanged plan or earlier steps. Revisions of an existing artifact show the changed part with locating context unless the user asks for the full or copy-ready version, the artifact is only a few lines, or an excerpt would be harder to apply; files already written by a tool are named, not pasted. Requested artifacts remain protected from abbreviation, and an excerpt may never be presented as complete. These rules have dedicated `progress` and `revision` cases.
 
+Omission has one explicit exception in the other direction: a warning is restated, briefly, when the user is about to carry out an irreversible, destructive, or security-sensitive action, even if the same warning was given earlier. A warning dropped as a repeat is the costliest omission the policy can cause, and it is what the `safety` cases and the zero-critical-omission gate criterion measure. The rule covers only the action the user is about to take now; it does not make every earlier caution recur.
+
 Manual control uses skill arguments (`off`, `full`, `on`) rather than a separate command, so there is one user-facing name and the hook-injected policy already explains the modes. No state is stored; the mode lives in the conversation.
 
 The generated `evals/native/` suite lets users run `claude plugin eval` themselves. It mirrors only smoke (development) cases so holdout outputs are never exposed during iteration, and its model-judged scores are screening data, not the human-graded release gate.

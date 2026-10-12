@@ -1,0 +1,20 @@
+name: Question
+description: Ask how SkipEcho works or how to use it.
+labels: [question]
+body:
+  - type: markdown
+    attributes:
+      value: Share only synthetic or redacted examples. Never include tokens, private code, or raw personal transcripts.
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: What you have already read or tried
+      description: Optionally add your OS, Node version, Claude Code version, and plugin version.
+    validations:
+      required: false

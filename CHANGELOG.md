@@ -5,6 +5,7 @@
 Status: experimental. No efficacy or cost claim.
 
 - Policy: progress reports lead with this step's outcome and skip an unchanged plan; revisions of an existing artifact show the changed part unless the full or copy-ready version is requested, the artifact is only a few lines, or an excerpt would be harder to apply; never present an excerpt as complete.
+- Policy: before an irreversible, destructive, or security-sensitive action, restate the warning that applies to this action (and the matching safeguard) even if it was given earlier. The `safety` cases from corpus v4 cover it. The regression suites (`smoke`, `stress`, `conditions`) were not re-run with this rule, so its effect on repetition in other categories is unmeasured. The policy grows from about 3,400 to about 3,900 characters.
 - Policy: explicit coexistence with terse styles (select claims, not wording; never drop required facts) and `off` / `full` / `on` skill arguments.
 - Skill: clearer discovery description and `argument-hint`.
 - Evaluation: manifest v2 adds 8 cases in `progress` and `revision` categories (68 total, v1 cases unchanged; smoke 14). A generated `claude plugin eval` suite under `evals/native/` replays smoke histories with and without the plugin.
@@ -15,6 +16,8 @@ Status: experimental. No efficacy or cost claim.
 - Verified with Claude Code 2.1.289: native suite runs end to end, history replay works, and SessionStart:resume injects the policy in eval runs. Screening shows a ceiling effect (Δ 0.00 on all 14 smoke cases, n=1); see evals/results.
 - Evaluation: manifest v4 adds 64 cases (148 total, v1 to v3 unchanged) in eight families aimed at agent sessions: `tool-report` (tool_use / tool_result histories), `rerun-report`, `review-response`, `infra-ops`, `data-analysis`, `doc-writing`, `long-session` (11 user turns after a compaction summary) and `safety`. 32 development and 32 holdout cases, frozen by SHA-256. Case messages may now hold Messages API blocks.
 - Evaluation: generated `evals/hard/` suite (the 32 development cases, with/without the plugin), `npm run eval:hard`, and `summarize-native.mjs --ceiling <share>` for the corpus ceiling check. Not yet run at full scale: a first single-case run scored 1.00 with and without the plugin, so the set may still be too easy.
+- CI: `claude plugin validate --strict` runs on the plugin and marketplace manifests and `skills/`; GitHub Actions are pinned by commit SHA and kept current by Dependabot; superseded runs on non-main refs are cancelled; `scripts/check-links.mjs` (run by the tests) checks relative Markdown links and heading anchors. Branch protection is a repository setting and is not part of this change.
+- Docs: pull request template, CODEOWNERS, GOVERNANCE, SUPPORT, and feature-request and question issue forms with a contact-links config. There is no code of conduct yet.
 
 ## 0.1.0 — 2026-10-06
 

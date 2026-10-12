@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/revo1290/skip-echo/blob/main/SECURITY.md
+    about: Read the security policy before sharing details in a public issue.
+  - name: Support policy
+    url: https://github.com/revo1290/skip-echo/blob/main/SUPPORT.md
+    about: Where to ask, what to include, and what response to expect.

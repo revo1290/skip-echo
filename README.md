@@ -31,6 +31,7 @@ Independent write-ups have found that terse styles cut a modest share of output 
 | Correct an earlier answer | Acknowledge the error and state the corrected conclusion |
 | Progress or completion report | Lead with the outcome; report only what changed, what was verified now, and what remains |
 | Change one value in an existing file or block | Show the changed part and say the rest is unchanged; give the full version if requested, if it is only a few lines, or if an excerpt would be harder to apply |
+| About to run an irreversible, destructive, or security-sensitive action | Restate the warning that applies to this action, even if given before, and name the matching safeguard |
 | Full text, final version, copy-ready, handoff | Restore all necessary context; never elide |
 | Explain again, more detail, confusion | Explain afresh; never assume the user understood |
 | New topic, or history lost after compaction | Complete answer using only the context actually available |
@@ -106,7 +107,7 @@ node scripts/summarize-native.mjs evals/conditions/results/<timestamp>/aggregate
 
 `src/response-policy.md` is the only policy source. `node scripts/build.mjs` generates both SKILL.md copies, the hook's policy module, the Cursor and AGENTS.md rule files, and the native eval suite; `--check` fails on any drift. The SessionStart hook injects the fixed policy for startup, resume, clear, compact, and fork. It ignores stdin, stores no user data, reads no transcripts, makes no network or model calls, and fails open if the policy cannot load.
 
-Instructions add input tokens. In short or new conversations total cost can increase; the policy is about 3,400 characters (517 words), and its token count has not been measured. Skill discovery can load the same policy a second time; that duplicate has not been measured. There is no per-prompt injection, post-processing, or external memory.
+Instructions add input tokens. In short or new conversations total cost can increase; the policy is about 3,900 characters (595 words), and its token count has not been measured. Skill discovery can load the same policy a second time; that duplicate has not been measured. There is no per-prompt injection, post-processing, or external memory.
 
 ## Development
 
@@ -116,10 +117,11 @@ No npm dependencies or install step.
 node scripts/build.mjs
 node scripts/build.mjs --check
 node --test tests/*.test.mjs
-claude plugin validate .
+claude plugin validate --strict .
+node scripts/check-links.mjs
 node scripts/prepare-eval.mjs smoke 1
 ```
 
 The corpus has 148 synthetic cases in 74 bilingual pairs (80 development, 68 holdout) across 26 categories, including long multi-turn stress conversations and agent-session cases with tool_use histories. `prepare-eval` creates fixed-history A/B/C/D jobs and does not call a model. Variants share templates, so they are not 148 independent observations.
 
-See [CONTRIBUTING](CONTRIBUTING.md), [SECURITY](SECURITY.md), [compatibility](docs/compatibility.md), [design](docs/design.md), and [sources](docs/sources.md). Issue forms cover over-omission, repetition, and activation failures. Submit only synthetic or redacted examples.
+See [CONTRIBUTING](CONTRIBUTING.md), [GOVERNANCE](GOVERNANCE.md), [SUPPORT](SUPPORT.md), [SECURITY](SECURITY.md), [compatibility](docs/compatibility.md), [design](docs/design.md), and [sources](docs/sources.md). Issue forms cover over-omission, repetition, activation failures, feature requests, and questions. Submit only synthetic or redacted examples.

@@ -2,9 +2,16 @@ name: checks
 on: [push, pull_request]
 permissions:
   contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  # Keep every run on main; supersede older runs on other branches and pull requests.
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 defaults:
   run:
     shell: bash
+env:
+  # Not covered by Dependabot: bump by hand after running `claude plugin validate --strict` with the new version.
+  CLAUDE_CODE_VERSION: 2.1.296
 jobs:
   test:
     strategy:
@@ -13,9 +20,25 @@ jobs:
         node: [22, 24]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: ${{ matrix.node }}
       - run: node scripts/build.mjs --check
+      # Includes tests/links.test.mjs, which checks relative Markdown links and heading anchors.
       - run: node --test tests/*.test.mjs
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      # No persisted token: the next steps run the install scripts of a third-party npm package.
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+      # The CLI needs its postinstall, so do not pass --ignore-scripts. Validation needs no login or API key.
+      - run: npm install --global "@anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}"
+      - run: claude plugin validate --strict .
+      - run: claude plugin validate --strict .claude-plugin/plugin.json
+      - run: claude plugin validate --strict skills

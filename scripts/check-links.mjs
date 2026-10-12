@@ -1,6 +1,7 @@
 // Checks relative links and heading anchors in the project's Markdown files.
 // External links (http, https, mailto, ...) are not fetched, so CI stays offline and deterministic.
 // Generated eval suites are skipped: their prompts are synthetic conversation text, not project documentation.
+// Known limit: only ATX headings (`# Title`) are anchors; links to setext headings (underlined with === or ---) are reported as missing.
 import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
 import { resolve, dirname, relative, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -17,16 +18,19 @@ function markdownFiles(root, dir = root) {
 }
 
 // GitHub's anchor for a heading: lowercase, drop punctuation except hyphen and underscore, spaces become hyphens.
-const slug = text => text.replace(/\[([^\]]*)\]\([^)]*\)/g, '$1').replace(/<[^>]+>/g, '').replace(/[`*]/g, '').trim().toLowerCase().replace(/[^\p{L}\p{M}\p{N}\p{Pc} -]/gu, '').replace(/ /g, '-');
+const slug = text => text.replace(/\[([^\]]*)\]\([^)]*\)/g, '$1').replace(/<[^>]+>/g, '').replace(/[`*]/g, '').replace(/(^|\W)_+([^_]+?)_+(?=\W|$)/g, '$1$2').trim().toLowerCase().replace(/[^\p{L}\p{M}\p{N}\p{Pc} -]/gu, '').replace(/ /g, '-');
 
-// Lines outside fenced code blocks, with their 1-based numbers.
+// Lines outside fenced code blocks and HTML comments, with their 1-based numbers.
 function prose(text) {
  let fence = null;
- return text.split('\n').flatMap((line, i) => {
-  const m = line.match(/^ {0,3}(`{3,}|~{3,})/);
-  if (m && !fence) { fence = m[1][0]; return []; }
-  if (m && fence === m[1][0]) { fence = null; return []; }
-  return fence ? [] : [[i + 1, line]];
+ return text.replace(/<!--[\s\S]*?-->/g, c => c.replace(/[^\n]/g, '')).split('\n').flatMap((line, i) => {
+  const m = line.match(/^ {0,3}(`{3,}|~{3,})(.*)$/);
+  if (fence) {
+   if (m && m[1][0] === fence.char && m[1].length >= fence.length && !m[2].trim()) fence = null;
+   return [];
+  }
+  if (m && !(m[1][0] === '`' && m[2].includes('`'))) { fence = { char: m[1][0], length: m[1].length }; return []; }
+  return [[i + 1, line]];
  });
 }
 
@@ -51,7 +55,7 @@ export function checkLinks(root) {
  for (const file of markdownFiles(root)) {
   for (const [no, raw] of prose(readFileSync(file, 'utf8'))) {
    const line = raw.replace(/`[^`]*`/g, '');
-   const targets = [...line.matchAll(/!?\[[^\]]*\]\((<[^>]+>|[^)\s]+)(?:\s+"[^"]*")?\)/g)].map(m => m[1].replace(/^<|>$/g, ''));
+   const targets = [...line.matchAll(/!?\[[^\]]*\]\((<[^>]+>|(?:[^()\s]|\([^()\s]*\))+)(?:\s+(?:"[^"]*"|'[^']*'|\([^)]*\)))?\)/g)].map(m => m[1].replace(/^<|>$/g, ''));
    const ref = line.match(/^ {0,3}\[[^\]]+\]:\s*(\S+)/);
    if (ref) targets.push(ref[1]);
    for (const target of targets) {

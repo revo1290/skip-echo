@@ -37,3 +37,13 @@ test('duplicate headings get numbered anchors like GitHub',()=>{
  const dir=fixture({'README.md':'[a](docs/a.md#same) [b](docs/a.md#same-1) [c](docs/a.md#same-2)','docs/a.md':'# Same\n\n## Same\n'});
  try{assert.deepEqual(checkLinks(dir).map(p=>p.split(': ')[1]),['(docs/a.md#same-2) no such heading']);}finally{rmSync(dir,{recursive:true,force:true});}
 });
+test('link syntax variants: any title style, parentheses in targets, longer fences, comments, emphasis in headings',()=>{
+ const dir=fixture({
+  'README.md':[
+   "[single](gone.md 'title') [paren](gone2.md (title)) [balanced](docs/a_(b).md) [anchor](docs/a.md#heading-with-code-and-emph)",
+   '<!-- [commented](gone3.md) -->','````','```','[nested](gone4.md)','```','````','[after](gone5.md)'
+  ].join('\n'),
+  'docs/a.md':'# A\n\n## Heading with `code` and _emph_\n','docs/a_(b).md':'x'
+ });
+ try{assert.deepEqual(checkLinks(dir).map(p=>p.split(': ')[1]),['(gone.md) file not found','(gone2.md) file not found','(gone5.md) file not found']);}finally{rmSync(dir,{recursive:true,force:true});}
+});

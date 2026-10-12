@@ -15,4 +15,4 @@ Versioning: any change to `src/response-policy.md` is at least a minor version, 
 
 Run the integration checklist in `docs/compatibility.md` before expanding compatibility claims. CI checks JavaScript, packaging, manifest validation (`claude plugin validate --strict`), and relative Markdown links (`node scripts/check-links.mjs`), not Claude Code integration or model quality.
 
-Pull requests use the [template](.github/pull_request_template.md), and [CODEOWNERS](.github/CODEOWNERS) requests the maintainer's review on every change. [GOVERNANCE](GOVERNANCE.md) describes how decisions are made; [SUPPORT](SUPPORT.md) covers questions and bug reports.
+Pull requests use the [template](.github/pull_request_template.md), and [CODEOWNERS](.github/CODEOWNERS) asks GitHub to request the maintainer's review on pull requests from others. [GOVERNANCE](GOVERNANCE.md) describes how decisions are made; [SUPPORT](SUPPORT.md) covers questions and bug reports.

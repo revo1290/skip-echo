@@ -12,6 +12,12 @@ body:
     validations:
       required: true
   - type: textarea
+    id: doctor
+    attributes:
+      label: Doctor output
+      description: Paste the output of /skip-echo:doctor, or of node <plugin dir>/scripts/doctor.mjs --debug-log <file> after claude --debug-file <file> --init-only. See docs/troubleshooting.md. Do not paste the raw debug log.
+      render: text
+  - type: textarea
     id: reproduction
     attributes:
       label: Minimal synthetic conversation or reproduction

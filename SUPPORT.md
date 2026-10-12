@@ -18,5 +18,6 @@ Use [New issue](https://github.com/revo1290/skip-echo/issues/new/choose) and pic
 ## Before you file
 
 - Read [compatibility](docs/compatibility.md). Most environments are untested, and it records what has been observed. A formal list of supported clients is still open (#10); until then that page is the record. Reports from untested environments are still useful.
+- If the plugin seems inactive, follow [troubleshooting](docs/troubleshooting.md) and paste the output of `/skip-echo:doctor` (or `node <plugin dir>/scripts/doctor.mjs --debug-log <file>`). Never paste the raw debug log.
 - Include the OS, Node.js version, Claude Code version, model, plugin version, other styles you use, and how you installed SkipEcho.
 - Share only synthetic or redacted examples. Never include tokens, private code, or raw personal transcripts.

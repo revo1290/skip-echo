@@ -12,8 +12,13 @@
 | Native `claude plugin eval` suite | Executed 2026-10-05, Claude Code 2.1.289, Linux: synthetic `history.jsonl` accepted and replayed; `SessionStart:resume` fired with the plugin and injected the policy, absent without it |
 | History with `tool_use` / `tool_result` blocks in `claude plugin eval` | Executed 2026-10-06, Claude Code 2.1.292, Linux: a prototype and `evals/hard/tool-report-01-en` replay and are answered from the tool history, with and without the plugin; one case, no other client |
 | Cursor rule / AGENTS.md snippet | Generated only; untested in any client |
-| SessionStart context inside Claude Code | Observed only inside `claude plugin eval` child sessions (resume source); interactive sessions not observed |
-| startup / resume / clear / compact / fork | Hook unit inputs covered; real host lifecycle untested |
+| SessionStart context inside Claude Code | Observed inside `claude plugin eval` child sessions (resume source), and on 2026-10-12 with Claude Code 2.1.296 on Linux at startup through `claude --debug-file <file> --init-only` with an isolated config directory: the debug log shows the hook finishing with status 0 in 59 to 126 ms and `provided additionalContext (3905 chars)`. Interactive sessions not observed |
+| `SKIP_ECHO=off` | Same setup: from the shell, from `--settings` `env`, and from a project's `.claude/settings.local.json`, the hook ran and no context was delivered; settings `env` `on` overrode shell `off`; unrecognized values injected the policy. Workspace-trust behavior for project `env` in interactive sessions untested |
+| `claude plugin disable ... --scope local` | Same setup, plugin installed at user scope from a local marketplace: no SkipEcho hook ran in the disabled project; another project still received the policy |
+| Duplicate hook registration | Same setup: the hook added to `--settings` as well as the plugin ran twice and delivered the policy twice at one startup; the doctor's `--debug-log` check reports it |
+| `/skip-echo:doctor` command | Loads in Claude Code 2.1.296 (debug log: 1 command from plugin skip-echo); `claude plugin validate --strict commands` passes. A model run of the command is untested |
+| `scripts/doctor.mjs` | `tests/doctor.test.mjs` passed locally on Linux with Node 22.22.0, and the CI matrix runs it on Linux, macOS, and Windows. Its checks run outside the host, except `--debug-log` |
+| startup / resume / clear / compact / fork | Hook unit inputs covered. In the host: startup observed through `--init-only` (above), resume inside eval child sessions; clear, compact, and fork untested |
 | Standalone skill format | Local skill validator checked; discovery is client-specific |
 | Agent forward tests | Explicit policy, development-only; not Claude Code auto-application |
 | Subagent inheritance / output-style coexistence | Untested |

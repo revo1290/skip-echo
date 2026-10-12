@@ -13,6 +13,7 @@ SkipEcho is an experimental project with one maintainer. This page states who de
 - **Claims.** A claim about effectiveness, cost, or compatibility needs recorded evidence ([evaluation status](evals/results/README.md), [compatibility](docs/compatibility.md)). Character counts are not evidence. Missing evidence is reported as "not measured" or "untested", never as a pass.
 - **Holdout cases.** No one tunes on them. If their outputs influence a change, the holdout set is replaced before the next confirmatory run.
 - **v1.0.** The release gate in [evals/rubric.md](evals/rubric.md#v10-release-gate-final) decides, applied as written. Its thresholds, model, repetition count, and budget are not changed after outputs have been generated; a change needs a dated amendment committed before the next run. If, after shortening the policy and a fresh holdout run, it is still no better than the one-line control, the project stays on 0.x as experimental.
+- **Conduct.** The [Code of Conduct](CODE_OF_CONDUCT.md) applies in every project space; the maintainer enforces it.
 - **Security.** See [SECURITY](SECURITY.md).
 
 Questions and reports: [SUPPORT](SUPPORT.md).

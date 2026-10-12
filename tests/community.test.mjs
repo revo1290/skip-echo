@@ -6,7 +6,7 @@ import {fileURLToPath} from 'node:url';
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const read=p=>readFileSync(resolve(root,p),'utf8');
 test('community files exist',()=>{
- for(const f of ['CONTRIBUTING.md','GOVERNANCE.md','SUPPORT.md','SECURITY.md','.github/pull_request_template.md','.github/CODEOWNERS','.github/dependabot.yml'])assert.ok(existsSync(resolve(root,f)),f);
+ for(const f of ['CONTRIBUTING.md','CODE_OF_CONDUCT.md','GOVERNANCE.md','SUPPORT.md','SECURITY.md','.github/pull_request_template.md','.github/CODEOWNERS','.github/dependabot.yml'])assert.ok(existsSync(resolve(root,f)),f);
 });
 test('CODEOWNERS names an owner for every pattern and each pattern matches a repository path',()=>{
  const rules=read('.github/CODEOWNERS').split('\n').map(l=>l.trim()).filter(l=>l&&!l.startsWith('#'));
@@ -23,4 +23,9 @@ test('every issue form has a name, description, body, and required fields; confi
  for(const f of forms){const y=read('.github/ISSUE_TEMPLATE/'+f);for(const key of ['name','description','body'])assert.match(y,new RegExp('^'+key+':','m'),f+' '+key);assert.match(y,/required: true/,f);}
  const config=read('.github/ISSUE_TEMPLATE/config.yml');assert.match(config,/^contact_links:/m);
  for(const f of ['SECURITY.md','SUPPORT.md'])assert.ok(config.includes('/blob/main/'+f)&&existsSync(resolve(root,f)),f);
+});
+test('the code of conduct names a GitHub reporting route and no email address',()=>{
+ const coc=read('CODE_OF_CONDUCT.md');
+ assert.match(coc,/^# Contributor Covenant Code of Conduct/);assert.ok(!coc.includes('[INSERT CONTACT METHOD]'));
+ assert.match(coc,/through GitHub only/);assert.ok(!/[\w.+-]+@[\w-]+\.[\w.]+/.test(coc.replace(/https?:\/\/\S+/g,'')),'no email address');
 });

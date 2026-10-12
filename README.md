@@ -87,6 +87,25 @@ claude plugin uninstall skip-echo@skip-echo-marketplace --scope user
 
 Previously injected context can remain in the current conversation; start a new session to confirm it is gone.
 
+### Turn it off for a shell or a project
+
+`/skip-echo off` lives in the conversation, so it does not survive `/clear` and may not survive compaction. For a lasting switch, set `SKIP_ECHO=off`: the hook then injects nothing, and `/skip-echo` still loads the policy when you ask for it.
+
+```sh
+SKIP_ECHO=off claude                                                   # this run only
+claude plugin disable skip-echo@skip-echo-marketplace --scope local    # the whole plugin, this project only
+```
+
+To keep the plugin but stop automatic injection in one project, put `{"env": {"SKIP_ECHO": "off"}}` in `.claude/settings.local.json` (just you) or `.claude/settings.json` (everyone). These routes were observed with Claude Code 2.1.296; details and caveats are in [troubleshooting](docs/troubleshooting.md#turn-it-off).
+
+### Check that it is active
+
+```text
+/skip-echo:doctor
+```
+
+The doctor checks Node.js, the hook registration, the policy module, a dry run of the hook, `SKIP_ECHO`, and a duplicate standalone skill. To confirm that Claude Code itself ran the hook and received the policy, pass it a debug log from `claude --debug-file <file> --init-only`, which starts up without a model call. See [troubleshooting](docs/troubleshooting.md#is-skipecho-active).
+
 ## Measure it yourself
 
 The repository ships two [`claude plugin eval`](https://code.claude.com/docs/en/plugin-evals) suites generated from frozen development conversations. Each case replays a fixed multi-turn history.
@@ -105,7 +124,7 @@ node scripts/summarize-native.mjs evals/conditions/results/<timestamp>/aggregate
 
 ## How it works
 
-`src/response-policy.md` is the only policy source. `node scripts/build.mjs` generates both SKILL.md copies, the hook's policy module, the Cursor and AGENTS.md rule files, and the native eval suite; `--check` fails on any drift. The SessionStart hook injects the fixed policy for startup, resume, clear, compact, and fork. It ignores stdin, stores no user data, reads no transcripts, makes no network or model calls, and fails open if the policy cannot load.
+`src/response-policy.md` is the only policy source. `node scripts/build.mjs` generates both SKILL.md copies, the hook's policy module, the Cursor and AGENTS.md rule files, and the native eval suite; `--check` fails on any drift. The SessionStart hook injects the fixed policy for startup, resume, clear, compact, and fork. It reads only the `SKIP_ECHO` variable, ignores stdin, stores no user data, reads no transcripts, makes no network or model calls, and fails open if the policy cannot load.
 
 Instructions add input tokens. In short or new conversations total cost can increase; the policy is about 3,900 characters (595 words), and its token count has not been measured. Skill discovery can load the same policy a second time; that duplicate has not been measured. There is no per-prompt injection, post-processing, or external memory.
 
@@ -119,9 +138,10 @@ node scripts/build.mjs --check
 node --test tests/*.test.mjs
 claude plugin validate --strict .
 node scripts/check-links.mjs
+node scripts/doctor.mjs
 node scripts/prepare-eval.mjs smoke 1
 ```
 
 The corpus has 148 synthetic cases in 74 bilingual pairs (80 development, 68 holdout) across 26 categories, including long multi-turn stress conversations and agent-session cases with tool_use histories. `prepare-eval` creates fixed-history A/B/C/D jobs and does not call a model. Variants share templates, so they are not 148 independent observations.
 
-See [CONTRIBUTING](CONTRIBUTING.md), [GOVERNANCE](GOVERNANCE.md), [SUPPORT](SUPPORT.md), [SECURITY](SECURITY.md), [compatibility](docs/compatibility.md), [design](docs/design.md), and [sources](docs/sources.md). Issue forms cover over-omission, repetition, activation failures, feature requests, and questions. Submit only synthetic or redacted examples.
+See [CONTRIBUTING](CONTRIBUTING.md), [CODE_OF_CONDUCT](CODE_OF_CONDUCT.md), [GOVERNANCE](GOVERNANCE.md), [SUPPORT](SUPPORT.md), [SECURITY](SECURITY.md), [troubleshooting](docs/troubleshooting.md), [compatibility](docs/compatibility.md), [design](docs/design.md), and [sources](docs/sources.md). Issue forms cover over-omission, repetition, activation failures, feature requests, and questions. Submit only synthetic or redacted examples.

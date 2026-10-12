@@ -9,7 +9,9 @@ import {createHash} from 'node:crypto';
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const read=p=>readFileSync(resolve(root,p),'utf8');
 const json=p=>JSON.parse(read(p));
-const run=(script,opts={})=>spawnSync(process.execPath,[resolve(root,script)],{encoding:'utf8',timeout:4000,...opts});
+// The developer's own SKIP_ECHO must not change what these tests observe.
+const env=(extra={})=>{const e={...process.env,...extra};if(!('SKIP_ECHO' in extra))delete e.SKIP_ECHO;return e;};
+const run=(script,opts={})=>spawnSync(process.execPath,[resolve(root,script)],{encoding:'utf8',timeout:4000,env:env(),...opts});
 test('generated skill and hook exactly match source',()=>{
  const p=spawnSync(process.execPath,[resolve(root,'scripts/build.mjs'),'--check'],{encoding:'utf8'});
  assert.equal(p.status,0,p.stderr);assert.equal(read('SKILL.md'),read('skills/skip-echo/SKILL.md'));
@@ -25,7 +27,7 @@ test('hook does not require valid stdin',()=>{
 });
 test('works with unrelated cwd and spaces in installation path',()=>{
  const dir=mkdtempSync(join(tmpdir(),'skip echo '));
- try{cpSync(resolve(root,'scripts'),join(dir,'scripts'),{recursive:true});const p=spawnSync(process.execPath,[join(dir,'scripts/session-start.mjs')],{cwd:tmpdir(),encoding:'utf8'});assert.equal(p.status,0);assert.equal(JSON.parse(p.stdout).hookSpecificOutput.additionalContext,read('src/response-policy.md').trim());}finally{rmSync(dir,{recursive:true,force:true});}
+ try{cpSync(resolve(root,'scripts'),join(dir,'scripts'),{recursive:true});const p=spawnSync(process.execPath,[join(dir,'scripts/session-start.mjs')],{cwd:tmpdir(),encoding:'utf8',env:env()});assert.equal(p.status,0);assert.equal(JSON.parse(p.stdout).hookSpecificOutput.additionalContext,read('src/response-policy.md').trim());}finally{rmSync(dir,{recursive:true,force:true});}
 });
 test('missing or malformed generated module fails open',()=>{
  const dir=mkdtempSync(join(tmpdir(),'skip-echo-failure-'));
@@ -34,9 +36,34 @@ test('missing or malformed generated module fails open',()=>{
   for(const mode of ['missing','invalid','empty']){
    if(mode==='invalid')writeFileSync(join(dir,'policy.generated.mjs'),'invalid syntax !');
    if(mode==='empty')writeFileSync(join(dir,'policy.generated.mjs'),'export default "";');
-   const p=spawnSync(process.execPath,[join(dir,'session-start.mjs')],{encoding:'utf8'});
+   const p=spawnSync(process.execPath,[join(dir,'session-start.mjs')],{encoding:'utf8',env:env()});
    assert.equal(p.status,0);assert.equal(p.stdout,'');assert.match(p.stderr,/continuing without/);
   }
+ }finally{rmSync(dir,{recursive:true,force:true});}
+});
+test('SKIP_ECHO=off, 0, or false suppresses injection; on, 1, true, empty, or unset inject',()=>{
+ const policy=read('src/response-policy.md').trim();
+ for(const value of ['off','OFF',' off ','0','false','False']){
+  const p=run('scripts/session-start.mjs',{input:'{}',env:env({SKIP_ECHO:value})});
+  assert.equal(p.status,0,value);assert.equal(p.stdout,'',value);assert.equal(p.stderr,'',value);
+ }
+ for(const value of ['on','ON','1','true','',undefined]){
+  const p=run('scripts/session-start.mjs',{input:'{}',env:value===undefined?env():env({SKIP_ECHO:value})});
+  assert.equal(p.status,0,String(value));assert.equal(p.stderr,'',String(value));
+  assert.equal(JSON.parse(p.stdout).hookSpecificOutput.additionalContext,policy,String(value));
+ }
+});
+test('an unrecognized SKIP_ECHO value keeps the default and is not echoed',()=>{
+ const p=run('scripts/session-start.mjs',{input:'{}',env:env({SKIP_ECHO:'NEVER_ECHO_maybe'})});
+ assert.equal(p.status,0);assert.equal(JSON.parse(p.stdout).hookSpecificOutput.additionalContext,read('src/response-policy.md').trim());
+ assert.match(p.stderr,/unrecognized SKIP_ECHO value/);assert.ok(!p.stderr.includes('NEVER_ECHO'));
+});
+test('SKIP_ECHO=off does not load the policy module, so it cannot fail',()=>{
+ const dir=mkdtempSync(join(tmpdir(),'skip-echo-off-'));
+ try{
+  cpSync(resolve(root,'scripts/session-start.mjs'),join(dir,'session-start.mjs'));writeFileSync(join(dir,'policy.generated.mjs'),'throw new Error("must not load")');
+  const p=spawnSync(process.execPath,[join(dir,'session-start.mjs')],{encoding:'utf8',env:env({SKIP_ECHO:'off'})});
+  assert.equal(p.status,0);assert.equal(p.stdout,'');assert.equal(p.stderr,'');
  }finally{rmSync(dir,{recursive:true,force:true});}
 });
 test('single default hook registration with five match sources',()=>{

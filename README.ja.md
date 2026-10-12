@@ -87,6 +87,25 @@ claude plugin uninstall skip-echo@skip-echo-marketplace --scope user
 
 すでに入った指示は今の会話に残ることがあります。確認は新しいセッションで行ってください。
 
+### シェルやプロジェクト単位で止める
+
+`/skip-echo off` は会話の中だけの切り替えなので、`/clear` すると元に戻り、compact 後に残るかも分かりません。続けて止めたいときは `SKIP_ECHO=off` を設定します。hook は何も注入しなくなり、`/skip-echo` と打てば方針を読み込めます。
+
+```sh
+SKIP_ECHO=off claude                                                   # この起動だけ
+claude plugin disable skip-echo@skip-echo-marketplace --scope local    # このプロジェクトだけプラグインごと
+```
+
+プラグインは残したままこのプロジェクトで自動注入だけ止めるには、`.claude/settings.local.json`（自分だけ）か `.claude/settings.json`（全員）に `{"env": {"SKIP_ECHO": "off"}}` を書きます。これらの方法は Claude Code 2.1.296 で動作を確認しました。詳細と注意点は[トラブルシューティング](docs/troubleshooting.md#turn-it-off)（英語）にあります。
+
+### 有効になっているか確かめる
+
+```text
+/skip-echo:doctor
+```
+
+Node.js、hook の登録、方針モジュール、hook の試し実行、`SKIP_ECHO`、単体スキルとの重複を確認します。Claude Code が実際に hook を実行して方針を受け取ったかは、`claude --debug-file <file> --init-only`（モデルを呼ばずに起動処理だけ行う）で取ったデバッグログを doctor に渡すと確認できます。[トラブルシューティング](docs/troubleshooting.md#is-skipecho-active)（英語）を参照してください。
+
 ## 自分で効果を測る
 
 凍結済みの開発用会話から生成した、[`claude plugin eval`](https://code.claude.com/docs/en/plugin-evals) 用の評価スイートを2つ同梱しています。どちらも決まった会話履歴を再生してから最後の質問に答えさせます。
@@ -104,7 +123,7 @@ node scripts/summarize-native.mjs evals/conditions/results/<timestamp>/aggregate
 
 ## 仕組み
 
-方針の元は `src/response-policy.md` の1か所だけです。`node scripts/build.mjs` で2つのSKILL.md、hook用モジュール、Cursor・AGENTS.md用ファイル、ネイティブ評価スイートを生成し、`--check` で生成物とのずれを検出します。hookは固定の方針だけを返します。入力も会話ログも読まず、通信・ユーザーデータの保存・追加のモデル呼び出しは行いません。方針を読み込めなかった場合も作業を止めません。
+方針の元は `src/response-policy.md` の1か所だけです。`node scripts/build.mjs` で2つのSKILL.md、hook用モジュール、Cursor・AGENTS.md用ファイル、ネイティブ評価スイートを生成し、`--check` で生成物とのずれを検出します。hookは固定の方針だけを返します。読むのは環境変数 `SKIP_ECHO` だけで、入力も会話ログも読まず、通信・ユーザーデータの保存・追加のモデル呼び出しは行いません。方針を読み込めなかった場合も作業を止めません。
 
 指示を入れる分、入力トークンは増えます。短い会話や新しい会話では総コストが増えることがあります。方針は約3,900文字（595語）で、トークン数は未計測です。スキルの自動読み込みと重なって同じ方針が2回入る可能性があり、その影響も未計測です。
 
@@ -118,9 +137,10 @@ node scripts/build.mjs --check
 node --test tests/*.test.mjs
 claude plugin validate --strict .
 node scripts/check-links.mjs
+node scripts/doctor.mjs
 node scripts/prepare-eval.mjs smoke 1
 ```
 
 評価用の会話は日英148ケース（74組の対訳、開発80／holdout68、26カテゴリ。長い複数往復の会話や、ツール使用の履歴を含むエージェント作業のケースを含む）です。`prepare-eval` は履歴固定のA/B/C/Dジョブを作るだけで、モデルは呼び出しません。テンプレートを共有しているので、148件の独立した観測ではありません。
 
-貢献の方法は[CONTRIBUTING](CONTRIBUTING.md)（英語）、意思決定は[GOVERNANCE](GOVERNANCE.md)（英語）、質問や報告の窓口は[SUPPORT](SUPPORT.md)（英語）にあります。省略しすぎ・繰り返し・発火不良・機能要望・質問のIssueフォームがあります。実会話や機密情報は投稿しないでください。
+貢献の方法は[CONTRIBUTING](CONTRIBUTING.md)（英語）、行動規範は[CODE_OF_CONDUCT](CODE_OF_CONDUCT.md)（英語）、意思決定は[GOVERNANCE](GOVERNANCE.md)（英語）、質問や報告の窓口は[SUPPORT](SUPPORT.md)（英語）、うまく動かないときは[トラブルシューティング](docs/troubleshooting.md)（英語）にあります。省略しすぎ・繰り返し・発火不良・機能要望・質問のIssueフォームがあります。実会話や機密情報は投稿しないでください。

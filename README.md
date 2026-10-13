@@ -20,6 +20,7 @@ Terse-output skills such as caveman and genshijin compress **wording inside one 
 | Status report after multi-step work | Compressed full replay | Outcome, what changed, what was verified now, what remains |
 | One-value edit of a long file | Whole file, compressed | Changed part plus “rest unchanged”, unless full text is requested |
 | Combined use | | Supported by design: never drops required facts to meet another style's word budget |
+| How you check it | Count output tokens | `/skip-echo:echo-meter`: a deterministic, offline measure of how much prose repeats earlier turns, on your own sessions, with no judge model and no cost |
 
 Independent write-ups have found that terse styles cut a modest share of output tokens and that a one-line “be brief” instruction does about as well ([implicator.ai](https://www.implicator.ai/caveman-claude-code-skill-cuts-output-20-your-bill-barely-notices-2/), [Hacker News](https://news.ycombinator.com/item?id=47954745)). SkipEcho is designed to be tested against exactly that: the evaluation includes a strong one-sentence control (condition B), and the project commits to simplifying itself if it cannot beat that control. No savings or superiority claim is made until that evaluation is done. See [evaluation status](evals/results/README.md).
 
@@ -108,6 +109,24 @@ The doctor checks Node.js, the hook registration, the policy module, a dry run o
 
 ## Measure it yourself
 
+### Echo meter: free, offline, no judge
+
+Output length cannot tell a useful answer from a repeated one. The echo meter measures the thing SkipEcho targets: how much of each assistant reply restates earlier assistant turns, as overlapping word sequences (character sequences for Japanese and Chinese). It is deterministic, reads only the files you pass, makes no network or model calls, and prints no conversation text unless you add `--examples`.
+
+```text
+/skip-echo:echo-meter                 # this project's Claude Code sessions
+```
+
+```sh
+node scripts/echo-meter.mjs transcript --project --examples           # same, from a terminal in the project
+node scripts/echo-meter.mjs transcript ~/.claude/projects/<project>/  # any session file or directory
+node scripts/echo-meter.mjs results evals/results/native-regression-2026-10-12.json   # recorded eval outputs
+```
+
+To see SkipEcho's effect on your own work, compare sessions on similar tasks with the plugin on and with `SKIP_ECHO=off`. Text the user wrote this turn is not counted, and fenced code is reported separately because requested full artifacts are supposed to repeat. It measures surface overlap, not meaning: a paraphrased repeat is missed, and a correction, a restated warning, or a new test result that happens to read the same is counted. Read it next to the judged graders below, not instead of them.
+
+### Judged suites
+
 The repository ships two [`claude plugin eval`](https://code.claude.com/docs/en/plugin-evals) suites generated from frozen development conversations. Each case replays a fixed multi-turn history.
 
 ```sh
@@ -139,6 +158,7 @@ node --test tests/*.test.mjs
 claude plugin validate --strict .
 node scripts/check-links.mjs
 node scripts/doctor.mjs
+node scripts/echo-meter.mjs results evals/results/native-regression-2026-10-12.json
 node scripts/prepare-eval.mjs smoke 1
 ```
 

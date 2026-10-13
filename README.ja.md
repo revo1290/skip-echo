@@ -20,6 +20,7 @@ caveman や genshijin のような圧縮系スキルは、**1回の返答の中�
 | 複数ステップ作業の報告 | 全経緯を圧縮して再掲 | 結果、変わったこと、今回確認したこと、残っていること |
 | 長いファイルの1か所修正 | 全文を圧縮して再掲 | 変更箇所＋「ほかは変更なし」（全文の依頼があれば全文） |
 | 併用 | | 前提として設計。ほかのスタイルの文字数に合わせるために必要な事実を落とさない |
+| 効果の確かめ方 | 出力トークン数を数える | `/skip-echo:echo-meter`：自分のセッションで、前のターンの繰り返しがどれだけあるかを決定的に測る。採点モデル不要、オフライン、無料 |
 
 圧縮系スキルで減る出力トークンは限られていて、「be brief.」の1文でもほぼ同じ効果が出るという第三者の検証があります（[implicator.ai](https://www.implicator.ai/caveman-claude-code-skill-cuts-output-20-your-bill-barely-notices-2/)、[Hacker News](https://news.ycombinator.com/item?id=47954745)）。SkipEchoの評価には、この「短くて強い1文の指示」を対照条件Bとして最初から入れてあります。Bを上回れなければ、仕組みのほうを簡素にすると決めています。評価が終わるまで、トークン削減や優位性はうたいません（[評価状況](evals/results/README.md)）。
 
@@ -108,6 +109,24 @@ Node.js、hook の登録、方針モジュール、hook の試し実行、`SKIP_
 
 ## 自分で効果を測る
 
+### エコーメーター：無料・オフライン・採点モデルなし
+
+出力の長さだけでは、役に立つ答えと繰り返しを区別できません。エコーメーターは、SkipEchoが減らそうとしているもの、つまり各返答のうち前のアシスタントのターンと同じ語の並び（日本語・中国語は文字の並び）がどれだけあるかを測ります。結果は毎回同じで、渡したファイルだけを読み、通信もモデル呼び出しもしません。`--examples` を付けない限り会話の本文は表示しません。
+
+```text
+/skip-echo:echo-meter                 # このプロジェクトのClaude Codeセッション
+```
+
+```sh
+node scripts/echo-meter.mjs transcript --project --examples           # 同じことをプロジェクトのターミナルから
+node scripts/echo-meter.mjs transcript ~/.claude/projects/<project>/  # 任意のセッションファイルやディレクトリ
+node scripts/echo-meter.mjs results evals/results/native-regression-2026-10-12.json   # 記録済みの評価出力
+```
+
+自分の作業での効果を見るには、似た作業のセッションを、プラグイン有効と `SKIP_ECHO=off` で比べてください。そのターンにユーザーが書いた内容は数えず、コードブロックは別に集計します（全文を求められた成果物は繰り返すのが正しいため）。測っているのは表面の重なりで、意味ではありません。言い換えた繰り返しは拾えず、訂正、言い直した警告、たまたま同じ文面になった新しいテスト結果は数えてしまいます。下のモデル採点と並べて読み、代わりにはしないでください。
+
+### モデル採点の評価スイート
+
 凍結済みの開発用会話から生成した、[`claude plugin eval`](https://code.claude.com/docs/en/plugin-evals) 用の評価スイートを2つ同梱しています。どちらも決まった会話履歴を再生してから最後の質問に答えさせます。
 
 ```sh
@@ -138,6 +157,7 @@ node --test tests/*.test.mjs
 claude plugin validate --strict .
 node scripts/check-links.mjs
 node scripts/doctor.mjs
+node scripts/echo-meter.mjs results evals/results/native-regression-2026-10-12.json
 node scripts/prepare-eval.mjs smoke 1
 ```
 

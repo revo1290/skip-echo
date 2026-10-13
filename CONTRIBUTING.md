@@ -17,6 +17,8 @@ Run the integration checklist in `docs/compatibility.md` before expanding compat
 
 `node scripts/echo-meter.mjs results <file>` gives a free, judge-free repetition measure for recorded outputs; report it next to judged scores, never as a substitute or as evidence that a repeat was unnecessary.
 
+`node scripts/measure-cost.mjs --runs 3 --max-cost-usd 2` measures the input-token and cost overhead of the plugin on your account (billed). Rerun it whenever the policy, the skill description, or a command description changes, and replace the numbers in the README with the new record.
+
 `node scripts/doctor.mjs` checks a plugin copy and, with `--debug-log`, what Claude Code did at session start; see [troubleshooting](docs/troubleshooting.md). Keep the hook's inputs to the bundled policy module and `SKIP_ECHO`; any new input needs the same review as a hook contract change.
 
 Participation is governed by the [Code of Conduct](CODE_OF_CONDUCT.md). Pull requests use the [template](.github/pull_request_template.md), and [CODEOWNERS](.github/CODEOWNERS) asks GitHub to request the maintainer's review on pull requests from others. [GOVERNANCE](GOVERNANCE.md) describes how decisions are made; [SUPPORT](SUPPORT.md) covers questions and bug reports.

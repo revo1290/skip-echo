@@ -145,7 +145,16 @@ node scripts/summarize-native.mjs evals/conditions/results/<timestamp>/aggregate
 
 `src/response-policy.md` is the only policy source. `node scripts/build.mjs` generates both SKILL.md copies, the hook's policy module, the Cursor and AGENTS.md rule files, and the native eval suite; `--check` fails on any drift. The SessionStart hook injects the fixed policy for startup, resume, clear, compact, and fork. It reads only the `SKIP_ECHO` variable, ignores stdin, stores no user data, reads no transcripts, makes no network or model calls, and fails open if the policy cannot load.
 
-Instructions add input tokens. In short or new conversations total cost can increase; the policy is about 3,900 characters (595 words), and its token count has not been measured. Skill discovery can load the same policy a second time; that duplicate has not been measured. There is no per-prompt injection, post-processing, or external memory.
+Instructions add input tokens, so SkipEcho costs something on every turn and pays for itself only when it shortens replies enough. Measured on 2026-10-13 with Claude Code 2.1.296 and `claude-sonnet-5-5` (3 runs per arm, [raw record](evals/results/cost-2026-10-13.json)):
+
+| | Extra input tokens per request |
+| --- | --- |
+| Whole plugin vs no plugin | 1,321 (turn 1), 1,333 (turn 2) |
+| Policy injected by the hook (3,905 characters) | about 1,170 |
+| Skill and command listings | about 150 |
+| A standalone skill installed next to the plugin | about 140 more (listing only; the skill body was not loaded in these runs) |
+
+On turn 1 the extra tokens are written to the prompt cache: about $0.0053 per session at published prices, the price of about 530 output tokens. On later turns they cost the price of about 27 output tokens per turn if they are read from the cache, or about 530 if they are written again, which is what happened on every resumed `claude -p` turn measured here; interactive sessions were not measured. In the recorded screening runs, which are single replies, replies with the plugin were not shorter and each run cost about 21% more ($0.037 vs $0.030 on average). So in short conversations SkipEcho is a net cost, and no saving has been shown for longer ones. `node scripts/measure-cost.mjs` repeats the measurement on your account. There is no per-prompt injection, post-processing, or external memory.
 
 ## Development
 

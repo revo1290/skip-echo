@@ -51,7 +51,7 @@ node <installPath>/scripts/doctor.mjs --debug-log skip-echo-debug.log
 `--init-only` runs Claude Code's start-up, including every SessionStart hook of every enabled plugin, and exits without a model call. The doctor then reports each SkipEcho run it finds in the log:
 
 ```text
-  ok    debug-log          startup: hook finished with status 0 in 64 ms (plugin skip-echo@skip-echo-marketplace); policy delivered (3905 characters)
+  ok    debug-log          startup: hook finished with status 0 in 64 ms (plugin skip-echo@skip-echo-marketplace); policy delivered (3234 characters)
 ```
 
 Claude Code 2.1.296 writes two lines for this: `Hooks: SessionStart:<source> [...session-start.mjs] (plugin ...) finished with status 0 (...ms)` when the hook ran, and `Hook SessionStart (...) provided additionalContext (<n> chars)` when its output was accepted as context. With `SKIP_ECHO=off` only the first line appears. Earlier versions may not write them.

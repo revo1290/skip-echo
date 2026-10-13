@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {readFileSync,existsSync} from 'node:fs';
+import {readFileSync,readdirSync} from 'node:fs';
 import {resolve,dirname} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {spawnSync} from 'node:child_process';
@@ -29,15 +29,16 @@ test('summarize reports medians per arm and turn and the input-token deltas betw
  assert.deepEqual(s.input_token_deltas['turn 2'],{plugin_vs_none:1325,policy_only:1175,listings_only:150,duplicate_skill_vs_plugin:145});
  assert.deepEqual(ARMS,['none','plugin','plugin-off','plugin+skill']);
 });
-test('the committed cost record is complete, isolated, and shows the hook only where it should',()=>{
- const f=resolve(root,'evals/results/cost-2026-10-13.json');
- if(!existsSync(f))return;
- const d=JSON.parse(readFileSync(f,'utf8'));
+test('each committed cost record is complete, isolated, and shows the hook only where it should',()=>{
+ for(const name of readdirSync(resolve(root,'evals/results')).filter(n=>/^cost-.*\.json$/.test(n))){
+ const d=JSON.parse(readFileSync(resolve(root,'evals/results',name),'utf8'));
  assert.equal(d.partial,false);assert.ok(d.records.every(r=>!r.error));
  for(const r of d.records){
-  if(r.arm==='plugin'||r.arm==='plugin+skill')assert.equal(r.hook.context_chars,readFileSync(resolve(root,'src/response-policy.md'),'utf8').trim().length,JSON.stringify(r.hook));
+  // The record was made with the policy of its date, not necessarily the current one.
+  if(r.arm==='plugin'||r.arm==='plugin+skill')assert.equal(r.hook.context_chars,d.records.find(x=>x.arm==='plugin').hook.context_chars,JSON.stringify(r.hook));
   else if(r.arm==='plugin-off')assert.equal(r.hook.context_chars,null);
   else assert.equal(r.hook,null);
+ }
  }
 });
 test('the CLI refuses invalid options before calling claude',()=>{
